@@ -8,9 +8,7 @@ using namespace std;
 
 SpriteRenderer::SpriteRenderer(RenderManager* renderer) :
 	renderer(renderer),
-	active(false),
-	aspectX(16.0f),
-	aspectY(9.0f) {
+	active(false) {
 
 }
 
@@ -19,28 +17,10 @@ SpriteRenderer::~SpriteRenderer() {
 	glDeleteBuffers(1, &spriteVbo);
 }
 
-void SpriteRenderer::setTargetAspectRatio(float width, float height) {
-	aspectX = width;
-	aspectY = height;
-}
-
 void SpriteRenderer::startSpriteBatch() {
 	if (active) {
 		throw runtime_error("Attempted to start duplicate sprite batch!");
 	}
-
-	float vw = renderer->getViewWidth();
-	float vh = renderer->getViewHeight();
-	float multX = aspectX;
-	float multY = aspectY;
-
-	while (multX < vw || multY < vh) {
-		multX += multX;
-		multY += multY;
-	}
-
-	viewMultiplierX = multX / vw;
-	viewMultiplierY = multY / vh;
 
 	active = true;
 }
@@ -52,10 +32,10 @@ void SpriteRenderer::addSprite(float x, float y, float width, float height, stri
 
 	SpriteInfo info;
 
-	info.transX = x * viewMultiplierX;
-	info.transY = y * viewMultiplierY;
-	info.radX = width / 2.0f * viewMultiplierX;
-	info.radY = height / 2.0f * viewMultiplierY;
+	info.transX = x;
+	info.transY = y;
+	info.radX = width / 2.0f;
+	info.radY = height / 2.0f;
 	info.texName = texName;
 
 	sprites.push(info);

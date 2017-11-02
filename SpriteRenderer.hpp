@@ -21,8 +21,6 @@ public:
 	SpriteRenderer(RenderManager* renderer);
 	~SpriteRenderer();
 
-	void setTargetAspectRatio(float width, float height);
-
 	void startSpriteBatch();
 
 	//x and y are center coordinates, width and height are horizontal and vertical diameters
@@ -36,12 +34,6 @@ private:
 
 	GLuint spriteVbo;
 	GLuint spriteVao;
-
-	float viewMultiplierX;
-	float viewMultiplierY;
-
-	float aspectX;
-	float aspectY;
 
 	bool active;
 
