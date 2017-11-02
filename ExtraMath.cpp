@@ -4,7 +4,7 @@
 #include "ExtraMath.hpp"
 
 namespace {
-	std::mt19937 engine;
+	std::mt19937 engine(ExMath::getTimeMillis());
 	std::uniform_real_distribution<float> distribution(0.0f, 1.0f);
 	std::uniform_int_distribution<int> intDistribution;
 }
