@@ -85,27 +85,12 @@ void RenderManager::setCameraPos(glm::vec3 pos) {
 }
 
 void RenderManager::setViewPort(int width, int height) {
-	float bigger;
-	float smaller;
-
-	if (width > height) {
-		bigger = width;
-		smaller = height;
-	}
-	else {
-		bigger = height;
-		smaller = width;
-	}
-
-	//Adjust for wierd window ratios (otherwise sizes like 960x10 zoom out really far)
-	fieldOfView = (DEFAULT_ASPECT_RATIO / (bigger / smaller)) * (PI / 4.0f);
-
 	glViewport(0, 0, width, height);
 
 	viewWidth = width;
 	viewHeight = height;
 
-	proj = glm::perspective(fieldOfView, (float)width / height, 0.1f, 400.0f);
+	proj = glm::perspective(45.0f, (float)width / height, 0.1f, 400.0f);
 }
 
 bool RenderManager::windowClosed() const {
@@ -128,13 +113,18 @@ void RenderManager::loadGl() {
 		throw std::runtime_error("Couldn't initialize glfw");
 	}
 
+	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	int createWidth = mode->width / 2.0f;
+	int createHeight = mode->height / 2.0f;
+
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_SAMPLES, 4);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE); //Stop myself from going insane
 
-	window = glfwCreateWindow(960, 540, "Squares", NULL, NULL);
+	window = glfwCreateWindow(createWidth, createHeight, "Squares", NULL, NULL);
 
 	if (window == nullptr) {
 		Logger::fatal() << "Failed to create window and context!\n";
