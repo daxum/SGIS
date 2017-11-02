@@ -3,11 +3,13 @@
 #include "arena.hpp"
 #include "Gui.hpp"
 #include "ScreenChangeButton.hpp"
+#include "BackButton.hpp"
 
 Game::Game() : renderer(this) {
 	Gui* mainMenu = new Gui(screenManager, settings, "main");
 	mainMenu->setBackground("main_menu");
 	mainMenu->addButton(new ScreenChangeButton(screenManager, 0.0f, 0.5f, 1.0f, 0.5625f, "arena", "button"));
+	mainMenu->addButton(new BackButton(screenManager, 0.0f, -0.5f, 1.0f, 0.5625f, "button"));
 
 	screenManager.addScreen("main", mainMenu);
 	screenManager.addScreen("arena", new Arena(screenManager, settings, "arena", keyTracker));

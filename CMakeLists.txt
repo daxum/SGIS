@@ -22,6 +22,7 @@ add_executable(squareGame
 	SpriteRenderer.cpp
 	Button.cpp
 	ScreenChangeButton.cpp
+	BackButton.cpp
 )
 
 set_target_properties(squareGame PROPERTIES

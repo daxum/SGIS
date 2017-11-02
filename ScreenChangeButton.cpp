@@ -25,4 +25,5 @@ void ScreenChangeButton::onPress() {
 void ScreenChangeButton::onRelease() {
 	screenManager.pushScreenStack();
 	screenManager.openScreen(screenName);
+	texture = texName;
 }

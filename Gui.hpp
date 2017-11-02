@@ -21,7 +21,6 @@ public:
 	bool onMouseClick(int button, int action);
 
 	void setBackground(std::string textureName);
-	void setPopOnClose(bool shouldPop);
 
 	void addButton(Button* button);
 
@@ -30,7 +29,6 @@ private:
 	Button* activeButton;
 	Button* mouseDownButton;
 
-	bool popOnClose;
 	bool hasBackground;
 	std::string background;
 };

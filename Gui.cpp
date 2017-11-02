@@ -7,7 +7,6 @@ Gui::Gui(ScreenManager& manager, GameSettings& settings, string screenName) :
 	Screen(manager, settings, screenName),
 	background(""),
 	hasBackground(false),
-	popOnClose(true),
 	activeButton(nullptr),
 	mouseDownButton(nullptr) {
 
@@ -24,10 +23,6 @@ void Gui::onOpen() {
 }
 
 void Gui::onClose() {
-	if (popOnClose) {
-		screenManager.popScreenStack();
-	}
-
 	activeButton->onHoverStop();
 	activeButton = nullptr;
 	mouseDownButton = nullptr;
@@ -98,6 +93,7 @@ bool Gui::onMouseClick(int button, int action) {
 		else if (action == GLFW_RELEASE){
 			if (activeButton != nullptr && mouseDownButton == activeButton) {
 				activeButton->onRelease();
+				mouseDownButton = nullptr;
 				return true;
 			}
 
@@ -111,10 +107,6 @@ bool Gui::onMouseClick(int button, int action) {
 void Gui::setBackground(string textureName) {
 	background = textureName;
 	hasBackground = true;
-}
-
-void Gui::setPopOnClose(bool shouldPop) {
-	popOnClose = shouldPop;
 }
 
 void Gui::addButton(Button* button) {
