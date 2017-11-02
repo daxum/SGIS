@@ -56,7 +56,13 @@ void ScreenManager::pushScreenStack() {
 }
 
 void ScreenManager::popScreenStack() {
+	vector<Screen*> oldTop = activeScreenStack.top();
+
 	activeScreenStack.pop();
+
+	for (Screen* s : oldTop) {
+		s->onClose();
+	}
 }
 
 void ScreenManager::update() {

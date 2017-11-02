@@ -8,7 +8,6 @@ Game::Game() : renderer(this) {
 	Gui* mainMenu = new Gui(screenManager, settings, "main");
 	mainMenu->setBackground("main_menu");
 	mainMenu->addButton(new ScreenChangeButton(screenManager, 0.0f, 0.5f, 1.0f, 0.5625f, "arena", "button"));
-	mainMenu->addButton(new ScreenChangeButton(screenManager, 0.0f, -0.5f, 1.0f, 0.5625f, "arena", "button"));
 
 	screenManager.addScreen("main", mainMenu);
 	screenManager.addScreen("arena", new Arena(screenManager, settings, "arena", keyTracker));
