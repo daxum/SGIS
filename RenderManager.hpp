@@ -6,6 +6,7 @@
 #include "ShaderManager.hpp"
 #include "TextureManager.hpp"
 #include "SpriteRenderer.hpp"
+#include "ModelManager.hpp"
 
 class Game;
 
@@ -23,7 +24,6 @@ public:
 	glm::mat4 getView();
 	glm::mat4 getProj();
 
-	float getFOV();
 	int getViewWidth();
 	int getViewHeight();
 
@@ -31,12 +31,14 @@ public:
 
 	void setCameraLook(glm::vec3 look);
 	void setCameraPos(glm::vec3 pos);
+	glm::vec3 getCameraPos();
 
 	void setViewPort(int width, int height);
 
 	bool windowClosed() const;
 
 	const Shader* getShader(std::string name) const;
+	const void renderModel(std::string model, std::string texture, const Shader* shader) const;
 	void useTexture(std::string name, GLenum textureUnit = GL_TEXTURE0) const;
 
 private:
@@ -45,13 +47,12 @@ private:
 	ShaderManager shaderManager;
 	TextureManager textureManager;
 	SpriteRenderer spriteRenderer;
+	ModelManager modelManager;
 
 	glm::vec3 cameraPos;
 	glm::vec3 cameraLook;
 	glm::vec3 cameraUp;
 
-
-	float fieldOfView;
 	int viewWidth;
 	int viewHeight;
 

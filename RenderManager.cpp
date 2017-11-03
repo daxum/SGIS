@@ -4,6 +4,7 @@
 #include "Logger.hpp"
 #include "callbackList.h"
 #include "ExtraMath.hpp"
+#include "Model.hpp"
 
 using namespace std;
 
@@ -15,8 +16,7 @@ RenderManager::RenderManager(Game* game) :
 	spriteRenderer(this),
 	cameraPos(0.0, 0.0, 3.0),
 	cameraLook(0.0, 0.0, 0.0),
-	cameraUp(0.0, 1.0, 0.0),
-	fieldOfView(PI / 4.0f),
+	cameraUp(0.0, 0.0, 1.0),
 	viewWidth(960),
 	viewHeight(540) {
 
@@ -32,6 +32,8 @@ RenderManager::RenderManager(Game* game) :
 	textureManager.loadTexture("button", GL_NEAREST, GL_NEAREST);
 	textureManager.loadTexture("button_hover", GL_NEAREST, GL_NEAREST);
 	textureManager.loadTexture("button_press", GL_NEAREST, GL_NEAREST);
+
+	modelManager.loadModel("square");
 }
 
 RenderManager::~RenderManager() {
@@ -60,10 +62,6 @@ glm::mat4 RenderManager::getProj() {
 	return proj;
 }
 
-float RenderManager::getFOV() {
-	return fieldOfView;
-}
-
 int RenderManager::getViewWidth() {
 	return viewWidth;
 }
@@ -84,13 +82,17 @@ void RenderManager::setCameraPos(glm::vec3 pos) {
 	cameraPos = pos;
 }
 
+glm::vec3 RenderManager::getCameraPos() {
+	return cameraPos;
+}
+
 void RenderManager::setViewPort(int width, int height) {
 	glViewport(0, 0, width, height);
 
 	viewWidth = width;
 	viewHeight = height;
 
-	proj = glm::perspective(45.0f, (float)width / height, 0.1f, 400.0f);
+	proj = glm::perspective(PI / 4.0f, (float)width / height, 0.1f, 400.0f);
 }
 
 bool RenderManager::windowClosed() const {
@@ -99,6 +101,10 @@ bool RenderManager::windowClosed() const {
 
 const Shader* RenderManager::getShader(string name) const {
 	return shaderManager.getShader(name);
+}
+
+const void RenderManager::renderModel(std::string model, std::string texture, const Shader* shader) const {
+	modelManager.getModel(model)->draw(this, texture, shader);
 }
 
 void RenderManager::useTexture(string name, GLenum textureUnit) const {
@@ -163,7 +169,7 @@ void RenderManager::loadGl() {
 
 	glEnable(GL_MULTISAMPLE);
 	glEnable(GL_CULL_FACE);
-	glEnable(GL_DEPTH);
+	glEnable(GL_DEPTH_TEST);
 
 	Logger::popDomain();
 }

@@ -2,6 +2,12 @@
 #include "ExtraMath.hpp"
 #include "Logger.hpp"
 
+namespace {
+	const float PLAYER_COLOR[3] = {0.1f, 0.9f, 0.1f};
+	const float BIGGER_COLOR[3] = {0.9f, 0.06f, 0.06f};
+	const float SMALLER_COLOR[3] = {0.95f, 0.95f, 0.04f};
+}
+
 Arena::Arena(ScreenManager& manager, GameSettings& settings, std::string screenName, const KeyTracker& keyTracker) :
 	Screen(manager, settings, screenName),
 	keyTracker(keyTracker),
@@ -14,7 +20,7 @@ Arena::Arena(ScreenManager& manager, GameSettings& settings, std::string screenN
 			   settings.sizeX / 2.0f + ArenaRenderer::MAX_CAMERA_HEIGHT,
 			   settings.sizeY / 2.0f + ArenaRenderer::MAX_CAMERA_HEIGHT),
 	targetArea(settings.sizeX * settings.sizeY * TARGET_PERCENT_AREA),
-	player(0.0f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f),
+	player(0.0f, 0.0f, 0.5f, PLAYER_COLOR[0], PLAYER_COLOR[1], PLAYER_COLOR[2]),
 	occupiedArea(1.0f),
 	squares(),
 	squareCount(0),
@@ -29,7 +35,7 @@ void Arena::onOpen() {
 }
 
 void Arena::onClose() {
-	player = Square(0.0f, 0.0f, 0.5f, 0.0f, 1.0f, 0.0f);
+	player = Square(0.0f, 0.0f, 0.5f, PLAYER_COLOR[0], PLAYER_COLOR[1], PLAYER_COLOR[2]);
 	occupiedArea = player.boundingBox.getArea();
 	squareCount = 0;
 	eatenScale = 0.0f;
@@ -111,11 +117,11 @@ void Arena::updatePlayerVelocity() {
 	}
 
 	if (keyTracker.isKeyPressed(settings.keyMoveLeft)) {
-		player.velocity[0] -= 0.15f;
+		player.velocity[0] += 0.15f;
 	}
 
 	if (keyTracker.isKeyPressed(settings.keyMoveRight)) {
-		player.velocity[0] += 0.15f;
+		player.velocity[0] -= 0.15f;
 	}
 
 	ExMath::clamp(player.velocity[0], -MAX_VELOCITY, MAX_VELOCITY);
@@ -142,7 +148,7 @@ bool Arena::checkCollisions() {
 				playerGrew = true;
 			}
 			else {
-				dead = true;
+				//dead = true;
 			}
 		}
 	}
@@ -257,14 +263,14 @@ Square Arena::makeSquare(const AxisAlignedBB& outer, const AxisAlignedBB& inner,
 	float color[3];
 
 	if (diameter <= averageSize) {
-		color[0] = 1.0f;
-		color[1] = 1.0f;
-		color[2] = 0.0f;
+		color[0] = SMALLER_COLOR[0];
+		color[1] = SMALLER_COLOR[1];
+		color[2] = SMALLER_COLOR[2];
 	}
 	else {
-		color[0] = 1.0f;
-		color[1] = 0.0f;
-		color[2] = 0.0f;
+		color[0] = BIGGER_COLOR[0];
+		color[1] = BIGGER_COLOR[1];
+		color[2] = BIGGER_COLOR[2];
 	}
 
 	return Square(centerX, centerY, diameter / 2.0f, color[0], color[1], color[2], velocityX, velocityY);

@@ -9,7 +9,7 @@ class Arena;
 
 class ArenaRenderer {
 public:
-	constexpr static float MIN_CAMERA_HEIGHT = 10.0f;
+	constexpr static float MIN_CAMERA_HEIGHT = 5.0f;
 	constexpr static float MAX_CAMERA_HEIGHT = 300.0f;
 	constexpr static float MAX_CAMERA_VELOCITY = 5.0f;
 
@@ -33,6 +33,6 @@ private:
 	GLuint borderEbo;
 	GLuint squareVao;
 
-	void renderSquare(const Shader* shader, const Square& toAdd, float partialTicks);
+	void renderSquare(RenderManager& renderer, const Shader* shader, const Square& toAdd, float partialTicks);
 	void initGraphics();
 };

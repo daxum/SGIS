@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 project(squareGame)
 
 find_package(glfw3 3.2 REQUIRED)
+find_package(assimp REQUIRED)
 
 add_executable(squareGame
 	main.cpp
@@ -23,6 +24,9 @@ add_executable(squareGame
 	Button.cpp
 	ScreenChangeButton.cpp
 	BackButton.cpp
+	Mesh.cpp
+	Model.cpp
+	ModelManager.cpp
 )
 
 set_target_properties(squareGame PROPERTIES
@@ -30,4 +34,4 @@ set_target_properties(squareGame PROPERTIES
 	CXX_STANDARD_REQUIRED ON
 )
 
-target_link_libraries(squareGame glfw GL)
+target_link_libraries(squareGame glfw GL assimp)

@@ -46,6 +46,8 @@ void SpriteRenderer::endSpriteBatch() {
 		throw runtime_error("Attempted to draw sprites when not batching!");
 	}
 
+	glDisable(GL_DEPTH_TEST);
+
 	glBindVertexArray(spriteVao);
 	const Shader* shader = renderer->getShader("sprite");
 	shader->use();
@@ -64,6 +66,8 @@ void SpriteRenderer::endSpriteBatch() {
 
 	glBindVertexArray(0);
 	active = false;
+
+	glEnable(GL_DEPTH_TEST);
 }
 
 void SpriteRenderer::initSpriteBuffers() {
