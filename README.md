@@ -1,5 +1,5 @@
 # SGIS
-A simple game involving squares.
+A simple game involving squares - because names are hard.
 
 ---
 This project uses the following libraries:
