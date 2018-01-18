@@ -18,16 +18,28 @@
 
 #pragma once
 
-#include "AxisAlignedBB.hpp"
+#include <stdexcept>
 
 namespace ExMath {
-	void clamp(float& value, float minimum, float maximum);
+	//Note: Passing constexpr values to functions that take things by reference, like this one, does not work.
+	//This can be fixed by doing T(Value), where T is a type and value is the constexpr object, like float(CONST_FLOAT)
+	//Should probably find another way to fix later
+	template <typename T>
+	void clamp(T& value, const T& minimum, const T& maximum) {
+		if (minimum >= maximum) {
+			throw std::logic_error("Maximum not greater than minimum!");
+		}
 
-	float abs(float value);
+		if (value > maximum) {
+			value = maximum;
+		}
+
+		if (value < minimum) {
+			value = minimum;
+		}
+	}
 
 	float interpolate(float start, float finish, float percent);
-
-	AxisAlignedBB interpolateBox(const AxisAlignedBB& start, const AxisAlignedBB& finish, float percent);
 
 	float randomFloat(float min, float max);
 
@@ -36,8 +48,6 @@ namespace ExMath {
 	int randomInt(int min, int max);
 
 	double getTimeMillis();
-
-	float min(float val1, float val2);
 
 	float minMagnitude(float val1, float val2);
 }

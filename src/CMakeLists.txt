@@ -21,6 +21,7 @@ add_executable(squareGame
 	Mesh.cpp
 	Model.cpp
 	ModelManager.cpp
+	AxisAlignedBB.cpp
 )
 
 set_target_properties(squareGame PROPERTIES

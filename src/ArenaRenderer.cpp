@@ -41,13 +41,13 @@ ArenaRenderer::~ArenaRenderer() {
 void ArenaRenderer::updateCamera() {
 	prevCameraHeight = cameraHeight;
 	cameraHeight += cameraVelocity;
-	ExMath::clamp(cameraHeight, MIN_CAMERA_HEIGHT, MAX_CAMERA_HEIGHT);
+	ExMath::clamp(cameraHeight, float(MIN_CAMERA_HEIGHT), float(MAX_CAMERA_HEIGHT));
 	cameraVelocity *= 0.9f;
 }
 
 void ArenaRenderer::increaseCameraVelocity(float amount) {
 	cameraVelocity += amount;
-	ExMath::clamp(cameraVelocity, -MAX_CAMERA_VELOCITY, MAX_CAMERA_VELOCITY);
+	ExMath::clamp(cameraVelocity, float(-MAX_CAMERA_VELOCITY), float(MAX_CAMERA_VELOCITY));
 }
 
 float ArenaRenderer::getCameraHeight() {
@@ -56,7 +56,7 @@ float ArenaRenderer::getCameraHeight() {
 
 void ArenaRenderer::render(RenderManager& renderer, float partialTicks) {
 	float playerCenter[2] = {0.0f, 0.0f};
-	ExMath::interpolateBox(arena->player.prevBox, arena->player.boundingBox, partialTicks).getCenter(playerCenter[0], playerCenter[1]);
+	AxisAlignedBB::interpolate(arena->player.prevBox, arena->player.boundingBox, partialTicks).getCenter(playerCenter[0], playerCenter[1]);
 
 	float interpolatedHeight = ExMath::interpolate(prevCameraHeight, cameraHeight, partialTicks);
 
@@ -99,7 +99,7 @@ void ArenaRenderer::render(RenderManager& renderer, float partialTicks) {
 }
 
 void ArenaRenderer::renderSquare(RenderManager& renderer, const Shader* shader, const Square& square, float partialTicks) {
-	AxisAlignedBB interpolatedBox = ExMath::interpolateBox(square.prevBox, square.boundingBox, partialTicks);
+	AxisAlignedBB interpolatedBox = AxisAlignedBB::interpolate(square.prevBox, square.boundingBox, partialTicks);
 
 	float centerX = 0.0f;
 	float centerY = 0.0f;

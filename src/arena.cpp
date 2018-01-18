@@ -105,11 +105,11 @@ void Arena::updateSquare(Square& square, float friction, bool shouldDespawn) {
 	square.velocity[0] *= friction;
 	square.velocity[1] *= friction;
 
-	if (ExMath::abs(square.velocity[0]) < 0.005f) {
+	if (std::abs(square.velocity[0]) < 0.005f) {
 		square.velocity[0] = 0.0f;
 	}
 
-	if (ExMath::abs(square.velocity[1]) < 0.005f) {
+	if (std::abs(square.velocity[1]) < 0.005f) {
 		square.velocity[1] = 0.0f;
 	}
 }
@@ -143,8 +143,8 @@ void Arena::updatePlayerVelocity() {
 		player.velocity[0] -= 0.15f;
 	}
 
-	ExMath::clamp(player.velocity[0], -MAX_VELOCITY, MAX_VELOCITY);
-	ExMath::clamp(player.velocity[1], -MAX_VELOCITY, MAX_VELOCITY);
+	ExMath::clamp(player.velocity[0], float(-MAX_VELOCITY), float(MAX_VELOCITY));
+	ExMath::clamp(player.velocity[1], float(-MAX_VELOCITY), float(MAX_VELOCITY));
 }
 
 void Arena::removeSquares() {
@@ -249,7 +249,7 @@ void Arena::spawnInitialSquares() {
 
 Square Arena::makeSquare(const AxisAlignedBB& outer, const AxisAlignedBB& inner, float averageSize) {
 	int direction = ExMath::randomInt(0, 3);
-	float diameter = ExMath::randomFloat(0.4f * averageSize, ExMath::min(MAX_SQUARE_SIZE, averageSize * 1.5f));
+	float diameter = ExMath::randomFloat(0.4f * averageSize, std::min(float(MAX_SQUARE_SIZE), averageSize * 1.5f));
 	float centerX;
 	float centerY;
 	float velocityX = 0.0f;

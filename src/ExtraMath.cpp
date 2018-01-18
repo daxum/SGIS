@@ -16,9 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-#include <stdexcept>
 #include <random>
 #include <chrono>
+#include <algorithm>
+#include <cmath>
 #include "ExtraMath.hpp"
 
 namespace {
@@ -27,38 +28,9 @@ namespace {
 	std::uniform_int_distribution<int> intDistribution;
 }
 
-void ExMath::clamp(float& value, float minimum, float maximum) {
-	if (minimum >= maximum) {
-		throw std::logic_error("Maximum not greater than minimum!");
-	}
-
-	if (value > maximum) {
-		value = maximum;
-	}
-
-	if (value < minimum) {
-		value = minimum;
-	}
-}
-
-float ExMath::abs(float value) {
-	if (value < 0) {
-		return -value;
-	}
-
-	return value;
-}
-
 float ExMath::interpolate(float start, float finish, float percent) {
-	return (finish - start) * percent + start;
-}
-
-AxisAlignedBB ExMath::interpolateBox(const AxisAlignedBB& start, const AxisAlignedBB& finish, float percent) {
-	return AxisAlignedBB(interpolate(start.minX, finish.minX, percent),
-						 interpolate(start.minY, finish.minY, percent),
-						 interpolate(start.maxX, finish.maxX, percent),
-						 interpolate(start.maxY, finish.maxY, percent));
-}
+		return (finish - start) * percent + start;
+	}
 
 float ExMath::randomFloat(float min, float max) {
 	return interpolate(min, max, distribution(engine));
@@ -77,16 +49,8 @@ double ExMath::getTimeMillis() {
 	return time.count();
 }
 
-float ExMath::min(float val1, float val2) {
-	if (val1 < val2) {
-		return val1;
-	}
-
-	return val2;
-}
-
 float ExMath::minMagnitude(float val1, float val2) {
-	if (ExMath::min(ExMath::abs(val1), ExMath::abs(val2)) == ExMath::abs(val1)) {
+	if (std::min(std::abs(val1), std::abs(val2)) == std::abs(val1)) {
 		return val1;
 	}
 
