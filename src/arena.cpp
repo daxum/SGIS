@@ -167,7 +167,7 @@ bool Arena::checkCollisions() {
 				playerGrew = true;
 			}
 			else {
-				dead = true;
+				//dead = true;
 			}
 		}
 	}

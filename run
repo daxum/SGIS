@@ -1,9 +1,0 @@
-#!/bin/bash
-
-export vblank_mode=0
-export MESA_DEBUG="context"
-export LIBGL_DEBUG=1
-export GALLIUM_HUD="cpu+GPU-load;.dfps;VRAM-usage"
-
-cd "$(dirname "$0")/src"
-./squareGame
