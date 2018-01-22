@@ -1,5 +1,6 @@
 # SGIS
 A simple game involving squares - because names are hard.
+
 This is the game as it was before the engine was split out.
 
 ---
