@@ -18,36 +18,21 @@
 
 #pragma once
 
-#include "RenderManager.hpp"
-#include "GameSettings.hpp"
-#include "KeyTracker.hpp"
-#include "ScreenManager.hpp"
-#include "Screen.hpp"
+#include "GameInterface.hpp"
 
-class Game {
+class Game : public GameInterface {
 public:
-	//The time taken for each tick, in milliseconds
-	constexpr static double timeStep = 1000.0 / 60.0;
+	/**
+	 * Called from the engine, loads the game's textures.
+	 * @param loader The texture loader provided by the engine.
+	 */
+	void loadTextures(std::shared_ptr<TextureLoader> loader);
 
-	Game();
-	~Game();
+	//Documentation to be added to these three once implemented
 
-	bool shouldExit() const;
+	void loadModels() {}
 
-	void update();
-	void render(float partialTicks);
-	void handleKeyboardInput(int key, int scanCode, int action);
-	void handleMouseScroll(double offset);
-	void handleMouseMove(double x, double y);
-	void handleMouseClick(int button, int action);
+	void loadMenus() {}
 
-	void setViewPort(int width, int height);
-
-	void onExit();
-
-private:
-	GameSettings settings;
-	KeyTracker keyTracker;
-	RenderManager renderer;
-	ScreenManager screenManager;
+	void loadMaps() {}
 };

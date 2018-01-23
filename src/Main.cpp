@@ -16,13 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
+#include <stdexcept>
+#include <iostream>
+#include "Engine.hpp"
 #include "Game.hpp"
 
-void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
-	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
-	loader->loadTexture("arena", "textures/arena.png", Filter::NEAREST, Filter::NEAREST, true);
-	loader->loadTexture("main_menu", "textures/main_menu.png", Filter::LINEAR, Filter::LINEAR, true);
-	loader->loadTexture("button", "textures/button.png", Filter::NEAREST, Filter::NEAREST, true);
-	loader->loadTexture("button_hover", "textures/button_hover.png", Filter::NEAREST, Filter::NEAREST, true);
-	loader->loadTexture("button_press", "textures/button_press.png", Filter::NEAREST, Filter::NEAREST, true);
+int main(int argc, char** argv) {
+	//Create instance of game engine
+	EngineConfig config = {};
+	config.renderer = Renderer::OPEN_GL;
+	config.windowWidth = 800;
+	config.windowHeight = 600;
+	config.windowTitle = "Squares";
+	config.physicsTimestep = 1000.0 / 60.0;
+
+	try {
+		Engine engine(config);
+
+		//Run game
+		Game squareGame;
+		engine.run(squareGame);
+	}
+	catch(const std::runtime_error& e) {
+		std::cout << e.what() << "\n";
+	}
+
+	return 0;
 }
