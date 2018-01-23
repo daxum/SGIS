@@ -1,6 +1,15 @@
 cmake_minimum_required(VERSION 3.1)
 project(SGIS)
 
+#Note: To build this, the engine repository must be within the same directory as this repository.
+#That means the directory structure should look like this:
+#
+#    parent directory --> game repository
+#           |
+#           +-----------> engine repository
+#
+#Hopefully I can think of a better way to handle this later.
+
 add_subdirectory(../../engine/src ${CMAKE_CURRENT_BINARY_DIR}/engine)
 
 add_executable(squareGame
@@ -19,9 +28,19 @@ endif()
 
 target_link_libraries(squareGame Engine)
 
+#Copy resources to build directory
+
 add_custom_command(
 	TARGET squareGame POST_BUILD
 	COMMAND ${CMAKE_COMMAND} -E copy_directory
 	${CMAKE_SOURCE_DIR}/../resources $<TARGET_FILE_DIR:squareGame>
+)
+
+#Copy default shaders from engine to build directory.
+
+add_custom_command(
+	TARGET squareGame POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory
+	${CMAKE_SOURCE_DIR}/../../engine/shaders $<TARGET_FILE_DIR:squareGame>/shaders
 )
 

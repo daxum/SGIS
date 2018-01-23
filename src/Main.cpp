@@ -29,6 +29,7 @@ int main(int argc, char** argv) {
 	config.windowHeight = 600;
 	config.windowTitle = "Squares";
 	config.physicsTimestep = 1000.0 / 60.0;
+	config.shaderPath = "shaders/";
 
 	try {
 		Engine engine(config);
