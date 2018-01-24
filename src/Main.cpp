@@ -25,8 +25,8 @@ int main(int argc, char** argv) {
 	//Create instance of game engine
 	EngineConfig config = {};
 	config.renderer = Renderer::OPEN_GL;
-	config.windowWidth = 800;
-	config.windowHeight = 600;
+	config.windowWidth = 960;
+	config.windowHeight = 540;
 	config.windowTitle = "Squares";
 	config.physicsTimestep = 1000.0 / 60.0;
 	config.shaderPath = "shaders/";
