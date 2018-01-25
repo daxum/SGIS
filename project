@@ -8,7 +8,7 @@ MODE="none"
 function build {
 	if [ $BUILD -eq 1 ]; then
 		echo "Building mode \"${MODE}\"..."
-		make
+		make -j
 	fi
 }
 
