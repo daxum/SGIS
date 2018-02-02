@@ -28,9 +28,12 @@ public:
 	 */
 	void loadTextures(std::shared_ptr<TextureLoader> loader);
 
-	//Documentation to be added to these three once implemented
+	/**
+	 * Called from the engine to load the game's models
+	 */
+	void loadModels(std::shared_ptr<ModelLoader> loader);
 
-	void loadModels() {}
+	//Documentation to be added to these two once implemented
 
 	void loadMenus() {}
 

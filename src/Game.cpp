@@ -26,3 +26,7 @@ void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("button_hover", "textures/button_hover.png", Filter::NEAREST, Filter::NEAREST, true);
 	loader->loadTexture("button_press", "textures/button_press.png", Filter::NEAREST, Filter::NEAREST, true);
 }
+
+void Game::loadModels(std::shared_ptr<ModelLoader> loader) {
+	loader->loadModel("square", "models/square.obj");
+}
