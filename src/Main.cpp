@@ -31,6 +31,15 @@ int main(int argc, char** argv) {
 	config.physicsTimestep = 1000.0 / 60.0;
 	config.shaderPath = "shaders/";
 
+	config.generalLog.type = LogType::STDOUT;
+	config.generalLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
+
+	config.rendererLog.type = LogType::STDOUT;
+	config.rendererLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
+
+	config.loaderLog.type = LogType::STDOUT;
+	config.loaderLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
+
 	try {
 		Engine engine(config);
 
