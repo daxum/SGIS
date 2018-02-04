@@ -11,6 +11,7 @@ CONCURRENCY=16;
 function build {
 	if [ $BUILD -eq 1 ]; then
 		echo "Building mode \"${MODE}\"..."
+		rm squareGame > /dev/null 2>&1
 		make -j${CONCURRENCY}
 	fi
 }
