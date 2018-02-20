@@ -37,7 +37,7 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->setMap(std::make_shared<FlatMap>(100.0f, "arena"));
 
 	//Hack for testing
-	mainMenu->getRenderData().camera.move(0.0f, 130.0f, 0.0f);
+	mainMenu->getRenderData().camera.move(0.0f, 130.0f, 0.01f);
 
 	display.pushScreen(mainMenu);
 }
