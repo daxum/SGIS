@@ -19,6 +19,7 @@
 #include "Game.hpp"
 #include "World.hpp"
 #include "FlatMap.hpp"
+#include "RenderComponent.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -33,7 +34,11 @@ void Game::loadModels(std::shared_ptr<ModelLoader> loader) {
 void Game::loadScreens(DisplayEngine& display) {
 	//Main menu is actually the world at the moment.
 	std::shared_ptr<World> mainMenu = std::make_shared<World>(display);
-	mainMenu->addObject(std::make_shared<Object>("square", glm::vec3(0.0f, 0.0f, 0.0f)));
+	std::shared_ptr<Object> square = std::make_shared<Object>(glm::vec3(0.0f, 0.0f, 0.0f));
+
+	square->addComponent(RENDER_COMPONENT_NAME, std::make_shared<RenderComponent>(*(square.get()), "square"));
+
+	mainMenu->addObject(square);
 	mainMenu->setMap(std::make_shared<FlatMap>(100.0f, "arena"));
 
 	//Hack for testing
