@@ -17,6 +17,7 @@
  ******************************************************************************/
 
 #include "Game.hpp"
+#include "World.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -28,5 +29,16 @@ void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 }
 
 void Game::loadModels(std::shared_ptr<ModelLoader> loader) {
-	loader->loadModel("square", "models/square.obj");
+	loader->loadModel("square", "models/square.obj", "square");
+}
+
+void Game::loadScreens(DisplayEngine& display) {
+	//Main menu is actually the world at the moment.
+	std::shared_ptr<World> mainMenu = std::make_shared<World>(display);
+	mainMenu->addObject(std::make_shared<Object>("square"));
+
+	//Hack for testing
+	mainMenu->getRenderData().camera.move(1.0f, 1.0f, 5.0f);
+
+	display.pushScreen(mainMenu);
 }

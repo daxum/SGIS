@@ -34,9 +34,9 @@ public:
 	 */
 	void loadModels(std::shared_ptr<ModelLoader> loader);
 
-	//Documentation to be added to these two once implemented
-
-	void loadMenus() {}
-
-	void loadMaps() {}
+	/**
+	 * Loads the main menu onto the display.
+	 * @param display The display to add the menu to.
+	 */
+	void loadScreens(DisplayEngine& display);
 };
