@@ -22,10 +22,6 @@
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
 	loader->loadTexture("arena", "textures/arena.png", Filter::NEAREST, Filter::NEAREST, true);
-	loader->loadTexture("main_menu", "textures/main_menu.png", Filter::LINEAR, Filter::LINEAR, true);
-	loader->loadTexture("button", "textures/button.png", Filter::NEAREST, Filter::NEAREST, true);
-	loader->loadTexture("button_hover", "textures/button_hover.png", Filter::NEAREST, Filter::NEAREST, true);
-	loader->loadTexture("button_press", "textures/button_press.png", Filter::NEAREST, Filter::NEAREST, true);
 }
 
 void Game::loadModels(std::shared_ptr<ModelLoader> loader) {
