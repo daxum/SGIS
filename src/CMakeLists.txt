@@ -15,6 +15,7 @@ add_subdirectory(../../engine/src ${CMAKE_CURRENT_BINARY_DIR}/engine)
 add_executable(squareGame
 	Main.cpp
 	Game.cpp
+	ControlledAI.cpp
 )
 
 set_target_properties(squareGame PROPERTIES

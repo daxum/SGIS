@@ -20,6 +20,7 @@
 #include "World.hpp"
 #include "FlatMap.hpp"
 #include "RenderComponent.hpp"
+#include "ControlledAI.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -37,6 +38,7 @@ void Game::loadScreens(DisplayEngine& display) {
 	std::shared_ptr<Object> square = std::make_shared<Object>(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	square->addComponent(RENDER_COMPONENT_NAME, std::make_shared<RenderComponent>(*(square.get()), "square"));
+	square->addComponent(AI_COMPONENT_NAME, std::make_shared<ControlledAI>(*(square.get())));
 
 	mainMenu->addObject(square);
 	mainMenu->setMap(std::make_shared<FlatMap>(100.0f, "arena"));
