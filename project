@@ -60,6 +60,7 @@ elif [ ${MODE} = "release" ]; then
 	cd release
 	build
 	if [ ${RUN} -eq 1 ]; then
+		export GALLIUM_HUD="cpu+GPU-load;.dfps;VRAM-usage"
 		./squareGame
 	fi
 elif [ ${SETUP} -eq 0 ]; then
