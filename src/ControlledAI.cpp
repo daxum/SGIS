@@ -39,5 +39,5 @@ void ControlledAI::update(World* world) {
 		addedVelocity.z += speed;
 	}
 
-	parent.addVelocity(addedVelocity);
+	parent.velocity += addedVelocity;
 }
