@@ -18,24 +18,24 @@
 
 #include "ControlledAI.hpp"
 
-void ControlledAI::update(World* world) {
+void ControlledAI::update(Screen* screen) {
 	glm::vec3 addedVelocity;
 	float speed = 0.1f;
 
-	if (world->isKeyPressed(Key::A)) {
+	if (screen->isKeyPressed(Key::A)) {
 		addedVelocity.x -= speed;
 	}
 
 	//Yes, "north" is negative z. I don't like it either.
-	if (world->isKeyPressed(Key::W)) {
+	if (screen->isKeyPressed(Key::W)) {
 		addedVelocity.z -= speed;
 	}
 
-	if (world->isKeyPressed(Key::D)) {
+	if (screen->isKeyPressed(Key::D)) {
 		addedVelocity.x += speed;
 	}
 
-	if (world->isKeyPressed(Key::S)) {
+	if (screen->isKeyPressed(Key::S)) {
 		addedVelocity.z += speed;
 	}
 

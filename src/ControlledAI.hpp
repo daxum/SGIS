@@ -25,5 +25,5 @@ class ControlledAI : public AIComponent {
 public:
 	ControlledAI(Object& parent) : AIComponent(parent) {}
 
-	void update(World* world);
+	void update(Screen* screen);
 };
