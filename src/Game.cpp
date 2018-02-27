@@ -23,6 +23,8 @@
 #include "ControlledAI.hpp"
 #include "RenderComponentManager.hpp"
 #include "AIComponentManager.hpp"
+#include "PhysicsComponentManager.hpp"
+#include "PhysicsComponent.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -41,12 +43,14 @@ void Game::loadScreens(DisplayEngine& display) {
 	//Add component managers to screen
 	mainMenu->addComponentManager(std::make_shared<RenderComponentManager>());
 	mainMenu->addComponentManager(std::make_shared<AIComponentManager>());
+	mainMenu->addComponentManager(std::make_shared<PhysicsComponentManager>());
 
 	//Create test object
 	std::shared_ptr<Object> square = std::make_shared<Object>(glm::vec3(0.0f, 0.0f, 0.0f));
 
 	square->addComponent(RENDER_COMPONENT_NAME, std::make_shared<RenderComponent>(*(square.get()), "square"));
 	square->addComponent(AI_COMPONENT_NAME, std::make_shared<ControlledAI>(*(square.get())));
+	square->addComponent(PHYSICS_COMPONENT_NAME, std::make_shared<PhysicsComponent>(*(square.get())));
 
 	//Add object and set map
 	mainMenu->addObject(square);
