@@ -45,8 +45,8 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->addComponentManager(std::make_shared<AIComponentManager>());
 	mainMenu->addComponentManager(std::make_shared<PhysicsComponentManager>());
 
-	//Create test object
-	std::shared_ptr<Object> square = std::make_shared<Object>(glm::vec3(0.0f, 0.0f, 0.0f));
+	//Create test object                                                              //Need to calculate this from model later probably
+	std::shared_ptr<Object> square = std::make_shared<Object>(AxisAlignedBB(glm::vec3(-0.930302, -0.315477, -0.930302), glm::vec3(0.930302, 0.315477, 0.930302)));
 
 	square->addComponent(RENDER_COMPONENT_NAME, std::make_shared<RenderComponent>(*(square.get()), "square"));
 	square->addComponent(AI_COMPONENT_NAME, std::make_shared<ControlledAI>(*(square.get())));
