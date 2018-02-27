@@ -28,13 +28,20 @@ public:
 	 * @param size The x/z size of the map.
 	 * @param model The model to use for rendering.
 	 */
-	 FlatMap(float size, std::string model) : renderData(std::make_shared<FlatMapRenderData>(size, model)), size(size) {}
+	 FlatMap(float size, std::string model) : renderData(std::make_shared<FlatMapRenderData>(size, model)), size(size), border(glm::vec3(-size / 2.0, 0.0, -size / 2.0), glm::vec3(size / 2.0, 1000.0, size / 2.0)) {}
 
 	/**
 	 * Returns the height at the given position.
+	 * @param pos The position to retrieve the height for.
+	 * @return The height at the given position.
 	 */
 	float getHeight(glm::vec3 pos) { return 0.0f; }
 
+	/**
+	 * The outer edge of the map.
+	 * @return The border of the map.
+	 */
+	const AxisAlignedBB& getBorder() { return border; }
 	/**
 	 * Returns the render data for this map.
 	 * @return A pointer to this map's rendering data.
@@ -44,4 +51,5 @@ public:
 private:
 	std::shared_ptr<FlatMapRenderData> renderData;
 	float size;
+	AxisAlignedBB border;
 };
