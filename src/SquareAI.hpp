@@ -20,12 +20,18 @@
 
 #include "AIComponent.hpp"
 
-//A simple ai controlled by the keyboard
-class ControlledAI : public AIComponent {
+//A simple ai that mindlessly goes in one direction.
+class SquareAI : public AIComponent {
 public:
-	ControlledAI(Object& parent) : AIComponent(parent) {
-		parent.ensureState("velocity", std::make_shared<glm::vec3>(0.0, 0.0, 0.0));
+	SquareAI(Object& parent, glm::vec3 velocity) : AIComponent(parent), velocity(velocity) {
+			parent.setState("velocity", std::make_shared<glm::vec3>(velocity));
 	}
 
-	void update(Screen* screen);
+	void update(Screen* screen) {
+		parent.setState("velocity", std::make_shared<glm::vec3>(velocity));
+	}
+
+private:
+	glm::vec3 velocity;
 };
+

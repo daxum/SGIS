@@ -53,6 +53,8 @@ public:
 	 */
 	virtual std::string getModel() { return modelName; }
 
+	virtual glm::vec3 getColor() { return glm::vec3(1.0f, 1.0f, 1.0f); }
+
 private:
 	glm::vec3 scale;
 	std::string modelName;

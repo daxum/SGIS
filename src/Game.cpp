@@ -25,6 +25,8 @@
 #include "AIComponentManager.hpp"
 #include "PhysicsComponentManager.hpp"
 #include "PhysicsComponent.hpp"
+#include "UpdateComponentManager.hpp"
+#include "SquareSpawner.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -44,15 +46,22 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->addComponentManager(std::make_shared<RenderComponentManager>());
 	mainMenu->addComponentManager(std::make_shared<AIComponentManager>());
 	mainMenu->addComponentManager(std::make_shared<PhysicsComponentManager>());
+	mainMenu->addComponentManager(std::make_shared<UpdateComponentManager>());
+
+	//Add update object
+	std::shared_ptr<Object> worldUpdater = std::make_shared<Object>();
+	worldUpdater->addComponent(std::make_shared<SquareSpawner>(*(worldUpdater.get())));
+
+	mainMenu->addObject(worldUpdater);
 
 	//Create test object
 	std::shared_ptr<Object> square = std::make_shared<Object>();
 	//Should probably get the box from the model later. This is just that hard-coded.
 	std::shared_ptr<AxisAlignedBB> squareBox = std::make_shared<AxisAlignedBB>(glm::vec3(-0.930302, -0.315477, -0.930302), glm::vec3(0.930302, 0.315477, 0.930302));
 
-	square->addComponent(RENDER_COMPONENT_NAME, std::make_shared<RenderComponent>(*(square.get()), "square"));
-	square->addComponent(AI_COMPONENT_NAME, std::make_shared<ControlledAI>(*(square.get())));
-	square->addComponent(PHYSICS_COMPONENT_NAME, std::make_shared<PhysicsComponent>(*(square.get()), squareBox));
+	square->addComponent(std::make_shared<RenderComponent>(*(square.get()), "square", glm::vec3(0.1f, 0.9f, 0.1f)));
+	square->addComponent(std::make_shared<ControlledAI>(*(square.get())));
+	square->addComponent(std::make_shared<PhysicsComponent>(*(square.get()), squareBox));
 
 	//Add object and set map
 	mainMenu->addObject(square);

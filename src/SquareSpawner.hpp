@@ -18,14 +18,24 @@
 
 #pragma once
 
-#include "AIComponent.hpp"
+#include "UpdateComponent.hpp"
 
-//A simple ai controlled by the keyboard
-class ControlledAI : public AIComponent {
+class SquareSpawner : public UpdateComponent {
 public:
-	ControlledAI(Object& parent) : AIComponent(parent) {
-		parent.ensureState("velocity", std::make_shared<glm::vec3>(0.0, 0.0, 0.0));
-	}
+	SquareSpawner(Object& object) : UpdateComponent(object), targetArea(4000.0f), squareCount(0), occupiedArea(0.0f) {}
 
 	void update(Screen* screen);
+
+private:
+	constexpr static unsigned int MAX_SPAWN_PER_TICK = 50;
+	constexpr static unsigned int MAX_SQUARES = 100;
+	const float MAX_SQUARE_SIZE = 150.0f;
+
+	const float targetArea;
+
+	//TODO: below two need to be moved to screen state, for proper decrementing.
+	unsigned int squareCount;
+	float occupiedArea;
+
+	std::shared_ptr<Object> makeSquare(AxisAlignedBB baseBox);
 };
