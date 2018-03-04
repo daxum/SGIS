@@ -39,5 +39,5 @@ void ControlledAI::update(Screen* screen) {
 		addedVelocity.z += speed;
 	}
 
-	parent.velocity += addedVelocity;
+	*(parent.getState<glm::vec3>("velocity")) += addedVelocity;
 }
