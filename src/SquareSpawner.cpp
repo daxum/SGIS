@@ -46,22 +46,22 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(AxisAlignedBB baseBox) {
 	glm::vec3 velocity;
 
 	switch(ExMath::randomInt(0, 3)) {
-		case 0: //north
+		case 0: //moving north
 			translation.x = posOffset;
 			translation.z = 50.0f;
 			velocity.z = -speed;
 			break;
-		case 1: //east
+		case 1: //moving east
 			translation.x = -50.0;
 			translation.z = posOffset;
 			velocity.x = speed;
 			break;
-		case 2: //south
+		case 2: //moving south
 			translation.x = posOffset;
 			translation.z = -50.0f;
 			velocity.z = speed;
 			break;
-		case 3: //west
+		case 3: //moving west
 			translation.x = 50.0f;
 			translation.z = posOffset;
 			velocity.x = -speed;
