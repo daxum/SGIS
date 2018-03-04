@@ -10,7 +10,7 @@ project(SGIS)
 #
 #Hopefully I can think of a better way to handle this later.
 
-add_subdirectory(../../engine/src ${CMAKE_CURRENT_BINARY_DIR}/engine)
+add_subdirectory(../../engine ${CMAKE_CURRENT_BINARY_DIR}/engine)
 
 add_executable(squareGame
 	Main.cpp
