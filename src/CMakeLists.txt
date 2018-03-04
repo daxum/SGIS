@@ -6,7 +6,7 @@ project(SGIS)
 #
 #    parent directory --> game repository
 #           |
-#           +-----------> engine repository (folder currently needs to be named "engine" - lines 13 and 45)
+#           +-----------> engine repository (folder currently needs to be named "engine")
 #
 #Hopefully I can think of a better way to handle this later.
 
