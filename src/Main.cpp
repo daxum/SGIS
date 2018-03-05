@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
 	config.windowWidth = 960;
 	config.windowHeight = 540;
 	config.windowTitle = "Squares";
-	config.physicsTimestep = 1000.0 / 60.0;
+	config.timestep = 1000.0 / 60.0;
 	config.shaderPath = "shaders/";
 
 	config.generalLog.type = LogType::STDOUT;
