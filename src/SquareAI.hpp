@@ -23,12 +23,10 @@
 //A simple ai that mindlessly goes in one direction.
 class SquareAI : public AIComponent {
 public:
-	SquareAI(Object& parent, glm::vec3 velocity) : AIComponent(parent), velocity(velocity) {
-			parent.setState("velocity", std::make_shared<glm::vec3>(velocity));
-	}
+	SquareAI(Object& parent, glm::vec3 velocity) : AIComponent(parent), velocity(velocity) {}
 
 	void update(Screen* screen) {
-		parent.setState("velocity", std::make_shared<glm::vec3>(velocity));
+		parent.getComponent<PhysicsComponent>(PHYSICS_COMPONENT_NAME)->getVelocity() = velocity;
 	}
 
 private:

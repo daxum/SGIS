@@ -69,9 +69,9 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(AxisAlignedBB baseBox) {
 		default: throw std::out_of_range("Invalid direction recieved!");
 	}
 
-	std::shared_ptr<AxisAlignedBB> box = std::make_shared<AxisAlignedBB>(baseBox);
-	box->scaleAll(scale);
-	box->translate(translation);
+	AxisAlignedBB box = baseBox;
+	box.scaleAll(scale);
+	box.translate(translation);
 
 	glm::vec3 color = scale <= scaleFactor ? glm::vec3(0.95f, 0.95f, 0.04f) : glm::vec3(0.9f, 0.06f, 0.06f);
 

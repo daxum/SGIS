@@ -57,7 +57,7 @@ void Game::loadScreens(DisplayEngine& display) {
 	//Create test object
 	std::shared_ptr<Object> square = std::make_shared<Object>();
 	//Should probably get the box from the model later. This is just that hard-coded.
-	std::shared_ptr<AxisAlignedBB> squareBox = std::make_shared<AxisAlignedBB>(glm::vec3(-0.930302, -0.315477, -0.930302), glm::vec3(0.930302, 0.315477, 0.930302));
+	AxisAlignedBB squareBox(glm::vec3(-0.930302, -0.315477, -0.930302), glm::vec3(0.930302, 0.315477, 0.930302));
 
 	square->addComponent(std::make_shared<RenderComponent>(*(square.get()), "square", glm::vec3(0.1f, 0.9f, 0.1f)));
 	square->addComponent(std::make_shared<ControlledAI>(*(square.get())));

@@ -17,6 +17,7 @@
  ******************************************************************************/
 
 #include "ControlledAI.hpp"
+#include "PhysicsComponent.hpp"
 
 void ControlledAI::update(Screen* screen) {
 	glm::vec3 addedVelocity;
@@ -39,5 +40,5 @@ void ControlledAI::update(Screen* screen) {
 		addedVelocity.z += speed;
 	}
 
-	*(parent.getState<glm::vec3>("velocity")) += addedVelocity;
+	parent.getComponent<PhysicsComponent>(PHYSICS_COMPONENT_NAME)->getVelocity() += addedVelocity;
 }

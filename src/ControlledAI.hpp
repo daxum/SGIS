@@ -23,9 +23,7 @@
 //A simple ai controlled by the keyboard
 class ControlledAI : public AIComponent {
 public:
-	ControlledAI(Object& parent) : AIComponent(parent) {
-		parent.ensureState("velocity", std::make_shared<glm::vec3>(0.0, 0.0, 0.0));
-	}
+	ControlledAI(Object& parent) : AIComponent(parent) {}
 
 	void update(Screen* screen);
 };
