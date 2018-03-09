@@ -24,8 +24,7 @@
 
 void SquareSpawner::update(Screen* screen) {
 	unsigned int spawned = 0;
-	//TODO: get from model
-	AxisAlignedBB squareBox(glm::vec3(-0.930302, -0.315477, -0.930302), glm::vec3(0.930302, 0.315477, 0.930302));
+	AxisAlignedBB squareBox(screen->getModelManager().getModel("square").meshBox);
 
 	while(squareCount < MAX_SQUARES && occupiedArea < targetArea && spawned < MAX_SPAWN_PER_TICK) {
 		screen->addObject(makeSquare(squareBox));
