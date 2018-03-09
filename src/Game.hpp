@@ -32,7 +32,7 @@ public:
 	 * Called from the engine to load the game's models
 	 * @param loader The model loader provided by the engine.
 	 */
-	void loadModels(std::shared_ptr<ModelLoader> loader);
+	void loadModels(ModelLoader& loader);
 
 	/**
 	 * Loads the main menu onto the display.

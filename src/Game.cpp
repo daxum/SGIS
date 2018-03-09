@@ -33,9 +33,9 @@ void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("arena", "textures/arena.png", Filter::NEAREST, Filter::NEAREST, true);
 }
 
-void Game::loadModels(std::shared_ptr<ModelLoader> loader) {
-	loader->loadModel("square", "models/square.obj", "square");
-	loader->loadModel("arena", "models/arena.obj", "arena");
+void Game::loadModels(ModelLoader& loader) {
+	loader.loadModel("square", "models/square.obj", "square");
+	loader.loadModel("arena", "models/arena.obj", "arena");
 }
 
 void Game::loadScreens(DisplayEngine& display) {
