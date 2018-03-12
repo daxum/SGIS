@@ -20,25 +20,25 @@
 #include "PhysicsComponent.hpp"
 
 void ControlledAI::update(Screen* screen) {
-	glm::vec3 addedVelocity;
-	float speed = 0.1f;
+	glm::vec3 newVelocity;
+	float speed = 100.0f;
 
 	if (screen->isKeyPressed(Key::A)) {
-		addedVelocity.x -= speed;
+		newVelocity.x -= speed;
 	}
 
 	//Yes, "north" is negative z. I don't like it either.
 	if (screen->isKeyPressed(Key::W)) {
-		addedVelocity.z -= speed;
+		newVelocity.z -= speed;
 	}
 
 	if (screen->isKeyPressed(Key::D)) {
-		addedVelocity.x += speed;
+		newVelocity.x += speed;
 	}
 
 	if (screen->isKeyPressed(Key::S)) {
-		addedVelocity.z += speed;
+		newVelocity.z += speed;
 	}
 
-	parent.getComponent<PhysicsComponent>(PHYSICS_COMPONENT_NAME)->getVelocity() += addedVelocity;
+	parent.getComponent<PhysicsComponent>(PHYSICS_COMPONENT_NAME)->setVelocity(newVelocity);
 }

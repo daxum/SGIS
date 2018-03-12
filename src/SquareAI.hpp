@@ -26,7 +26,7 @@ public:
 	SquareAI(Object& parent, glm::vec3 velocity) : AIComponent(parent), velocity(velocity) {}
 
 	void update(Screen* screen) {
-		parent.getComponent<PhysicsComponent>(PHYSICS_COMPONENT_NAME)->getVelocity() = velocity;
+		parent.getComponent<PhysicsComponent>(PHYSICS_COMPONENT_NAME)->setVelocity(velocity);
 	}
 
 private:

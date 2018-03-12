@@ -21,6 +21,7 @@
 #include "PhysicsComponent.hpp"
 #include "SquareAI.hpp"
 #include "RenderComponent.hpp"
+#include "BoxPhysicsObject.hpp"
 
 void SquareSpawner::update(Screen* screen) {
 	unsigned int spawned = 0;
@@ -39,7 +40,7 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(AxisAlignedBB baseBox) {
 	float scaleFactor = 1.0f;
 
 	float posOffset = ExMath::randomFloat(-50.0f, 50.0f);
-	float speed = ExMath::randomFloat(0.1f, 0.3f);
+	float speed = ExMath::randomFloat(20.0f, 45.0f);
 	float scale = ExMath::randomFloat(0.4f * scaleFactor, std::min(MAX_SQUARE_SIZE, scaleFactor * 1.5f));
 	glm::vec3 translation;
 	glm::vec3 velocity;
@@ -70,14 +71,13 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(AxisAlignedBB baseBox) {
 
 	AxisAlignedBB box = baseBox;
 	box.scaleAll(scale);
-	box.translate(translation);
 
 	glm::vec3 color = scale <= scaleFactor ? glm::vec3(0.95f, 0.95f, 0.04f) : glm::vec3(0.9f, 0.06f, 0.06f);
 
 	std::shared_ptr<Object> square = std::make_shared<Object>();
-	square->addComponent(std::make_shared<PhysicsComponent>(*(square.get()), box));
-	square->addComponent(std::make_shared<SquareAI>(*(square.get()), velocity));
-	square->addComponent(std::make_shared<RenderComponent>(*(square.get()), "square", color));
+	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(box, translation)));
+	square->addComponent(std::make_shared<SquareAI>(*square, velocity));
+	square->addComponent(std::make_shared<RenderComponent>(*square, "square", color));
 
 	return square;
 }

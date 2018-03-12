@@ -18,7 +18,6 @@
 
 #include "Game.hpp"
 #include "Screen.hpp"
-#include "FlatMap.hpp"
 #include "RenderComponent.hpp"
 #include "ControlledAI.hpp"
 #include "RenderComponentManager.hpp"
@@ -27,6 +26,8 @@
 #include "PhysicsComponent.hpp"
 #include "UpdateComponentManager.hpp"
 #include "SquareSpawner.hpp"
+#include "PlanePhysicsObject.hpp"
+#include "BoxPhysicsObject.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -54,19 +55,25 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	mainMenu->addObject(worldUpdater);
 
+	//Create ground
+	std::shared_ptr<Object> ground = std::make_shared<Object>();
+
+	ground->addComponent(std::make_shared<PhysicsComponent>(*ground, std::make_shared<PlanePhysicsObject>()));
+	ground->addComponent(std::make_shared<RenderComponent>(*ground, "arena", glm::vec3(1.0, 1.0, 1.0), glm::vec3(1000.0, 1.0, 1000.0)));
+
 	//Create test object
 	std::shared_ptr<Object> square = std::make_shared<Object>();
 
-	square->addComponent(std::make_shared<RenderComponent>(*(square.get()), "square", glm::vec3(0.1f, 0.9f, 0.1f)));
-	square->addComponent(std::make_shared<ControlledAI>(*(square.get())));
-	square->addComponent(std::make_shared<PhysicsComponent>(*(square.get()), display.getModelManager().getModel("square").meshBox));
+	square->addComponent(std::make_shared<RenderComponent>(*square, "square", glm::vec3(0.1f, 0.9f, 0.1f)));
+	square->addComponent(std::make_shared<ControlledAI>(*square));
+	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(display.getModelManager().getModel("square").meshBox)));
 
-	//Add object and set map
+	//Add objects
+	mainMenu->addObject(ground);
 	mainMenu->addObject(square);
-	mainMenu->setMap(std::make_shared<FlatMap>(100.0f, "arena"));
 
 	//Hack for testing
-	mainMenu->getRenderData().camera.move(0.0f, 130.0f, 0.01f);
+	mainMenu->getRenderData().camera.move(0.0f, 200.0f, 0.01f);
 
 	display.pushScreen(mainMenu);
 }
