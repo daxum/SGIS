@@ -61,6 +61,20 @@ void Game::loadScreens(DisplayEngine& display) {
 	ground->addComponent(std::make_shared<PhysicsComponent>(*ground, std::make_shared<PlanePhysicsObject>()));
 	ground->addComponent(std::make_shared<RenderComponent>(*ground, "arena", glm::vec3(1.0, 1.0, 1.0), glm::vec3(1000.0, 1.0, 1000.0)));
 
+	//Create invisible walls
+	std::shared_ptr<Object> northWall = std::make_shared<Object>();
+	std::shared_ptr<Object> eastWall = std::make_shared<Object>();
+	std::shared_ptr<Object> southWall = std::make_shared<Object>();
+	std::shared_ptr<Object> westWall = std::make_shared<Object>();
+
+	AxisAlignedBB nsWall = AxisAlignedBB(glm::vec3(-100.0, 0.0, -500.0), glm::vec3(0.0, 10.0, 500.0));
+	AxisAlignedBB ewWall = AxisAlignedBB(glm::vec3(-500.0, 0.0, -100.0), glm::vec3(500.0, 10.0, 0.0));
+
+	northWall->addComponent(std::make_shared<PhysicsComponent>(*northWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 0.0, -550.0), 0.0f)));
+	eastWall->addComponent(std::make_shared<PhysicsComponent>(*eastWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(550.0, 0.0, 0.0), 0.0f)));
+	southWall->addComponent(std::make_shared<PhysicsComponent>(*southWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 0.0, 550.0), 0.0f)));
+	westWall->addComponent(std::make_shared<PhysicsComponent>(*westWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(-550.0, 0.0, 0.0), 0.0f)));
+
 	//Create test object
 	std::shared_ptr<Object> square = std::make_shared<Object>();
 
@@ -71,6 +85,10 @@ void Game::loadScreens(DisplayEngine& display) {
 	//Add objects
 	mainMenu->addObject(ground);
 	mainMenu->addObject(square);
+	mainMenu->addObject(northWall);
+	mainMenu->addObject(eastWall);
+	mainMenu->addObject(southWall);
+	mainMenu->addObject(westWall);
 
 	//Set camera
 	mainMenu->getCamera().setTarget(square);
