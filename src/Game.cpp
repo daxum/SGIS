@@ -70,10 +70,10 @@ void Game::loadScreens(DisplayEngine& display) {
 	AxisAlignedBB nsWall = AxisAlignedBB(glm::vec3(-100.0, 0.0, -510.0), glm::vec3(0.0, 10.0, 510.0));
 	AxisAlignedBB ewWall = AxisAlignedBB(glm::vec3(-510.0, 0.0, -100.0), glm::vec3(510.0, 10.0, 0.0));
 
-	northWall->addComponent(std::make_shared<PhysicsComponent>(*northWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 0.0, -550.0), 0.0f)));
-	eastWall->addComponent(std::make_shared<PhysicsComponent>(*eastWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(550.0, 0.0, 0.0), 0.0f)));
-	southWall->addComponent(std::make_shared<PhysicsComponent>(*southWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 0.0, 550.0), 0.0f)));
-	westWall->addComponent(std::make_shared<PhysicsComponent>(*westWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(-550.0, 0.0, 0.0), 0.0f)));
+	northWall->addComponent(std::make_shared<PhysicsComponent>(*northWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 0.0, -550.0), 0.0f, 0.0f)));
+	eastWall->addComponent(std::make_shared<PhysicsComponent>(*eastWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(550.0, 0.0, 0.0), 0.0f, 0.0f)));
+	southWall->addComponent(std::make_shared<PhysicsComponent>(*southWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 0.0, 550.0), 0.0f, 0.0f)));
+	westWall->addComponent(std::make_shared<PhysicsComponent>(*westWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(-550.0, 0.0, 0.0), 0.0f, 0.0f)));
 
 	//Create test object
 	std::shared_ptr<Object> square = std::make_shared<Object>();
