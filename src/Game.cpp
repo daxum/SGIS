@@ -51,7 +51,7 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	//Add update object
 	std::shared_ptr<Object> worldUpdater = std::make_shared<Object>();
-	worldUpdater->addComponent(std::make_shared<SquareSpawner>(*(worldUpdater.get())));
+	worldUpdater->addComponent(std::make_shared<SquareSpawner>(*worldUpdater));
 
 	mainMenu->addObject(worldUpdater);
 
