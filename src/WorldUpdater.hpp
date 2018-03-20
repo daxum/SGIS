@@ -18,17 +18,23 @@
 
 #pragma once
 
-#include "PhysicsComponent.hpp"
-#include "SquareState.hpp"
+#include "UpdateComponent.hpp"
 
-class SquareCollider : public CollisionHandler {
-	void handleCollision(Screen* screen, PhysicsComponent* hitObject) {
-		std::shared_ptr<SquareState> parentState = std::static_pointer_cast<SquareState>(parent->getParent()->getState());
-		std::shared_ptr<SquareState> hitState = std::static_pointer_cast<SquareState>(hitObject->getParent()->getState());
+//Tracks the player to determine when the game should be over.
+class WorldUpdater : public UpdateComponent {
+public:
+	WorldUpdater(Object& object, std::shared_ptr<Object> trackObject) : UpdateComponent(object), tracking(trackObject) {}
 
-		if (parentState->size > hitState->size) {
-			screen->removeObject(hitObject->getParent());
-			hitState->eaten = true;
+	void update(Screen* screen) {
+		if (std::static_pointer_cast<SquareState>(tracking->getState())->eaten) {
+			//Player got eaten!
+			screen->setPaused(true);
+			//TODO: game over screen
 		}
 	}
+
+private:
+	//The object the updater tracks.
+	std::shared_ptr<Object> tracking;
 };
+

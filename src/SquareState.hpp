@@ -21,7 +21,8 @@
 #include "Object.hpp"
 
 struct SquareState : public ObjectState {
-	SquareState(float s) : size(s) {}
+	SquareState(float s) : size(s), eaten(false) {}
 
 	float size;
+	bool eaten;
 };

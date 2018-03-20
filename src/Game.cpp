@@ -30,6 +30,7 @@
 #include "BoxPhysicsObject.hpp"
 #include "SquareCollider.hpp"
 #include "SquareState.hpp"
+#include "WorldUpdater.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -50,12 +51,6 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->addComponentManager(std::make_shared<AIComponentManager>());
 	mainMenu->addComponentManager(std::make_shared<PhysicsComponentManager>());
 	mainMenu->addComponentManager(std::make_shared<UpdateComponentManager>());
-
-	//Add update object
-	std::shared_ptr<Object> worldUpdater = std::make_shared<Object>();
-	worldUpdater->addComponent(std::make_shared<SquareSpawner>(*worldUpdater));
-
-	mainMenu->addObject(worldUpdater);
 
 	//Create ground
 	std::shared_ptr<Object> ground = std::make_shared<Object>();
@@ -85,13 +80,22 @@ void Game::loadScreens(DisplayEngine& display) {
 	square->addComponent(std::make_shared<ControlledAI>(*square));
 	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(display.getModelManager().getModel("square").meshBox), std::make_shared<SquareCollider>(), 1));
 
-	//Add objects
+	//Create update objects
+	std::shared_ptr<Object> spawner = std::make_shared<Object>();
+	spawner->addComponent(std::make_shared<SquareSpawner>(*spawner));
+
+	std::shared_ptr<Object> gameOverTracker = std::make_shared<Object>();
+	gameOverTracker->addComponent(std::make_shared<WorldUpdater>(*gameOverTracker, square));
+
+	//Add objects to screen
 	mainMenu->addObject(ground);
 	mainMenu->addObject(square);
 	mainMenu->addObject(northWall);
 	mainMenu->addObject(eastWall);
 	mainMenu->addObject(southWall);
 	mainMenu->addObject(westWall);
+	mainMenu->addObject(spawner);
+	mainMenu->addObject(gameOverTracker);
 
 	//Set camera
 	mainMenu->getCamera().setTarget(square);
