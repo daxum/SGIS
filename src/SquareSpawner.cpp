@@ -22,6 +22,7 @@
 #include "SquareAI.hpp"
 #include "RenderComponent.hpp"
 #include "BoxPhysicsObject.hpp"
+#include "SquareCollider.hpp"
 
 void SquareSpawner::update(Screen* screen) {
 	unsigned int spawned = 0;
@@ -75,7 +76,9 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(AxisAlignedBB baseBox) {
 	glm::vec3 color = scale <= scaleFactor ? glm::vec3(0.95f, 0.95f, 0.04f) : glm::vec3(0.9f, 0.06f, 0.06f);
 
 	std::shared_ptr<Object> square = std::make_shared<Object>();
-	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(box, translation)));
+	square->setState(std::make_shared<SquareState>(box.xLength()));
+
+	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(box, translation), std::make_shared<SquareCollider>(), 1));
 	square->addComponent(std::make_shared<SquareAI>(*square, velocity));
 	square->addComponent(std::make_shared<RenderComponent>(*square, "square", color, glm::vec3(scale, scale, scale)));
 

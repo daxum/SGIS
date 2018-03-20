@@ -28,6 +28,8 @@
 #include "SquareSpawner.hpp"
 #include "PlanePhysicsObject.hpp"
 #include "BoxPhysicsObject.hpp"
+#include "SquareCollider.hpp"
+#include "SquareState.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -77,10 +79,11 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	//Create test object
 	std::shared_ptr<Object> square = std::make_shared<Object>();
+	square->setState(std::make_shared<SquareState>(display.getModelManager().getModel("square").meshBox.xLength()));
 
 	square->addComponent(std::make_shared<RenderComponent>(*square, "square", glm::vec3(0.1f, 0.9f, 0.1f)));
 	square->addComponent(std::make_shared<ControlledAI>(*square));
-	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(display.getModelManager().getModel("square").meshBox)));
+	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(display.getModelManager().getModel("square").meshBox), std::make_shared<SquareCollider>(), 1));
 
 	//Add objects
 	mainMenu->addObject(ground);
