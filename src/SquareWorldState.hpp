@@ -18,18 +18,10 @@
 
 #pragma once
 
-#include "UpdateComponent.hpp"
+#include "Screen.hpp"
 
-class SquareSpawner : public UpdateComponent {
-public:
-	SquareSpawner(Object& object) : UpdateComponent(object) {}
+struct SquareWorldState : public ScreenState {
+	SquareWorldState() : squareCount(0) {}
 
-	void update(Screen* screen);
-
-private:
-	constexpr static unsigned int MAX_SPAWN_PER_TICK = 50;
-	constexpr static unsigned int MAX_SQUARES = 1000;
-	const float MAX_SQUARE_SIZE = 150.0f;
-
-	std::shared_ptr<Object> makeSquare(const AxisAlignedBB& baseBox);
+	unsigned int squareCount;
 };

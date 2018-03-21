@@ -20,6 +20,7 @@
 
 #include "PhysicsComponent.hpp"
 #include "SquareState.hpp"
+#include "SquareWorldState.hpp"
 
 class SquareCollider : public CollisionHandler {
 	void handleCollision(Screen* screen, PhysicsComponent* hitObject) {
@@ -29,6 +30,10 @@ class SquareCollider : public CollisionHandler {
 		if (parentState->size > hitState->size) {
 			screen->removeObject(hitObject->getParent());
 			hitState->eaten = true;
+
+			std::shared_ptr<SquareWorldState> worldState = std::static_pointer_cast<SquareWorldState>(screen->getState());
+
+			worldState->squareCount--;
 		}
 	}
 };

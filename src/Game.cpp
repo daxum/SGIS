@@ -31,6 +31,7 @@
 #include "SquareCollider.hpp"
 #include "SquareState.hpp"
 #include "WorldUpdater.hpp"
+#include "SquareWorldState.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -96,6 +97,14 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->addObject(westWall);
 	mainMenu->addObject(spawner);
 	mainMenu->addObject(gameOverTracker);
+
+	//Set screen state
+	std::shared_ptr<SquareWorldState> worldState = std::make_shared<SquareWorldState>();
+
+	//Only player in world
+	worldState->squareCount = 1;
+
+	mainMenu->setState(worldState);
 
 	//Set camera
 	mainMenu->getCamera().setTarget(square);

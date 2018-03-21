@@ -23,20 +23,25 @@
 #include "RenderComponent.hpp"
 #include "BoxPhysicsObject.hpp"
 #include "SquareCollider.hpp"
+#include "SquareWorldState.hpp"
 
 void SquareSpawner::update(Screen* screen) {
 	unsigned int spawned = 0;
-	AxisAlignedBB squareBox(screen->getModelManager().getModel("square").meshBox);
 
-	while(squareCount < MAX_SQUARES && occupiedArea < targetArea && spawned < MAX_SPAWN_PER_TICK) {
+	std::shared_ptr<SquareWorldState> state = std::static_pointer_cast<SquareWorldState>(screen->getState());
+
+	const AxisAlignedBB& squareBox(screen->getModelManager().getModel("square").meshBox);
+
+	while(state->squareCount < MAX_SQUARES && spawned < MAX_SPAWN_PER_TICK) {
+
 		screen->addObject(makeSquare(squareBox));
+
 		spawned++;
-		squareCount++;
-		//TODO: area
+		state->squareCount++;
 	}
 }
 
-std::shared_ptr<Object> SquareSpawner::makeSquare(AxisAlignedBB baseBox) {
+std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) {
 	//TODO: move to screen state for square growth
 	float scaleFactor = 1.0f;
 
