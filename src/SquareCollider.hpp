@@ -24,6 +24,11 @@
 
 class SquareCollider : public CollisionHandler {
 	void handleCollision(Screen* screen, PhysicsComponent* hitObject) {
+		//This only works because SquareState is the only type of object state.
+		if (!parent->getParent()->getState() || !hitObject->getParent()->getState()) {
+			return;
+		}
+
 		std::shared_ptr<SquareState> parentState = std::static_pointer_cast<SquareState>(parent->getParent()->getState());
 		std::shared_ptr<SquareState> hitState = std::static_pointer_cast<SquareState>(hitObject->getParent()->getState());
 
