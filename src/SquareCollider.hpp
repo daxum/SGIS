@@ -32,6 +32,10 @@ class SquareCollider : public CollisionHandler {
 		std::shared_ptr<SquareState> parentState = std::static_pointer_cast<SquareState>(parent->getParent()->getState());
 		std::shared_ptr<SquareState> hitState = std::static_pointer_cast<SquareState>(hitObject->getParent()->getState());
 
+		if (parentState->eaten || hitState->eaten) {
+			return;
+		}
+
 		if (parentState->size > hitState->size) {
 			screen->removeObject(hitObject->getParent());
 			hitState->eaten = true;
