@@ -29,7 +29,6 @@ int main(int argc, char** argv) {
 	config.windowHeight = 540;
 	config.windowTitle = "Squares";
 	config.timestep = 1000.0 / 60.0;
-	config.shaderPath = "shaders/";
 
 	config.generalLog.type = LogType::STDOUT;
 	config.generalLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;

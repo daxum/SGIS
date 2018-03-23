@@ -44,6 +44,27 @@ void Game::loadModels(ModelLoader& loader) {
 	loader.loadModel("arena", "models/arena.obj", "arena", "phong");
 }
 
+void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
+	ShaderInfo basicInfo;
+	basicInfo.vertex = "shaders/glsl/generic.vert";
+	basicInfo.fragment = "shaders/glsl/basic.frag";
+	basicInfo.modelView = true;
+	basicInfo.projection = true;
+	basicInfo.color = true;
+	basicInfo.tex0 = true;
+
+	ShaderInfo phongInfo;
+	phongInfo.vertex = "shaders/glsl/generic.vert";
+	phongInfo.fragment = "shaders/glsl/blinnPhong.frag";
+	phongInfo.modelView = true;
+	phongInfo.projection = true;
+	phongInfo.color = true;
+	phongInfo.tex0 = true;
+
+	loader->loadShader("basic", basicInfo);
+	loader->loadShader("phong", phongInfo);
+}
+
 void Game::loadScreens(DisplayEngine& display) {
 	//Main menu is actually the world at the moment.
 	std::shared_ptr<Screen> mainMenu = std::make_shared<Screen>(display);

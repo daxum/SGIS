@@ -35,6 +35,12 @@ public:
 	void loadModels(ModelLoader& loader);
 
 	/**
+	 * Called from the engine to load the game's shaders.
+	 * @param loader The shader loader provided by the engine.
+	 */
+	void loadShaders(std::shared_ptr<ShaderLoader> loader);
+
+	/**
 	 * Loads the main menu onto the display.
 	 * @param display The display to add the menu to.
 	 */
