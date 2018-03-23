@@ -24,13 +24,14 @@
 #include "BoxPhysicsObject.hpp"
 #include "SquareCollider.hpp"
 #include "SquareWorldState.hpp"
+#include "Engine.hpp"
 
 void SquareSpawner::update(Screen* screen) {
 	unsigned int spawned = 0;
 
 	std::shared_ptr<SquareWorldState> state = std::static_pointer_cast<SquareWorldState>(screen->getState());
 
-	const AxisAlignedBB& squareBox(screen->getModelManager().getModel("square").meshBox);
+	const AxisAlignedBB& squareBox(Engine::instance->getModelManager().getModel("square").meshBox);
 
 	while(state->squareCount < MAX_SQUARES && spawned < MAX_SPAWN_PER_TICK) {
 

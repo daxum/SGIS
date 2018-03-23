@@ -32,6 +32,7 @@
 #include "SquareState.hpp"
 #include "WorldUpdater.hpp"
 #include "SquareWorldState.hpp"
+#include "Engine.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -39,8 +40,8 @@ void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 }
 
 void Game::loadModels(ModelLoader& loader) {
-	loader.loadModel("square", "models/square.obj", "square");
-	loader.loadModel("arena", "models/arena.obj", "arena");
+	loader.loadModel("square", "models/square.obj", "square", "phong");
+	loader.loadModel("arena", "models/arena.obj", "arena", "phong");
 }
 
 void Game::loadScreens(DisplayEngine& display) {
@@ -75,11 +76,11 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	//Create test object
 	std::shared_ptr<Object> square = std::make_shared<Object>();
-	square->setState(std::make_shared<SquareState>(display.getModelManager().getModel("square").meshBox.xLength()));
+	square->setState(std::make_shared<SquareState>(Engine::instance->getModelManager().getModel("square").meshBox.xLength()));
 
 	square->addComponent(std::make_shared<RenderComponent>(*square, "square", glm::vec3(0.1f, 0.9f, 0.1f)));
 	square->addComponent(std::make_shared<ControlledAI>(*square));
-	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(display.getModelManager().getModel("square").meshBox), std::make_shared<SquareCollider>()));
+	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox), std::make_shared<SquareCollider>()));
 
 	//Create update objects
 	std::shared_ptr<Object> spawner = std::make_shared<Object>();
