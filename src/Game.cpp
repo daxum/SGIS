@@ -144,7 +144,7 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->getCamera().setTarget(square);
 
 	//Hack for testing
-	mainMenu->getCamera().move(0.0f, 200.0f, 0.01f);
+	mainMenu->getCamera().move(0.0f, 140.0f, 0.01f);
 
 	display.pushScreen(mainMenu);
 }
