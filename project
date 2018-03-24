@@ -5,14 +5,11 @@ BUILD=0
 SETUP=0
 MODE="none"
 
-#Change to number of cpu cores / threads
-CONCURRENCY=16;
-
 function build {
 	if [ $BUILD -eq 1 ]; then
 		echo "Building mode \"${MODE}\"..."
 		rm squareGame > /dev/null 2>&1
-		make -j${CONCURRENCY}
+		make -j$(nproc)
 	fi
 }
 
