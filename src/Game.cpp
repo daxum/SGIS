@@ -37,11 +37,13 @@
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
 	loader->loadTexture("arena", "textures/arena.png", Filter::NEAREST, Filter::NEAREST, true);
+	loader->loadTexture("wall", "textures/wall.png", Filter::LINEAR, Filter::LINEAR, true);
 }
 
 void Game::loadModels(ModelLoader& loader) {
 	loader.loadModel("square", "models/square.obj", "square", "phong");
 	loader.loadModel("arena", "models/arena.obj", "arena", "phong");
+	loader.loadModel("wall", "models/cube.obj", "wall", "phong");
 }
 
 void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
@@ -81,7 +83,7 @@ void Game::loadScreens(DisplayEngine& display) {
 	ground->addComponent(std::make_shared<PhysicsComponent>(*ground, std::make_shared<PlanePhysicsObject>()));
 	ground->addComponent(std::make_shared<RenderComponent>(*ground, "arena", glm::vec3(1.0, 1.0, 1.0), glm::vec3(1000.0, 1.0, 1000.0)));
 
-	//Create invisible walls
+	//Create walls
 	std::shared_ptr<Object> northWall = std::make_shared<Object>();
 	std::shared_ptr<Object> eastWall = std::make_shared<Object>();
 	std::shared_ptr<Object> southWall = std::make_shared<Object>();
@@ -94,6 +96,11 @@ void Game::loadScreens(DisplayEngine& display) {
 	eastWall->addComponent(std::make_shared<PhysicsComponent>(*eastWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(550.0, 4.0, 0.0), 0.0f, 0.0f)));
 	southWall->addComponent(std::make_shared<PhysicsComponent>(*southWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 4.0, 550.0), 0.0f, 0.0f)));
 	westWall->addComponent(std::make_shared<PhysicsComponent>(*westWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(-550.0, 4.0, 0.0), 0.0f, 0.0f)));
+
+	northWall->addComponent(std::make_shared<RenderComponent>(*northWall, "wall", glm::vec3(1.0, 1.0, 1.0), glm::vec3(500.0, 6.0, 50.0)));
+	eastWall->addComponent(std::make_shared<RenderComponent>(*eastWall, "wall", glm::vec3(1.0, 1.0, 1.0), glm::vec3(50.0, 6.0, 600.0)));
+	southWall->addComponent(std::make_shared<RenderComponent>(*southWall, "wall", glm::vec3(1.0, 1.0, 1.0), glm::vec3(500.0, 6.0, 50.0)));
+	westWall->addComponent(std::make_shared<RenderComponent>(*westWall, "wall", glm::vec3(1.0, 1.0, 1.0), glm::vec3(50.0, 6.0, 600.0)));
 
 	northWall->setState(std::make_shared<WallState>(ewWall));
 	eastWall->setState(std::make_shared<WallState>(nsWall));
