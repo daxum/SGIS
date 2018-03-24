@@ -41,9 +41,28 @@ void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 }
 
 void Game::loadModels(ModelLoader& loader) {
-	loader.loadModel("square", "models/square.obj", "square", "phong");
-	loader.loadModel("arena", "models/arena.obj", "arena", "phong");
-	loader.loadModel("wall", "models/cube.obj", "wall", "phong");
+	//These should really be in material files, but the object loader is having problems with non-absolute paths...
+	LightInfo squareLight = {
+		glm::vec3(0.25, 0.25, 0.25),
+		glm::vec3(1.0, 1.0, 1.0),
+		200.0f
+	};
+
+	LightInfo arenaLight = {
+		glm::vec3(0.27, 0.27, 0.27),
+		glm::vec3(0.9, 0.9, 0.9),
+		80.0f
+	};
+
+	LightInfo wallLight = {
+		glm::vec3(0.05, 0.05, 0.05),
+		glm::vec3(0.5, 0.5, 0.5),
+		200.0f
+	};
+
+	loader.loadModel("square", "models/square.obj", "square", "phong", squareLight);
+	loader.loadModel("arena", "models/arena.obj", "arena", "phong", arenaLight);
+	loader.loadModel("wall", "models/cube.obj", "wall", "phong", wallLight);
 }
 
 void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
@@ -62,6 +81,8 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	phongInfo.projection = true;
 	phongInfo.color = true;
 	phongInfo.tex0 = true;
+	phongInfo.lightDir = true;
+	phongInfo.lighting = true;
 
 	loader->loadShader("basic", basicInfo);
 	loader->loadShader("phong", phongInfo);
@@ -144,7 +165,7 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->getCamera().setTarget(square);
 
 	//Hack for testing
-	mainMenu->getCamera().move(0.0f, 140.0f, 0.01f);
+	mainMenu->getCamera().move(0.0f, 135.0f, 0.01f);
 
 	display.pushScreen(mainMenu);
 }
