@@ -55,21 +55,21 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 	switch(ExMath::randomInt(0, 3)) {
 		case 0: //moving north
 			translation.x = posOffset;
-			translation.z = 500.0f;
+			translation.z = 600.0f;
 			velocity.z = -speed;
 			break;
 		case 1: //moving east
-			translation.x = -500.0;
+			translation.x = -600.0;
 			translation.z = posOffset;
 			velocity.x = speed;
 			break;
 		case 2: //moving south
 			translation.x = posOffset;
-			translation.z = -500.0f;
+			translation.z = -600.0f;
 			velocity.z = speed;
 			break;
 		case 3: //moving west
-			translation.x = 500.0f;
+			translation.x = 600.0f;
 			translation.z = posOffset;
 			velocity.x = -speed;
 			break;
@@ -79,10 +79,13 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 	AxisAlignedBB box = baseBox;
 	box.scaleAll(scale);
 
+	//Walls are currently 10 units high
+	translation.y = 10.0f + box.yLength() / 2.0f;
+
 	glm::vec3 color = scale <= scaleFactor ? glm::vec3(0.95f, 0.95f, 0.04f) : glm::vec3(0.9f, 0.06f, 0.06f);
 
 	std::shared_ptr<Object> square = std::make_shared<Object>();
-	square->setState(std::make_shared<SquareState>(box.xLength()));
+	square->setState(std::make_shared<SquareState>(box, false));
 
 	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(box, translation), std::make_shared<SquareCollider>()));
 	square->addComponent(std::make_shared<SquareAI>(*square, velocity));

@@ -20,9 +20,27 @@
 
 #include "Object.hpp"
 
-struct SquareState : public ObjectState {
-	SquareState(float s) : size(s), eaten(false) {}
+enum class ObjectType {
+	SQUARE,
+	WALL
+};
 
-	float size;
+struct GameObjectState : public ObjectState {
+	GameObjectState(ObjectType type) : type(type) {}
+
+	const ObjectType type;
+};
+
+struct SquareState : public GameObjectState {
+	SquareState(AxisAlignedBB box, bool player) : GameObjectState(ObjectType::SQUARE), box(box), eaten(false), player(player) {}
+
+	AxisAlignedBB box;
 	bool eaten;
+	bool player;
+};
+
+struct WallState : public GameObjectState {
+	WallState(AxisAlignedBB box) : GameObjectState(ObjectType::WALL), box(box) {}
+
+	AxisAlignedBB box;
 };

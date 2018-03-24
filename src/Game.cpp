@@ -29,7 +29,7 @@
 #include "PlanePhysicsObject.hpp"
 #include "BoxPhysicsObject.hpp"
 #include "SquareCollider.hpp"
-#include "SquareState.hpp"
+#include "GameObjectStates.hpp"
 #include "WorldUpdater.hpp"
 #include "SquareWorldState.hpp"
 #include "Engine.hpp"
@@ -87,17 +87,22 @@ void Game::loadScreens(DisplayEngine& display) {
 	std::shared_ptr<Object> southWall = std::make_shared<Object>();
 	std::shared_ptr<Object> westWall = std::make_shared<Object>();
 
-	AxisAlignedBB nsWall = AxisAlignedBB(glm::vec3(-100.0, 0.0, -510.0), glm::vec3(0.0, 10.0, 510.0));
-	AxisAlignedBB ewWall = AxisAlignedBB(glm::vec3(-510.0, 0.0, -100.0), glm::vec3(510.0, 10.0, 0.0));
+	AxisAlignedBB nsWall = AxisAlignedBB(glm::vec3(-50.0, -6.0, -510.0), glm::vec3(50.0, 6.0, 510.0));
+	AxisAlignedBB ewWall = AxisAlignedBB(glm::vec3(-510.0, -6.0, -50.0), glm::vec3(510.0, 6.0, 50.0));
 
-	northWall->addComponent(std::make_shared<PhysicsComponent>(*northWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 0.0, -550.0), 0.0f, 0.0f)));
-	eastWall->addComponent(std::make_shared<PhysicsComponent>(*eastWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(550.0, 0.0, 0.0), 0.0f, 0.0f)));
-	southWall->addComponent(std::make_shared<PhysicsComponent>(*southWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 0.0, 550.0), 0.0f, 0.0f)));
-	westWall->addComponent(std::make_shared<PhysicsComponent>(*westWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(-550.0, 0.0, 0.0), 0.0f, 0.0f)));
+	northWall->addComponent(std::make_shared<PhysicsComponent>(*northWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 4.0, -550.0), 0.0f, 0.0f)));
+	eastWall->addComponent(std::make_shared<PhysicsComponent>(*eastWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(550.0, 4.0, 0.0), 0.0f, 0.0f)));
+	southWall->addComponent(std::make_shared<PhysicsComponent>(*southWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 4.0, 550.0), 0.0f, 0.0f)));
+	westWall->addComponent(std::make_shared<PhysicsComponent>(*westWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(-550.0, 4.0, 0.0), 0.0f, 0.0f)));
+
+	northWall->setState(std::make_shared<WallState>(ewWall));
+	eastWall->setState(std::make_shared<WallState>(nsWall));
+	southWall->setState(std::make_shared<WallState>(ewWall));
+	westWall->setState(std::make_shared<WallState>(nsWall));
 
 	//Create test object
 	std::shared_ptr<Object> square = std::make_shared<Object>();
-	square->setState(std::make_shared<SquareState>(Engine::instance->getModelManager().getModel("square").meshBox.xLength()));
+	square->setState(std::make_shared<SquareState>(Engine::instance->getModelManager().getModel("square").meshBox, true));
 
 	square->addComponent(std::make_shared<RenderComponent>(*square, "square", glm::vec3(0.1f, 0.9f, 0.1f)));
 	square->addComponent(std::make_shared<ControlledAI>(*square));
