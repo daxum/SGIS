@@ -22,7 +22,8 @@
 
 enum class ObjectType {
 	SQUARE,
-	WALL
+	WALL,
+	BLOCK
 };
 
 struct GameObjectState : public ObjectState {
@@ -32,7 +33,7 @@ struct GameObjectState : public ObjectState {
 };
 
 struct SquareState : public GameObjectState {
-	SquareState(AxisAlignedBB box, bool player) : GameObjectState(ObjectType::SQUARE), box(box), eaten(false), player(player) {}
+	SquareState(AxisAlignedBB box, bool player, bool block = false) : GameObjectState(block ? ObjectType::BLOCK : ObjectType::SQUARE), box(box), eaten(false), player(player) {}
 
 	AxisAlignedBB box;
 	bool eaten;

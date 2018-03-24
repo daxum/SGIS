@@ -82,10 +82,20 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 	//Walls are currently 10 units high
 	translation.y = 10.0f + box.yLength() / 2.0f;
 
-	glm::vec3 color = scale <= scaleFactor ? glm::vec3(0.95f, 0.95f, 0.04f) : glm::vec3(0.9f, 0.06f, 0.06f);
+	glm::vec3 color;
 
 	std::shared_ptr<Object> square = std::make_shared<Object>();
-	square->setState(std::make_shared<SquareState>(box, false));
+
+	//Is square a block (blue square, can't eat/be eaten)?
+	if (ExMath::randomFloat(0.0f, 1.0f) > 0.9f) {
+		color = glm::vec3(0.0, 0.35, 1.0);
+		square->setState(std::make_shared<SquareState>(box, false, true));
+	}
+	else {
+		//Big - red, small - yellow
+		color = scale <= scaleFactor ? glm::vec3(0.95f, 0.95f, 0.04f) : glm::vec3(0.9f, 0.06f, 0.06f);
+		square->setState(std::make_shared<SquareState>(box, false));
+	}
 
 	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(box, translation), std::make_shared<SquareCollider>()));
 	square->addComponent(std::make_shared<SquareAI>(*square, velocity));

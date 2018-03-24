@@ -38,6 +38,7 @@ class SquareCollider : public CollisionHandler {
 		switch(hitType) {
 			case ObjectType::SQUARE: doSquareCollision(screen, hitObject, parentState, std::static_pointer_cast<SquareState>(hitObject->getParent()->getState())); break;
 			case ObjectType::WALL: doWallCollision(screen, parentState, hitObject); break;
+			case ObjectType::BLOCK: break;
 			default: throw 5; //Why not?
 		}
 	}
@@ -48,8 +49,8 @@ private:
 	}
 
 	void doSquareCollision(Screen* screen, PhysicsComponent* hitObject, std::shared_ptr<SquareState> parentState, std::shared_ptr<SquareState> hitState) {
-		//If one has already been eaten, don't check again or else squareCount might get messed up
-		if (parentState->eaten || hitState->eaten) {
+		//If one has already been eaten, don't check again or else squareCount might get messed up. Also, blocks can't be eaten
+		if (parentState->eaten || hitState->eaten || parentState->type == ObjectType::BLOCK || hitState->type == ObjectType::BLOCK) {
 			return;
 		}
 
