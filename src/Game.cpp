@@ -33,6 +33,7 @@
 #include "WorldUpdater.hpp"
 #include "SquareWorldState.hpp"
 #include "Engine.hpp"
+#include "SquareCamera.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -162,10 +163,10 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->setState(worldState);
 
 	//Set camera
-	mainMenu->getCamera().setTarget(square);
+	std::shared_ptr<SquareCamera> camera = std::make_shared<SquareCamera>(glm::vec3(0.0f, 135.0f, 0.01f));
+	camera->setTarget(square);
 
-	//Hack for testing
-	mainMenu->getCamera().move(0.0f, 135.0f, 0.01f);
+	mainMenu->setCamera(camera);
 
 	display.pushScreen(mainMenu);
 }
