@@ -111,8 +111,8 @@ void Game::loadScreens(DisplayEngine& display) {
 	std::shared_ptr<Object> southWall = std::make_shared<Object>();
 	std::shared_ptr<Object> westWall = std::make_shared<Object>();
 
-	AxisAlignedBB nsWall = AxisAlignedBB(glm::vec3(-50.0, -6.0, -510.0), glm::vec3(50.0, 6.0, 510.0));
-	AxisAlignedBB ewWall = AxisAlignedBB(glm::vec3(-510.0, -6.0, -50.0), glm::vec3(510.0, 6.0, 50.0));
+	AxisAlignedBB nsWall = AxisAlignedBB(glm::vec3(-50.0, -6.0, -600.0), glm::vec3(50.0, 6.0, 600.0));
+	AxisAlignedBB ewWall = AxisAlignedBB(glm::vec3(-600.0, -6.0, -50.0), glm::vec3(600.0, 6.0, 50.0));
 
 	northWall->addComponent(std::make_shared<PhysicsComponent>(*northWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 4.0, -550.0), 0.0f)));
 	eastWall->addComponent(std::make_shared<PhysicsComponent>(*eastWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(550.0, 4.0, 0.0), 0.0f)));
