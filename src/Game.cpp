@@ -111,8 +111,8 @@ void Game::loadScreens(DisplayEngine& display) {
 	std::shared_ptr<Object> southWall = std::make_shared<Object>();
 	std::shared_ptr<Object> westWall = std::make_shared<Object>();
 
-	AxisAlignedBB nsWall = AxisAlignedBB(glm::vec3(-50.0, -6.0, -600.0), glm::vec3(50.0, 6.0, 600.0));
-	AxisAlignedBB ewWall = AxisAlignedBB(glm::vec3(-600.0, -6.0, -50.0), glm::vec3(600.0, 6.0, 50.0));
+	AxisAlignedBB nsWall(glm::vec3(-50.0, -6.0, -600.0), glm::vec3(50.0, 6.0, 600.0));
+	AxisAlignedBB ewWall(glm::vec3(-600.0, -6.0, -50.0), glm::vec3(600.0, 6.0, 50.0));
 
 	northWall->addComponent(std::make_shared<PhysicsComponent>(*northWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 4.0, -550.0), 0.0f)));
 	eastWall->addComponent(std::make_shared<PhysicsComponent>(*eastWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(550.0, 4.0, 0.0), 0.0f)));
@@ -128,6 +128,25 @@ void Game::loadScreens(DisplayEngine& display) {
 	eastWall->setState(std::make_shared<WallState>(nsWall));
 	southWall->setState(std::make_shared<WallState>(ewWall));
 	westWall->setState(std::make_shared<WallState>(nsWall));
+
+	//Create boundary walls
+	std::shared_ptr<Object> nBound = std::make_shared<Object>();
+	std::shared_ptr<Object> eBound = std::make_shared<Object>();
+	std::shared_ptr<Object> sBound = std::make_shared<Object>();
+	std::shared_ptr<Object> wBound = std::make_shared<Object>();
+
+	AxisAlignedBB ewBound(glm::vec3(-610.0, -50000.0, -50.0), glm::vec3(610.0, 50000.0, 50.0));
+	AxisAlignedBB nsBound(glm::vec3(-50.0, -50000.0, -610.0), glm::vec3(50.0, 50000.0, 610.0));
+
+	nBound->addComponent(std::make_shared<PhysicsComponent>(*nBound, std::make_shared<BoxPhysicsObject>(ewBound, glm::vec3(0.0, 49990.0, -650.0), 0.0f)));
+	eBound->addComponent(std::make_shared<PhysicsComponent>(*eBound, std::make_shared<BoxPhysicsObject>(nsBound, glm::vec3(650.0, 49990.0, 0.0), 0.0f)));
+	sBound->addComponent(std::make_shared<PhysicsComponent>(*sBound, std::make_shared<BoxPhysicsObject>(ewBound, glm::vec3(0.0, 49990.0, 650.0), 0.0f)));
+	wBound->addComponent(std::make_shared<PhysicsComponent>(*wBound, std::make_shared<BoxPhysicsObject>(nsBound, glm::vec3(-650.0, 49990.0, 0.0), 0.0f)));
+
+	nBound->setState(std::make_shared<WallState>(ewBound));
+	nBound->setState(std::make_shared<WallState>(nsBound));
+	nBound->setState(std::make_shared<WallState>(ewBound));
+	nBound->setState(std::make_shared<WallState>(nsBound));
 
 	//Create test object
 	std::shared_ptr<Object> square = std::make_shared<Object>();
@@ -151,6 +170,10 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->addObject(eastWall);
 	mainMenu->addObject(southWall);
 	mainMenu->addObject(westWall);
+	mainMenu->addObject(nBound);
+	mainMenu->addObject(eBound);
+	mainMenu->addObject(sBound);
+	mainMenu->addObject(wBound);
 	mainMenu->addObject(spawner);
 	mainMenu->addObject(gameOverTracker);
 

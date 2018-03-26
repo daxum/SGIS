@@ -55,21 +55,21 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 	switch(ExMath::randomInt(0, 3)) {
 		case 0: //moving north
 			translation.x = posOffset;
-			translation.z = 600.0f;
+			translation.z = 597.0f;
 			velocity.z = -speed;
 			break;
 		case 1: //moving east
-			translation.x = -600.0;
+			translation.x = -597.0;
 			translation.z = posOffset;
 			velocity.x = speed;
 			break;
 		case 2: //moving south
 			translation.x = posOffset;
-			translation.z = -600.0f;
+			translation.z = -597.0f;
 			velocity.z = speed;
 			break;
 		case 3: //moving west
-			translation.x = 600.0f;
+			translation.x = 597.0f;
 			translation.z = posOffset;
 			velocity.x = -speed;
 			break;
