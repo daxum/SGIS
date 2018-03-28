@@ -26,7 +26,6 @@ public:
 	SquareAI(Object& parent, glm::vec3 velocity) : AIComponent(parent), velocity(velocity) {}
 
 	void update(Screen* screen) {
-		//TODO: check if on ground to prevent getting stuck against walls in midair.
 		parent.getComponent<PhysicsComponent>(PHYSICS_COMPONENT_NAME)->setVelocity(velocity);
 	}
 
