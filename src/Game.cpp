@@ -91,7 +91,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 
 void Game::loadScreens(DisplayEngine& display) {
 	//Main menu is actually the world at the moment.
-	std::shared_ptr<Screen> mainMenu = std::make_shared<Screen>(display);
+	std::shared_ptr<Screen> mainMenu = std::make_shared<Screen>(display, false);
 
 	//Add component managers to screen
 	mainMenu->addComponentManager(std::make_shared<RenderComponentManager>());
