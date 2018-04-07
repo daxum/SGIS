@@ -154,7 +154,9 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	square->addComponent(std::make_shared<RenderComponent>(*square, "square", glm::vec3(0.1f, 0.9f, 0.1f)));
 	square->addComponent(std::make_shared<ControlledAI>(*square));
-	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox), std::make_shared<SquareCollider>()));
+	std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox), std::make_shared<SquareCollider>());
+	physics->velocityReduction(false);
+	square->addComponent(physics);
 
 	//Create update objects
 	std::shared_ptr<Object> spawner = std::make_shared<Object>();

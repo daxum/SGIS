@@ -97,7 +97,10 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 		square->setState(std::make_shared<SquareState>(box, false));
 	}
 
-	square->addComponent(std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(box, translation), std::make_shared<SquareCollider>()));
+	std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(box, translation), std::make_shared<SquareCollider>());
+	physics->velocityReduction(false);
+
+	square->addComponent(physics);
 	square->addComponent(std::make_shared<SquareAI>(*square, velocity));
 	square->addComponent(std::make_shared<RenderComponent>(*square, "square", color, glm::vec3(scale, scale, scale)));
 
