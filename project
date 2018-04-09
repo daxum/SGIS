@@ -30,15 +30,48 @@ for ((i=1;i<=$#;i++)); do
 done;
 
 if [ ${SETUP} -eq 1 ]; then
+	ADD_BULLET_INSTALL="-DUSE_INSTALLED_BULLET="
+	ADD_GLFW_INSTALL="-DUSE_INSTALLED_GLFW="
+
+	echo "Use installed bullet?"
+	select INSTALLED_BULLET in "Yes" "No"; do
+		case ${INSTALLED_BULLET} in
+			Yes) ADD_BULLET_INSTALL="${ADD_BULLET_INSTALL}ON"; break;;
+			No) ADD_BULLET_INSTALL=""; break;;
+		esac
+	done
+
+	if [ -z "${ADD_BULLET_INSTALL}" ]; then
+		read -p "Enter bullet directory: " BULLET_DIR
+		ADD_BULLET_INSTALL="-DBULLET_DIR=${BULLET_DIR}"
+	fi
+
+	echo "Use installed glfw?"
+	select INSTALLED_GLFW in "Yes" "No"; do
+		case ${INSTALLED_GLFW} in
+			Yes) ADD_GLFW_INSTALL="${ADD_GLFW_INSTALL}ON"; break;;
+			No) ADD_GLFW_INSTALL=""; break;;
+		esac
+	done
+
+	if [ -z "${ADD_GLFW_INSTALL}" ]; then
+		read -p "Enter glfw directory: " GLFW_DIR
+		ADD_GLFW_INSTALL="-DGLFW_DIR=${GLFW_DIR}"
+		ADD_GLFW_INSTALL="${ADD_GLFW_INSTALL} -DGLFW_BUILD_DOCS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_INSTALL=OFF"
+	fi
+
+	CMAKE_VARS="${ADD_BULLET_INSTALL} ${ADD_GLFW_INSTALL}"
+
 	echo "Setting up debug directory..."
 	mkdir debug > /dev/null 2>&1
 	cd debug
-	cmake -DCMAKE_BUILD_TYPE=Debug ../src
+	cmake -DCMAKE_BUILD_TYPE=Debug ${CMAKE_VARS} ../src
 	cd ..
+
 	echo "Setting up release directory..."
 	mkdir release > /dev/null 2>&1
 	cd release
-	cmake -DCMAKE_BUILD_TYPE=Release ../src
+	cmake -DCMAKE_BUILD_TYPE=Release ${CMAKE_VARS} ../src
 	cd ..
 	echo "Setup complete."
 fi
