@@ -21,7 +21,7 @@
 
 void ControlledAI::update(Screen* screen) {
 	glm::vec3 newVelocity;
-	float speed = 90.0f;
+	float speed = 80.0f;
 
 	if (screen->isKeyPressed(Key::A)) {
 		newVelocity.x -= speed;
