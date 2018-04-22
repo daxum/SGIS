@@ -18,6 +18,7 @@ add_executable(squareGame
 	ControlledAI.cpp
 	SquareSpawner.cpp
 	SquareCamera.cpp
+	StartButton.cpp
 )
 
 set_target_properties(squareGame PROPERTIES

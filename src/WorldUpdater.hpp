@@ -28,7 +28,7 @@ public:
 	void update(Screen* screen) {
 		if (std::static_pointer_cast<SquareState>(tracking->getState())->eaten) {
 			//Player got eaten!
-			screen->setPaused(true);
+			screen->getDisplay().popScreen();
 			//TODO: game over screen
 		}
 	}

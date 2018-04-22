@@ -19,21 +19,10 @@
 #include "Game.hpp"
 #include "Screen.hpp"
 #include "RenderComponent.hpp"
-#include "ControlledAI.hpp"
 #include "RenderComponentManager.hpp"
-#include "AIComponentManager.hpp"
-#include "PhysicsComponentManager.hpp"
-#include "PhysicsComponent.hpp"
-#include "UpdateComponentManager.hpp"
-#include "SquareSpawner.hpp"
-#include "PlanePhysicsObject.hpp"
-#include "BoxPhysicsObject.hpp"
-#include "SquareCollider.hpp"
-#include "GameObjectStates.hpp"
-#include "WorldUpdater.hpp"
-#include "SquareWorldState.hpp"
 #include "Engine.hpp"
-#include "SquareCamera.hpp"
+#include "GuiComponentManager.hpp"
+#include "Buttons.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -90,108 +79,25 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 }
 
 void Game::loadScreens(DisplayEngine& display) {
-	//Main menu is actually the world at the moment.
 	std::shared_ptr<Screen> mainMenu = std::make_shared<Screen>(display, false);
 
-	//Add component managers to screen
+	//Add component managers.
 	mainMenu->addComponentManager(std::make_shared<RenderComponentManager>());
-	mainMenu->addComponentManager(std::make_shared<AIComponentManager>());
-	mainMenu->addComponentManager(std::make_shared<PhysicsComponentManager>());
-	mainMenu->addComponentManager(std::make_shared<UpdateComponentManager>());
+	mainMenu->addComponentManager(std::make_shared<GuiComponentManager>(mainMenu));
 
-	//Create ground
-	std::shared_ptr<Object> ground = std::make_shared<Object>();
+	//Create buttons.
+	std::shared_ptr<Object> quitButton = std::make_shared<Object>();
+	std::shared_ptr<Object> startButton = std::make_shared<Object>();
 
-	ground->addComponent(std::make_shared<PhysicsComponent>(*ground, std::make_shared<PlanePhysicsObject>()));
-	ground->addComponent(std::make_shared<RenderComponent>(*ground, "arena", glm::vec3(1.0, 1.0, 1.0), glm::vec3(1000.0, 1.0, 1000.0)));
+	quitButton->addComponent(std::make_shared<BackButton>(*quitButton, glm::vec3(0.0, 0.0, -1.0), Key::ESCAPE));
+	quitButton->addComponent(std::make_shared<RenderComponent>(*quitButton, "square", glm::vec3(0.9, 0.1, 0.0), glm::vec3(0.25, 0.25, 0.25)));
 
-	//Create walls
-	std::shared_ptr<Object> northWall = std::make_shared<Object>();
-	std::shared_ptr<Object> eastWall = std::make_shared<Object>();
-	std::shared_ptr<Object> southWall = std::make_shared<Object>();
-	std::shared_ptr<Object> westWall = std::make_shared<Object>();
+	startButton->addComponent(std::make_shared<StartButton>(*startButton, glm::vec3(0.0, 0.26, -1.0), Key::ENTER));
+	startButton->addComponent(std::make_shared<RenderComponent>(*startButton, "square", glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.25, 0.25, 0.25)));
 
-	AxisAlignedBB nsWall(glm::vec3(-50.0, -6.0, -600.0), glm::vec3(50.0, 6.0, 600.0));
-	AxisAlignedBB ewWall(glm::vec3(-600.0, -6.0, -50.0), glm::vec3(600.0, 6.0, 50.0));
-
-	northWall->addComponent(std::make_shared<PhysicsComponent>(*northWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 4.0, -550.0), 0.0f)));
-	eastWall->addComponent(std::make_shared<PhysicsComponent>(*eastWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(550.0, 4.0, 0.0), 0.0f)));
-	southWall->addComponent(std::make_shared<PhysicsComponent>(*southWall, std::make_shared<BoxPhysicsObject>(ewWall, glm::vec3(0.0, 4.0, 550.0), 0.0f)));
-	westWall->addComponent(std::make_shared<PhysicsComponent>(*westWall, std::make_shared<BoxPhysicsObject>(nsWall, glm::vec3(-550.0, 4.0, 0.0), 0.0f)));
-
-	northWall->addComponent(std::make_shared<RenderComponent>(*northWall, "wall", glm::vec3(1.0, 1.0, 1.0), glm::vec3(500.0, 6.0, 50.0)));
-	eastWall->addComponent(std::make_shared<RenderComponent>(*eastWall, "wall", glm::vec3(1.0, 1.0, 1.0), glm::vec3(50.0, 6.0, 600.0)));
-	southWall->addComponent(std::make_shared<RenderComponent>(*southWall, "wall", glm::vec3(1.0, 1.0, 1.0), glm::vec3(500.0, 6.0, 50.0)));
-	westWall->addComponent(std::make_shared<RenderComponent>(*westWall, "wall", glm::vec3(1.0, 1.0, 1.0), glm::vec3(50.0, 6.0, 600.0)));
-
-	northWall->setState(std::make_shared<WallState>(ewWall));
-	eastWall->setState(std::make_shared<WallState>(nsWall));
-	southWall->setState(std::make_shared<WallState>(ewWall));
-	westWall->setState(std::make_shared<WallState>(nsWall));
-
-	//Create boundary walls
-	std::shared_ptr<Object> nBound = std::make_shared<Object>();
-	std::shared_ptr<Object> eBound = std::make_shared<Object>();
-	std::shared_ptr<Object> sBound = std::make_shared<Object>();
-	std::shared_ptr<Object> wBound = std::make_shared<Object>();
-
-	AxisAlignedBB ewBound(glm::vec3(-610.0, -50000.0, -50.0), glm::vec3(610.0, 50000.0, 50.0));
-	AxisAlignedBB nsBound(glm::vec3(-50.0, -50000.0, -610.0), glm::vec3(50.0, 50000.0, 610.0));
-
-	nBound->addComponent(std::make_shared<PhysicsComponent>(*nBound, std::make_shared<BoxPhysicsObject>(ewBound, glm::vec3(0.0, 49990.0, -650.0), 0.0f)));
-	eBound->addComponent(std::make_shared<PhysicsComponent>(*eBound, std::make_shared<BoxPhysicsObject>(nsBound, glm::vec3(650.0, 49990.0, 0.0), 0.0f)));
-	sBound->addComponent(std::make_shared<PhysicsComponent>(*sBound, std::make_shared<BoxPhysicsObject>(ewBound, glm::vec3(0.0, 49990.0, 650.0), 0.0f)));
-	wBound->addComponent(std::make_shared<PhysicsComponent>(*wBound, std::make_shared<BoxPhysicsObject>(nsBound, glm::vec3(-650.0, 49990.0, 0.0), 0.0f)));
-
-	nBound->setState(std::make_shared<WallState>(ewBound));
-	nBound->setState(std::make_shared<WallState>(nsBound));
-	nBound->setState(std::make_shared<WallState>(ewBound));
-	nBound->setState(std::make_shared<WallState>(nsBound));
-
-	//Create test object
-	std::shared_ptr<Object> square = std::make_shared<Object>();
-	square->setState(std::make_shared<SquareState>(Engine::instance->getModelManager().getModel("square").meshBox, true));
-
-	square->addComponent(std::make_shared<RenderComponent>(*square, "square", glm::vec3(0.1f, 0.9f, 0.1f)));
-	square->addComponent(std::make_shared<ControlledAI>(*square));
-	std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox), std::make_shared<SquareCollider>());
-	physics->velocityReduction(false);
-	square->addComponent(physics);
-
-	//Create update objects
-	std::shared_ptr<Object> spawner = std::make_shared<Object>();
-	spawner->addComponent(std::make_shared<SquareSpawner>(*spawner));
-
-	std::shared_ptr<Object> gameOverTracker = std::make_shared<Object>();
-	gameOverTracker->addComponent(std::make_shared<WorldUpdater>(*gameOverTracker, square));
-
-	//Add objects to screen
-	mainMenu->addObject(ground);
-	mainMenu->addObject(square);
-	mainMenu->addObject(northWall);
-	mainMenu->addObject(eastWall);
-	mainMenu->addObject(southWall);
-	mainMenu->addObject(westWall);
-	mainMenu->addObject(nBound);
-	mainMenu->addObject(eBound);
-	mainMenu->addObject(sBound);
-	mainMenu->addObject(wBound);
-	mainMenu->addObject(spawner);
-	mainMenu->addObject(gameOverTracker);
-
-	//Set screen state
-	std::shared_ptr<SquareWorldState> worldState = std::make_shared<SquareWorldState>();
-
-	//Only player in world
-	worldState->squareCount = 1;
-
-	mainMenu->setState(worldState);
-
-	//Set camera
-	std::shared_ptr<SquareCamera> camera = std::make_shared<SquareCamera>(glm::vec3(0.0f, 135.0f, 0.01f));
-	camera->setTarget(square);
-
-	mainMenu->setCamera(camera);
+	//Add buttons to menu.
+	mainMenu->addObject(quitButton);
+	mainMenu->addObject(startButton);
 
 	display.pushScreen(mainMenu);
 }
