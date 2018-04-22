@@ -51,6 +51,7 @@ void Game::loadModels(ModelLoader& loader) {
 	};
 
 	loader.loadModel("square", "models/square.obj", "square", "phong", squareLight);
+	loader.loadModel("button", "models/square.obj", "square", "basic", squareLight);
 	loader.loadModel("arena", "models/arena.obj", "arena", "phong", arenaLight);
 	loader.loadModel("wall", "models/cube.obj", "wall", "phong", wallLight);
 }
@@ -90,10 +91,10 @@ void Game::loadScreens(DisplayEngine& display) {
 	std::shared_ptr<Object> startButton = std::make_shared<Object>();
 
 	quitButton->addComponent(std::make_shared<BackButton>(*quitButton, glm::vec3(0.0, 0.0, -1.0), Key::ESCAPE));
-	quitButton->addComponent(std::make_shared<RenderComponent>(*quitButton, "square", glm::vec3(0.9, 0.1, 0.0), glm::vec3(0.25, 0.25, 0.25)));
+	quitButton->addComponent(std::make_shared<RenderComponent>(*quitButton, "button", glm::vec3(0.9, 0.1, 0.0), glm::vec3(0.25, 0.25, 0.25)));
 
 	startButton->addComponent(std::make_shared<StartButton>(*startButton, glm::vec3(0.0, 0.26, -1.0), Key::ENTER));
-	startButton->addComponent(std::make_shared<RenderComponent>(*startButton, "square", glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.25, 0.25, 0.25)));
+	startButton->addComponent(std::make_shared<RenderComponent>(*startButton, "button", glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.25, 0.25, 0.25)));
 
 	//Add buttons to menu.
 	mainMenu->addObject(quitButton);
