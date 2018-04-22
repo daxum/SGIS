@@ -19,7 +19,6 @@
 #include "SquareSpawner.hpp"
 #include "ExtraMath.hpp"
 #include "PhysicsComponent.hpp"
-#include "SquareAI.hpp"
 #include "RenderComponent.hpp"
 #include "BoxPhysicsObject.hpp"
 #include "SquareCollider.hpp"
@@ -99,9 +98,9 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 
 	std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(*square, std::make_shared<BoxPhysicsObject>(box, translation), std::make_shared<SquareCollider>());
 	physics->velocityReduction(false);
+	physics->setVelocity(velocity);
 
 	square->addComponent(physics);
-	square->addComponent(std::make_shared<SquareAI>(*square, velocity));
 	square->addComponent(std::make_shared<RenderComponent>(*square, "square", color, glm::vec3(scale, scale, scale)));
 
 	return square;
