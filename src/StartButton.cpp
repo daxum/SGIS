@@ -133,7 +133,7 @@ std::shared_ptr<Screen> StartButton::createGameWorld(std::shared_ptr<Screen> cur
 	world->setState(worldState);
 
 	//Set camera
-	std::shared_ptr<SquareCamera> camera = std::make_shared<SquareCamera>(glm::vec3(0.0f, 1.0f, 0.01f));
+	std::shared_ptr<SquareCamera> camera = std::make_shared<SquareCamera>(glm::vec3(0.0f, 135.0f, 0.01f));
 	camera->setTarget(square);
 
 	world->setCamera(camera);
