@@ -23,6 +23,8 @@
 #include "Engine.hpp"
 #include "GuiComponentManager.hpp"
 #include "Buttons.hpp"
+#include "PhysicsComponentManager.hpp"
+#include "BoxPhysicsObject.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -85,20 +87,26 @@ void Game::loadScreens(DisplayEngine& display) {
 	//Add component managers.
 	mainMenu->addComponentManager(std::make_shared<RenderComponentManager>());
 	mainMenu->addComponentManager(std::make_shared<GuiComponentManager>(mainMenu));
+	mainMenu->addComponentManager(std::make_shared<PhysicsComponentManager>());
 
 	//Create buttons.
 	std::shared_ptr<Object> quitButton = std::make_shared<Object>();
 	std::shared_ptr<Object> startButton = std::make_shared<Object>();
 
-	quitButton->addComponent(std::make_shared<BackButton>(*quitButton, glm::vec3(0.0, 0.0, -1.0), Key::ESCAPE));
-	quitButton->addComponent(std::make_shared<RenderComponent>(*quitButton, "button", glm::vec3(0.9, 0.1, 0.0), glm::vec3(0.25, 0.25, 0.25)));
+	quitButton->addComponent(std::make_shared<BackButton>(*quitButton, Key::ESCAPE));
+	quitButton->addComponent(std::make_shared<RenderComponent>(*quitButton, "button", glm::vec3(0.9, 0.1, 0.0)));
+	quitButton->addComponent(std::make_shared<PhysicsComponent>(*quitButton, std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, -0.5, 0.0), 0.0f)));
 
-	startButton->addComponent(std::make_shared<StartButton>(*startButton, glm::vec3(0.0, 0.26, -1.0), Key::ENTER));
-	startButton->addComponent(std::make_shared<RenderComponent>(*startButton, "button", glm::vec3(0.0, 1.0, 0.0), glm::vec3(0.25, 0.25, 0.25)));
+	startButton->addComponent(std::make_shared<StartButton>(*startButton, Key::ENTER));
+	startButton->addComponent(std::make_shared<RenderComponent>(*startButton, "button", glm::vec3(0.0, 1.0, 0.0)));
+	startButton->addComponent(std::make_shared<PhysicsComponent>(*startButton, std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, 0.5, 0.0), 0.0f)));
 
 	//Add buttons to menu.
 	mainMenu->addObject(quitButton);
 	mainMenu->addObject(startButton);
+
+	//Set camera
+	std::static_pointer_cast<DefaultCamera>(mainMenu->getCamera())->pos = glm::vec3(0.0, 0.0, -10.0);
 
 	display.pushScreen(mainMenu);
 }

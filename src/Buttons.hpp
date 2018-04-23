@@ -26,7 +26,7 @@
 //Pops the screen stack when the set key is pressed.
 class BackButton : public GuiComponent {
 public:
-	BackButton(Object& object, glm::vec3 position, Key key) : GuiComponent(object, position), actionKey(key) {}
+	BackButton(Object& object, Key key) : GuiComponent(object, true), actionKey(key) {}
 
 	bool onKeyPress(std::shared_ptr<Screen> screen, Key key, KeyAction action) {
 		if (key == actionKey && action == KeyAction::RELEASE) {
@@ -37,13 +37,19 @@ public:
 		return false;
 	}
 
+	void onMouseClick(std::shared_ptr<Screen> screen, MouseButton button, MouseAction action) {
+		if (button == MouseButton::LEFT && action == MouseAction::RELEASE) {
+			screen->getDisplay().popScreen();
+		}
+	}
+
 private:
 	Key actionKey;
 };
 
 class StartButton : public GuiComponent {
 public:
-	StartButton(Object& object, glm::vec3 position, Key key) : GuiComponent(object, position), actionKey(key) {}
+	StartButton(Object& object, Key key) : GuiComponent(object, true), actionKey(key) {}
 
 	bool onKeyPress(std::shared_ptr<Screen> screen, Key key, KeyAction action) {
 		if (key == actionKey && action == KeyAction::RELEASE) {
@@ -52,6 +58,12 @@ public:
 		}
 
 		return false;
+	}
+
+	void onMouseClick(std::shared_ptr<Screen> screen, MouseButton button, MouseAction action) {
+		if (button == MouseButton::LEFT && action == MouseAction::RELEASE) {
+			screen->getDisplay().pushScreen(createGameWorld(screen));
+		}
 	}
 
 	std::shared_ptr<Screen> createGameWorld(std::shared_ptr<Screen> current);

@@ -24,10 +24,12 @@
 int main(int argc, char** argv) {
 	//Create instance of game engine
 	EngineConfig config = {};
-	config.renderer = Renderer::OPEN_GL;
-	config.windowWidth = 960;
-	config.windowHeight = 540;
-	config.windowTitle = "Squares";
+	config.renderer.renderType = Renderer::OPEN_GL;
+	config.renderer.windowWidth = 960;
+	config.renderer.windowHeight = 540;
+	config.renderer.windowTitle = "Squares";
+	config.renderer.nearPlane = 0.1f;
+	config.renderer.farPlane = 10000.0f;
 	config.timestep = 1000.0 / 60.0;
 	config.physicsTimestep = 1.0f / 120.0f;
 
