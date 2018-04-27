@@ -86,7 +86,7 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	//Add component managers.
 	mainMenu->addComponentManager(std::make_shared<RenderComponentManager>());
-	mainMenu->addComponentManager(std::make_shared<GuiComponentManager>(mainMenu));
+	mainMenu->addComponentManager(std::make_shared<GuiComponentManager>(mainMenu.get()));
 	mainMenu->addComponentManager(std::make_shared<PhysicsComponentManager>());
 
 	//Create buttons.

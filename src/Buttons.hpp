@@ -28,7 +28,7 @@ class BackButton : public GuiComponent {
 public:
 	BackButton(Object& object, Key key) : GuiComponent(object, true), actionKey(key) {}
 
-	bool onKeyPress(std::shared_ptr<Screen> screen, Key key, KeyAction action) {
+	bool onKeyPress(Screen* screen, Key key, KeyAction action) {
 		if (key == actionKey && action == KeyAction::RELEASE) {
 			screen->getDisplay().popScreen();
 			return true;
@@ -37,7 +37,7 @@ public:
 		return false;
 	}
 
-	void onMouseClick(std::shared_ptr<Screen> screen, MouseButton button, MouseAction action) {
+	void onMouseClick(Screen* screen, MouseButton button, MouseAction action) {
 		if (button == MouseButton::LEFT && action == MouseAction::RELEASE) {
 			screen->getDisplay().popScreen();
 		}
@@ -51,7 +51,7 @@ class StartButton : public GuiComponent {
 public:
 	StartButton(Object& object, Key key) : GuiComponent(object, true), actionKey(key) {}
 
-	bool onKeyPress(std::shared_ptr<Screen> screen, Key key, KeyAction action) {
+	bool onKeyPress(Screen* screen, Key key, KeyAction action) {
 		if (key == actionKey && action == KeyAction::RELEASE) {
 			screen->getDisplay().pushScreen(createGameWorld(screen));
 			return true;
@@ -60,13 +60,13 @@ public:
 		return false;
 	}
 
-	void onMouseClick(std::shared_ptr<Screen> screen, MouseButton button, MouseAction action) {
+	void onMouseClick(Screen* screen, MouseButton button, MouseAction action) {
 		if (button == MouseButton::LEFT && action == MouseAction::RELEASE) {
 			screen->getDisplay().pushScreen(createGameWorld(screen));
 		}
 	}
 
-	std::shared_ptr<Screen> createGameWorld(std::shared_ptr<Screen> current);
+	std::shared_ptr<Screen> createGameWorld(Screen* current);
 
 private:
 	Key actionKey;

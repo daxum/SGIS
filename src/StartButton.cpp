@@ -35,7 +35,7 @@
 #include "SquareCamera.hpp"
 #include "Engine.hpp"
 
-std::shared_ptr<Screen> StartButton::createGameWorld(std::shared_ptr<Screen> current) {
+std::shared_ptr<Screen> StartButton::createGameWorld(Screen* current) {
 	std::shared_ptr<Screen> world = std::make_shared<Screen>(current->getDisplay(), false);
 
 	//Add component managers to world
