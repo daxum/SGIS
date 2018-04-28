@@ -35,9 +35,19 @@ vec3 pointLight(vec3 lightPos) {
 	return color * (ka + diffuse + specular);
 }
 
+vec3 cel(vec3 color, float factor) {
+	float average = (color.x + color.y + color.z) / 3.0;
+	float adjAverage = ((ceil(average * factor) / factor) + (floor(average * factor) / factor)) / 2.0;
+	color.x = color.x * (adjAverage / average);
+	color.y = color.y * (adjAverage / average);
+	color.z = color.z * (adjAverage / average);
+
+	return color;
+}
+
 void main() {
 	outColor = vec4(directionalLight(1.0), 1.0);
 
 	//Comment/uncomment to toggle cel shading
-	//outColor = ceil(outColor * 20.0) / 20.0;
+	//outColor = vec4(cel(outColor.xyz, 20.0), outColor.w);
 }
