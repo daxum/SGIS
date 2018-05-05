@@ -93,13 +93,13 @@ void Game::loadScreens(DisplayEngine& display) {
 	std::shared_ptr<Object> quitButton = std::make_shared<Object>();
 	std::shared_ptr<Object> startButton = std::make_shared<Object>();
 
-	quitButton->addComponent(std::make_shared<BackButton>(*quitButton, Key::ESCAPE));
-	quitButton->addComponent(std::make_shared<RenderComponent>(*quitButton, "button", glm::vec3(0.9, 0.1, 0.0)));
-	quitButton->addComponent(std::make_shared<PhysicsComponent>(*quitButton, std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, -0.5, 0.0), 0.0f)));
+	quitButton->addComponent(std::make_shared<BackButton>(Key::ESCAPE));
+	quitButton->addComponent(std::make_shared<RenderComponent>("button", glm::vec3(0.9, 0.1, 0.0)));
+	quitButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, -0.5, 0.0), 0.0f)));
 
-	startButton->addComponent(std::make_shared<StartButton>(*startButton, Key::ENTER));
-	startButton->addComponent(std::make_shared<RenderComponent>(*startButton, "button", glm::vec3(0.0, 1.0, 0.0)));
-	startButton->addComponent(std::make_shared<PhysicsComponent>(*startButton, std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, 0.5, 0.0), 0.0f)));
+	startButton->addComponent(std::make_shared<StartButton>(Key::ENTER));
+	startButton->addComponent(std::make_shared<RenderComponent>("button", glm::vec3(0.0, 1.0, 0.0)));
+	startButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, 0.5, 0.0), 0.0f)));
 
 	//Add buttons to menu.
 	mainMenu->addObject(quitButton);

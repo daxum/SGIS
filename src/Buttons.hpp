@@ -26,7 +26,7 @@
 //Pops the screen stack when the set key is pressed.
 class BackButton : public GuiComponent {
 public:
-	BackButton(Object& object, Key key) : GuiComponent(object, true), actionKey(key) {}
+	BackButton(Key key) : GuiComponent(), actionKey(key) {}
 
 	bool onKeyPress(Screen* screen, Key key, KeyAction action) {
 		if (key == actionKey && action == KeyAction::RELEASE) {
@@ -49,7 +49,7 @@ private:
 
 class StartButton : public GuiComponent {
 public:
-	StartButton(Object& object, Key key) : GuiComponent(object, true), actionKey(key) {}
+	StartButton(Key key) : GuiComponent(), actionKey(key) {}
 
 	bool onKeyPress(Screen* screen, Key key, KeyAction action) {
 		if (key == actionKey && action == KeyAction::RELEASE) {

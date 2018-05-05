@@ -23,7 +23,7 @@
 //A simple ai controlled by the keyboard
 class ControlledAI : public AIComponent {
 public:
-	ControlledAI(Object& parent) : AIComponent(parent) {}
+	ControlledAI() : AIComponent() {}
 
 	void update(Screen* screen);
 };

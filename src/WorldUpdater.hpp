@@ -23,7 +23,7 @@
 //Tracks the player to determine when the game should be over.
 class WorldUpdater : public UpdateComponent {
 public:
-	WorldUpdater(Object& object, std::shared_ptr<Object> trackObject) : UpdateComponent(object), tracking(trackObject) {}
+	WorldUpdater(std::shared_ptr<Object> trackObject) : UpdateComponent(), tracking(trackObject) {}
 
 	void update(Screen* screen) {
 		if (std::static_pointer_cast<SquareState>(tracking->getState())->eaten) {

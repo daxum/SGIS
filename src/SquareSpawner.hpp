@@ -22,7 +22,7 @@
 
 class SquareSpawner : public UpdateComponent {
 public:
-	SquareSpawner(Object& object) : UpdateComponent(object) {}
+	SquareSpawner() : UpdateComponent() {}
 
 	void update(Screen* screen);
 

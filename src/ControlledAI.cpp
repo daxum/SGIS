@@ -42,5 +42,5 @@ void ControlledAI::update(Screen* screen) {
 		newVelocity.z += speed;
 	}
 
-	parent.getComponent<PhysicsComponent>(PHYSICS_COMPONENT_NAME)->setVelocity(newVelocity);
+	lockParent()->getComponent<PhysicsComponent>(PHYSICS_COMPONENT_NAME)->setVelocity(newVelocity);
 }
