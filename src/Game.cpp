@@ -106,7 +106,7 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->addObject(startButton);
 
 	//Set camera
-	std::static_pointer_cast<DefaultCamera>(mainMenu->getCamera())->pos = glm::vec3(0.0, 0.0, -10.0);
+	std::static_pointer_cast<DefaultCamera>(mainMenu->getCamera())->pos = glm::vec3(0.0, 0.0, 10.0);
 
 	display.pushScreen(mainMenu);
 }
