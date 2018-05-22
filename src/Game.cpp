@@ -25,11 +25,13 @@
 #include "Buttons.hpp"
 #include "PhysicsComponentManager.hpp"
 #include "BoxPhysicsObject.hpp"
+#include "TextComponent.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
 	loader->loadTexture("arena", "textures/arena.png", Filter::NEAREST, Filter::NEAREST, true);
 	loader->loadTexture("wall", "textures/wall.png", Filter::LINEAR, Filter::LINEAR, true);
+	loader->loadFont("font", {"fonts/DejaVuSans.ttf"}, U"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:;'\".,-!", 90);
 }
 
 void Game::loadModels(ModelLoader& loader) {
@@ -77,8 +79,17 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	phongInfo.lightDir = true;
 	phongInfo.lighting = true;
 
+	ShaderInfo textInfo;
+	textInfo.vertex = "shaders/glsl/text.vert";
+	textInfo.fragment = "shaders/glsl/text.frag";
+	textInfo.modelView = true;
+	textInfo.projection = true;
+	textInfo.color = true;
+	textInfo.tex0 = true;
+
 	loader->loadShader("basic", basicInfo);
 	loader->loadShader("phong", phongInfo);
+	loader->loadShader("text", textInfo);
 }
 
 void Game::loadScreens(DisplayEngine& display) {
@@ -95,15 +106,25 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	quitButton->addComponent(std::make_shared<BackButton>(Key::ESCAPE));
 	quitButton->addComponent(std::make_shared<RenderComponent>("button", glm::vec3(0.9, 0.1, 0.0)));
-	quitButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, -0.5, 0.0), 0.0f)));
+	quitButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, -0.6, 0.0), 0.0f)));
 
 	startButton->addComponent(std::make_shared<StartButton>(Key::ENTER));
 	startButton->addComponent(std::make_shared<RenderComponent>("button", glm::vec3(0.0, 1.0, 0.0)));
-	startButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, 0.5, 0.0), 0.0f)));
+	startButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, 0.4, 0.0), 0.0f)));
 
-	//Add buttons to menu.
+	//Add a title thingy.
+	std::shared_ptr<Object> title = std::make_shared<Object>();
+
+	title->addComponent(std::make_shared<TextComponent>(U"Main Menu", "font", "text", glm::vec3(0.02, 0.02, 0.02)));
+
+	AxisAlignedBB textBox = title->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
+	//For position, doesn't take input.
+	title->addComponent(std::make_shared<GuiComponent>(glm::vec3(textBox.min.x, 3.5, 0.0)));
+
+	//Add buttons and title to menu.
 	mainMenu->addObject(quitButton);
 	mainMenu->addObject(startButton);
+	mainMenu->addObject(title);
 
 	//Set camera
 	std::static_pointer_cast<DefaultCamera>(mainMenu->getCamera())->pos = glm::vec3(0.0, 0.0, 10.0);
