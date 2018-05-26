@@ -31,7 +31,7 @@ void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
 	loader->loadTexture("arena", "textures/arena.png", Filter::NEAREST, Filter::NEAREST, true);
 	loader->loadTexture("wall", "textures/wall.png", Filter::LINEAR, Filter::LINEAR, true);
-	loader->loadFont("font", {"fonts/DejaVuSans.ttf"}, U"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:;'\".,-!", 90);
+	loader->loadFont("font", {"fonts/DejaVuSans.ttf"}, U"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:;'\".,-!?", 90);
 }
 
 void Game::loadModels(ModelLoader& loader) {

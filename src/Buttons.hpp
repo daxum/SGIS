@@ -53,7 +53,7 @@ public:
 
 	bool onKeyPress(Screen* screen, Key key, KeyAction action) {
 		if (key == actionKey && action == KeyAction::RELEASE) {
-			screen->getDisplay().pushScreen(createGameWorld(screen));
+			createGameWorld(screen);
 			return true;
 		}
 
@@ -62,11 +62,11 @@ public:
 
 	void onMouseClick(Screen* screen, MouseButton button, MouseAction action) {
 		if (button == MouseButton::LEFT && action == MouseAction::RELEASE) {
-			screen->getDisplay().pushScreen(createGameWorld(screen));
+			createGameWorld(screen);
 		}
 	}
 
-	std::shared_ptr<Screen> createGameWorld(Screen* current);
+	void createGameWorld(Screen* current);
 
 private:
 	Key actionKey;

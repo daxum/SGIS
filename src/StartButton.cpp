@@ -35,8 +35,9 @@
 #include "SquareCamera.hpp"
 #include "Engine.hpp"
 #include "ScoreUpdater.hpp"
+#include "TextComponent.hpp"
 
-std::shared_ptr<Screen> StartButton::createGameWorld(Screen* current) {
+void StartButton::createGameWorld(Screen* current) {
 	std::shared_ptr<Screen> world = std::make_shared<Screen>(current->getDisplay(), false);
 
 	//Add component managers to world
@@ -111,11 +112,6 @@ std::shared_ptr<Screen> StartButton::createGameWorld(Screen* current) {
 	std::shared_ptr<Object> gameOverTracker = std::make_shared<Object>();
 	gameOverTracker->addComponent(std::make_shared<WorldUpdater>(square));
 
-	//Score tracker for the player
-	std::shared_ptr<Object> score = std::make_shared<Object>();
-
-	score->addComponent(std::make_shared<ScoreUpdater>(std::static_pointer_cast<SquareState>(square->getState())));
-
 	//Add objects to screen
 	world->addObject(ground);
 	world->addObject(square);
@@ -129,7 +125,6 @@ std::shared_ptr<Screen> StartButton::createGameWorld(Screen* current) {
 	world->addObject(wBound);
 	world->addObject(spawner);
 	world->addObject(gameOverTracker);
-	world->addObject(score);
 
 	//Set screen state
 	std::shared_ptr<SquareWorldState> worldState = std::make_shared<SquareWorldState>();
@@ -145,5 +140,23 @@ std::shared_ptr<Screen> StartButton::createGameWorld(Screen* current) {
 
 	world->setCamera(camera);
 
-	return world;
+	current->getDisplay().pushScreen(world);
+
+	//Add hud thing
+	std::shared_ptr<Screen> hud = std::make_shared<Screen>(current->getDisplay(), false);
+
+	hud->addComponentManager(std::make_shared<RenderComponentManager>());
+	hud->addComponentManager(std::make_shared<UpdateComponentManager>());
+
+	//Score tracker for the player
+	std::shared_ptr<Object> score = std::make_shared<Object>();
+
+	score->addComponent(std::make_shared<ScoreUpdater>(std::static_pointer_cast<SquareState>(square->getState())));
+	score->addComponent(std::make_shared<TextComponent>(U"Score: 0", "font", "text", glm::vec3(0.02, 0.02, 0.02)));
+
+	hud->addObject(score);
+
+	std::static_pointer_cast<DefaultCamera>(hud->getCamera())->pos = glm::vec3(36.0, -20.0, 50.0);
+
+	current->getDisplay().pushOverlay(hud);
 }
