@@ -61,6 +61,7 @@ private:
 		if (parentState->box.xLength() > hitState->box.xLength()) {
 			screen->removeObject(hitObject->getParent());
 			hitState->eaten = true;
+			parentState->numEaten++;
 
 			std::shared_ptr<SquareWorldState> worldState = std::static_pointer_cast<SquareWorldState>(screen->getState());
 

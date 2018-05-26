@@ -34,6 +34,7 @@
 #include "SquareWorldState.hpp"
 #include "SquareCamera.hpp"
 #include "Engine.hpp"
+#include "ScoreUpdater.hpp"
 
 std::shared_ptr<Screen> StartButton::createGameWorld(Screen* current) {
 	std::shared_ptr<Screen> world = std::make_shared<Screen>(current->getDisplay(), false);
@@ -110,6 +111,11 @@ std::shared_ptr<Screen> StartButton::createGameWorld(Screen* current) {
 	std::shared_ptr<Object> gameOverTracker = std::make_shared<Object>();
 	gameOverTracker->addComponent(std::make_shared<WorldUpdater>(square));
 
+	//Score tracker for the player
+	std::shared_ptr<Object> score = std::make_shared<Object>();
+
+	score->addComponent(std::make_shared<ScoreUpdater>(std::static_pointer_cast<SquareState>(square->getState())));
+
 	//Add objects to screen
 	world->addObject(ground);
 	world->addObject(square);
@@ -123,6 +129,7 @@ std::shared_ptr<Screen> StartButton::createGameWorld(Screen* current) {
 	world->addObject(wBound);
 	world->addObject(spawner);
 	world->addObject(gameOverTracker);
+	world->addObject(score);
 
 	//Set screen state
 	std::shared_ptr<SquareWorldState> worldState = std::make_shared<SquareWorldState>();

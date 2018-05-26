@@ -18,31 +18,24 @@
 
 #pragma once
 
-#include "Object.hpp"
+#include <iostream>
 
-enum class ObjectType {
-	SQUARE,
-	WALL,
-	BLOCK
-};
+#include "UpdateComponent.hpp"
+#include "GameObjectStates.hpp"
 
-struct GameObjectState : public ObjectState {
-	GameObjectState(ObjectType type) : type(type) {}
+class ScoreUpdater : public UpdateComponent {
+public:
+	ScoreUpdater(std::shared_ptr<SquareState> toTrack) : tracked(toTrack), prevScore(0) {}
 
-	const ObjectType type;
-};
+	void update(Screen* screen) {
+		if (tracked->numEaten != prevScore) {
+			//Update score
+			prevScore = tracked->numEaten;
+			std::cout << prevScore << "\n";
+		}
+	}
 
-struct SquareState : public GameObjectState {
-	SquareState(AxisAlignedBB box, bool player, bool block = false) : GameObjectState(block ? ObjectType::BLOCK : ObjectType::SQUARE), box(box), eaten(false), player(player), numEaten(0) {}
-
-	AxisAlignedBB box;
-	bool eaten;
-	bool player;
-	unsigned int numEaten;
-};
-
-struct WallState : public GameObjectState {
-	WallState(AxisAlignedBB box) : GameObjectState(ObjectType::WALL), box(box) {}
-
-	AxisAlignedBB box;
+private:
+	std::shared_ptr<SquareState> tracked;
+	unsigned int prevScore;
 };
