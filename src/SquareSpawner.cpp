@@ -48,8 +48,8 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 	float posOffset = ExMath::randomFloat(-500.0f, 500.0f);
 	float speed = ExMath::randomFloat(20.0f, 45.0f);
 	float scale = ExMath::randomFloat(0.4f * scaleFactor, std::min(MAX_SQUARE_SIZE, scaleFactor * 1.5f));
-	glm::vec3 translation;
-	glm::vec3 velocity;
+	glm::vec3 translation(0.0, 0.0, 0.0);
+	glm::vec3 velocity(0.0, 0.0, 0.0);
 
 	switch(ExMath::randomInt(0, 3)) {
 		case 0: //moving north
@@ -81,7 +81,7 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 	//Walls are currently 10 units high
 	translation.y = 10.0f + box.yLength() / 2.0f;
 
-	glm::vec3 color;
+	glm::vec3 color(0.0, 0.0, 0.0);
 
 	std::shared_ptr<Object> square = std::make_shared<Object>();
 

@@ -22,7 +22,7 @@
 void ControlledAI::update(Screen* screen) {
 	InputHandler& handler = screen->getInputHandler();
 
-	glm::vec3 newVelocity;
+	glm::vec3 newVelocity(0.0, 0.0, 0.0);
 	float speed = 80.0f;
 
 	if (handler.isKeyPressed(Key::A)) {
