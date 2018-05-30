@@ -22,6 +22,8 @@
 
 #include "Object.hpp"
 #include "Camera.hpp"
+#include "Engine.hpp"
+#include "ExtraMath.hpp"
 
 //Follows an object around at a fixed height.
 class SquareCamera : public Camera {
@@ -39,6 +41,21 @@ public:
 	 * @return the view matrix
 	 */
 	glm::mat4 getView();
+
+	/**
+	 * Gets the projection matrix.
+	 */
+	glm::mat4 getProjection() { return projection; }
+
+	/**
+	 * Sets the projection matrix.
+	 */
+	void setProjection();
+
+	/**
+	 * Gets the near and far planes.
+	 */
+	std::pair<float, float> getNearFar() { return {near, far}; }
 
 	/**
 	 * Updates the camera. This currently moves it to track the object it is following.
@@ -62,5 +79,10 @@ private:
 
 	//The velocity of the camera.
 	glm::vec3 velocity;
+
+	//Near plane, far plane, and projection matrix.
+	float near;
+	float far;
+	glm::mat4 projection;
 };
 

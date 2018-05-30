@@ -36,6 +36,7 @@
 #include "Engine.hpp"
 #include "ScoreUpdater.hpp"
 #include "TextComponent.hpp"
+#include "DefaultCamera.hpp"
 
 void StartButton::createGameWorld(Screen* current) {
 	std::shared_ptr<Screen> world = std::make_shared<Screen>(current->getDisplay(), false);

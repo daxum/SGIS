@@ -26,6 +26,7 @@
 #include "PhysicsComponentManager.hpp"
 #include "BoxPhysicsObject.hpp"
 #include "TextComponent.hpp"
+#include "DefaultCamera.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -97,7 +98,7 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	//Add component managers.
 	mainMenu->addComponentManager(std::make_shared<RenderComponentManager>());
-	mainMenu->addComponentManager(std::make_shared<GuiComponentManager>(mainMenu.get()));
+	mainMenu->addComponentManager(std::make_shared<GuiComponentManager>());
 	mainMenu->addComponentManager(std::make_shared<PhysicsComponentManager>());
 
 	//Create buttons.

@@ -23,7 +23,9 @@ SquareCamera::SquareCamera(glm::vec3 startPos, glm::vec3 startLook, glm::vec3 st
 	pos(startPos),
 	look(startLook),
 	up(startUp),
-	velocity(0.0, 0.0, 0.0) {
+	velocity(0.0, 0.0, 0.0),
+	near(0.1f),
+	far(10000.0f) {
 
 }
 
@@ -31,9 +33,14 @@ glm::mat4 SquareCamera::getView() {
 	return glm::lookAt(pos, look, up);
 }
 
-void SquareCamera::update() {
-	//Temporary camera physics. Probably better to just make it a full-fledged object with limited one-way collision.
+void SquareCamera::setProjection() {
+	float width = Engine::instance->getRenderer()->getWindowWidth();
+	float height = Engine::instance->getRenderer()->getWindowHeight();
 
+	projection = glm::perspective(ExMath::PI / 4.0f, width / height, near, far);
+}
+
+void SquareCamera::update() {
 	if (target) {
 		glm::vec3 targetPos = target->getPhysics()->getTranslation();
 
