@@ -36,7 +36,7 @@
 #include "Engine.hpp"
 #include "ScoreUpdater.hpp"
 #include "TextComponent.hpp"
-#include "DefaultCamera.hpp"
+#include "GuiCamera.hpp"
 
 void StartButton::createGameWorld(Screen* current) {
 	std::shared_ptr<Screen> world = std::make_shared<Screen>(current->getDisplay(), false);
@@ -153,11 +153,11 @@ void StartButton::createGameWorld(Screen* current) {
 	std::shared_ptr<Object> score = std::make_shared<Object>();
 
 	score->addComponent(std::make_shared<ScoreUpdater>(std::static_pointer_cast<SquareState>(square->getState())));
-	score->addComponent(std::make_shared<TextComponent>(U"Score: 0", "font", "text", glm::vec3(0.02, 0.02, 0.02)));
+	score->addComponent(std::make_shared<TextComponent>(U"Score: 0", "font", "text", glm::vec3(0.8, 0.8, 0.8)));
+	score->addComponent(std::make_shared<GuiComponent>(glm::vec3(0.0, 1080.0, 0.0)));
 
 	hud->addObject(score);
-
-	std::static_pointer_cast<DefaultCamera>(hud->getCamera())->pos = glm::vec3(36.0, -20.0, 50.0);
+	hud->setCamera(std::make_shared<GuiCamera>());
 
 	current->getDisplay().pushOverlay(hud);
 }
