@@ -92,9 +92,9 @@ void StartButton::createGameWorld(Screen* current) {
 	wBound->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(nsBound, glm::vec3(-650.0, 49990.0, 0.0), 0.0f)));
 
 	nBound->setState(std::make_shared<WallState>(ewBound));
-	nBound->setState(std::make_shared<WallState>(nsBound));
-	nBound->setState(std::make_shared<WallState>(ewBound));
-	nBound->setState(std::make_shared<WallState>(nsBound));
+	eBound->setState(std::make_shared<WallState>(nsBound));
+	sBound->setState(std::make_shared<WallState>(ewBound));
+	wBound->setState(std::make_shared<WallState>(nsBound));
 
 	//Create player
 	std::shared_ptr<Object> square = std::make_shared<Object>();

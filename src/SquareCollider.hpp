@@ -55,7 +55,7 @@ private:
 		}
 
 		//Uncomment for invulnerable players
-		if (hitState->player) { return; }
+		//if (hitState->player) { return; }
 
 		//Who gets eaten?
 		if (parentState->box.xLength() > hitState->box.xLength()) {
