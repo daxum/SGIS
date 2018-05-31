@@ -55,10 +55,10 @@ void Game::loadModels(ModelLoader& loader) {
 		200.0f
 	};
 
-	loader.loadModel("square", "models/square.obj", "square", "phong", squareLight);
-	loader.loadModel("button", "models/square.obj", "square", "basic", squareLight);
-	loader.loadModel("arena", "models/arena.obj", "arena", "phong", arenaLight);
-	loader.loadModel("wall", "models/cube.obj", "wall", "phong", wallLight);
+	loader.loadModel("square", "models/square.obj", "square", "phong", squareLight, RenderPass::OPAQUE);
+	loader.loadModel("button", "models/square.obj", "square", "basic", squareLight, RenderPass::OPAQUE);
+	loader.loadModel("arena", "models/arena.obj", "arena", "phong", arenaLight, RenderPass::OPAQUE);
+	loader.loadModel("wall", "models/cube.obj", "wall", "phong", wallLight, RenderPass::OPAQUE);
 }
 
 void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
