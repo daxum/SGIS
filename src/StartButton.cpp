@@ -102,7 +102,11 @@ void StartButton::createGameWorld(Screen* current) {
 
 	square->addComponent(std::make_shared<RenderComponent>("square", glm::vec3(0.1f, 0.9f, 0.1f)));
 	square->addComponent(std::make_shared<ControlledAI>());
-	std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox), std::make_shared<SquareCollider>());
+
+	AxisAlignedBB playerBox = Engine::instance->getModelManager().getModel("square").meshBox;
+	std::shared_ptr<BoxPhysicsObject> playerPhysicsObject = std::make_shared<BoxPhysicsObject>(playerBox);
+
+	std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(playerPhysicsObject, std::make_shared<SquareCollider>());
 	physics->velocityReduction(false);
 	square->addComponent(physics);
 
