@@ -23,14 +23,14 @@
 #include "Screen.hpp"
 #include "DisplayEngine.hpp"
 
-//Pops the screen stack when the set key is pressed.
-class BackButton : public GuiComponent {
+class Button : public GuiComponent {
 public:
-	BackButton(Key key) : GuiComponent(), actionKey(key) {}
+	Button(Key shortcut) : GuiComponent(), actionKey(shortcut) {}
+	virtual ~Button() {}
 
 	bool onKeyPress(Screen* screen, Key key, KeyAction action) {
 		if (key == actionKey && action == KeyAction::RELEASE) {
-			screen->getDisplay().popScreen();
+			doButtonAction(screen);
 			return true;
 		}
 
@@ -39,35 +39,48 @@ public:
 
 	void onMouseClick(Screen* screen, MouseButton button, MouseAction action) {
 		if (button == MouseButton::LEFT && action == MouseAction::RELEASE) {
-			screen->getDisplay().popScreen();
+			doButtonAction(screen);
 		}
 	}
 
-private:
+	void onHoverStart(Screen* screen) {
+		std::shared_ptr<RenderComponent> render = lockParent()->getComponent<RenderComponent>(RENDER_COMPONENT_NAME);
+
+		if (render) {
+			render->setScale(render->getScale() + BUTTON_SIZE_CHANGE);
+		}
+	}
+
+	void onHoverStop(Screen* screen) {
+		std::shared_ptr<RenderComponent> render = lockParent()->getComponent<RenderComponent>(RENDER_COMPONENT_NAME);
+
+		if (render) {
+			render->setScale(render->getScale() - BUTTON_SIZE_CHANGE);
+		}
+	}
+
+	virtual void doButtonAction(Screen* screen) = 0;
+
+protected:
+	constexpr static const glm::vec3 BUTTON_SIZE_CHANGE = glm::vec3(0.05, 0.05, 0.05);
 	Key actionKey;
 };
 
-class StartButton : public GuiComponent {
+//Pops the screen stack.
+class BackButton : public Button {
 public:
-	StartButton(Key key) : GuiComponent(), actionKey(key) {}
+	BackButton(Key shortcut) : Button(shortcut) {}
 
-	bool onKeyPress(Screen* screen, Key key, KeyAction action) {
-		if (key == actionKey && action == KeyAction::RELEASE) {
-			createGameWorld(screen);
-			return true;
-		}
+	void doButtonAction(Screen* screen) { screen->getDisplay().popScreen(); }
+};
 
-		return false;
-	}
+//Starts the game.
+class StartButton : public Button {
+public:
+	StartButton(Key shortcut) : Button(shortcut) {}
 
-	void onMouseClick(Screen* screen, MouseButton button, MouseAction action) {
-		if (button == MouseButton::LEFT && action == MouseAction::RELEASE) {
-			createGameWorld(screen);
-		}
-	}
-
-	void createGameWorld(Screen* current);
+	void doButtonAction(Screen* screen) { createGameWorld(screen); }
 
 private:
-	Key actionKey;
+	void createGameWorld(Screen* current);
 };
