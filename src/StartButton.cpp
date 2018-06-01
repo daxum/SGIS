@@ -96,6 +96,10 @@ void StartButton::createGameWorld(Screen* current) {
 	sBound->setState(std::make_shared<WallState>(ewBound));
 	wBound->setState(std::make_shared<WallState>(nsBound));
 
+	//Create sky
+	std::shared_ptr<Object> sky = std::make_shared<Object>();
+	sky->addComponent(std::make_shared<RenderComponent>("sky"));
+
 	//Create player
 	std::shared_ptr<Object> square = std::make_shared<Object>();
 	square->setState(std::make_shared<SquareState>(Engine::instance->getModelManager().getModel("square").meshBox, true));
@@ -130,6 +134,7 @@ void StartButton::createGameWorld(Screen* current) {
 	world->addObject(wBound);
 	world->addObject(spawner);
 	world->addObject(gameOverTracker);
+	world->addObject(sky);
 
 	//Set screen state
 	std::shared_ptr<SquareWorldState> worldState = std::make_shared<SquareWorldState>();

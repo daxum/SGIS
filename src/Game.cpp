@@ -33,6 +33,7 @@ void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("arena", "textures/arena.png", Filter::NEAREST, Filter::NEAREST, true);
 	loader->loadTexture("wall", "textures/wall.png", Filter::LINEAR, Filter::LINEAR, true);
 	loader->loadFont("font", {"fonts/DejaVuSans.ttf"}, U"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:;'\".,-!?", 90);
+	loader->loadCubeMap("skybox", std::vector<std::string>(6, "textures/sky.png"), Filter::NEAREST, Filter::NEAREST, true);
 }
 
 void Game::loadModels(ModelLoader& loader) {
@@ -45,8 +46,8 @@ void Game::loadModels(ModelLoader& loader) {
 
 	LightInfo arenaLight = {
 		glm::vec3(0.27, 0.27, 0.27),
-		glm::vec3(0.9, 0.9, 0.9),
-		80.0f
+		glm::vec3(0.95, 0.95, 0.95),
+		200.0f
 	};
 
 	LightInfo wallLight = {
@@ -59,6 +60,7 @@ void Game::loadModels(ModelLoader& loader) {
 	loader.loadModel("button", "models/square.obj", "square", "basic", squareLight, RenderPass::OPAQUE);
 	loader.loadModel("arena", "models/arena.obj", "arena", "phong", arenaLight, RenderPass::OPAQUE);
 	loader.loadModel("wall", "models/cube.obj", "wall", "phong", wallLight, RenderPass::OPAQUE);
+	loader.loadModel("sky", "models/cube_cw.obj", "skybox", "cubemap", squareLight, RenderPass::OPAQUE, false);
 }
 
 void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
@@ -88,9 +90,17 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	textInfo.color = true;
 	textInfo.tex0 = true;
 
+	ShaderInfo skyInfo;
+	skyInfo.vertex = "shaders/glsl/cubemap.vert";
+	skyInfo.fragment = "shaders/glsl/cubemap.frag";
+	skyInfo.modelView = true;
+	skyInfo.projection = true;
+	skyInfo.cubemap = true;
+
 	loader->loadShader("basic", basicInfo);
 	loader->loadShader("phong", phongInfo);
 	loader->loadShader("text", textInfo);
+	loader->loadShader("cubemap", skyInfo);
 }
 
 void Game::loadScreens(DisplayEngine& display) {
@@ -122,10 +132,15 @@ void Game::loadScreens(DisplayEngine& display) {
 	//For position, doesn't take input.
 	title->addComponent(std::make_shared<GuiComponent>(glm::vec3(textBox.min.x, 3.5, 0.0)));
 
+	//...Sky box?
+	std::shared_ptr<Object> sky = std::make_shared<Object>();
+	sky->addComponent(std::make_shared<RenderComponent>("sky"));
+
 	//Add buttons and title to menu.
 	mainMenu->addObject(quitButton);
 	mainMenu->addObject(startButton);
 	mainMenu->addObject(title);
+	mainMenu->addObject(sky);
 
 	//Set camera
 	std::static_pointer_cast<DefaultCamera>(mainMenu->getCamera())->pos = glm::vec3(0.0, 0.0, 10.0);
