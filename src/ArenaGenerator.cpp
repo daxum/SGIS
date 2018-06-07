@@ -70,14 +70,14 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 	world->addObject(ground);
 
 	//Create walls
-	AxisAlignedBB nsWall(glm::vec3(-50.0, -6.0, -600.0), glm::vec3(50.0, 6.0, 600.0));
-	AxisAlignedBB ewWall(glm::vec3(-600.0, -6.0, -50.0), glm::vec3(600.0, 6.0, 50.0));
+	AxisAlignedBB nsWall(glm::vec3(-50.0, -5000.0, -600.0), glm::vec3(50.0, 5000.0, 600.0));
+	AxisAlignedBB ewWall(glm::vec3(-600.0, -5000.0, -50.0), glm::vec3(600.0, 5000.0, 50.0));
 
 	//North, east, south, then west
-	addWall(world, ewWall, glm::vec3(0.0, 4.0, -550.0), true, "wall", glm::vec3(500.0, 6.0, 50.0));
-	addWall(world, nsWall, glm::vec3(550.0, 4.0, 0.0), true, "wall", glm::vec3(50.0, 6.0, 600.0));
-	addWall(world, ewWall, glm::vec3(0.0, 4.0, 550.0), true, "wall", glm::vec3(500.0, 6.0, 50.0));
-	addWall(world, nsWall, glm::vec3(-550.0, 4.0, 0.0), true, "wall", glm::vec3(50.0, 6.0, 600.0));
+	addWall(world, ewWall, glm::vec3(0.0, -4992.0, -550.0), true, "wall", glm::vec3(500.0, 5000.0, 50.0));
+	addWall(world, nsWall, glm::vec3(550.0, -4992.0, 0.0), true, "wall", glm::vec3(50.0, 5000.0, 600.0));
+	addWall(world, ewWall, glm::vec3(0.0, -4992.0, 550.0), true, "wall", glm::vec3(500.0, 5000.0, 50.0));
+	addWall(world, nsWall, glm::vec3(-550.0, -4992.0, 0.0), true, "wall", glm::vec3(50.0, 5000.0, 600.0));
 
 	//Create boundary walls
 	AxisAlignedBB ewBound(glm::vec3(-610.0, -50000.0, -50.0), glm::vec3(610.0, 50000.0, 50.0));
