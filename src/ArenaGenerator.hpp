@@ -16,36 +16,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-#include "ControlledAI.hpp"
-#include "PhysicsComponent.hpp"
+#pragma once
 
-void ControlledAI::update(Screen* screen) {
-	InputHandler& handler = screen->getInputHandler();
+#include <memory>
 
-	glm::vec3 newVelocity(0.0, 0.0, 0.0);
-	float speed = 80.0f;
+#include "Screen.hpp"
+#include "GameObjectStates.hpp"
 
-	if (handler.isKeyPressed(Key::A)) {
-		newVelocity.x -= speed;
-	}
-
-	//Yes, "north" is negative z. I don't like it either.
-	if (handler.isKeyPressed(Key::W)) {
-		newVelocity.z -= speed;
-	}
-
-	if (handler.isKeyPressed(Key::D)) {
-		newVelocity.x += speed;
-	}
-
-	if (handler.isKeyPressed(Key::S)) {
-		newVelocity.z += speed;
-	}
-
-	//Debugging only
-	if (handler.isKeyPressed(Key::SPACE)) {
-		newVelocity.y += speed;
-	}
-
-	lockParent()->getComponent<PhysicsComponent>(PHYSICS_COMPONENT_NAME)->setVelocity(newVelocity);
-}
+namespace ArenaGenerator {
+	std::shared_ptr<Screen> generateArena(DisplayEngine& display, bool playable, std::shared_ptr<SquareState>* playerStateOut = nullptr);
+};

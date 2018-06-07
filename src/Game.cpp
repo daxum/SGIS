@@ -27,6 +27,7 @@
 #include "BoxPhysicsObject.hpp"
 #include "TextComponent.hpp"
 #include "DefaultCamera.hpp"
+#include "AnimationComponentManager.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);

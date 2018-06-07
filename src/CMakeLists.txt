@@ -19,6 +19,7 @@ add_executable(squareGame
 	SquareSpawner.cpp
 	SquareCamera.cpp
 	StartButton.cpp
+	ArenaGenerator.cpp
 )
 
 set_target_properties(squareGame PROPERTIES
