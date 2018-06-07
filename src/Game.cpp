@@ -107,7 +107,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 
 void Game::loadScreens(DisplayEngine& display) {
 	//Run a "demo" version of the game in the background.
-	std::shared_ptr<Screen> demoWorld = ArenaGenerator::generateArena(display, false);
+	std::shared_ptr<Screen> demoWorld = ArenaGenerator::generateArena(display, false, 500);
 	display.pushScreen(demoWorld);
 
 	//Create main menu.

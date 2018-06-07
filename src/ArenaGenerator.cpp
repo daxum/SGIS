@@ -52,7 +52,7 @@ namespace {
 	}
 }
 
-std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bool playable, std::shared_ptr<SquareState>* playerStateOut) {
+std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bool playable, unsigned int maxSquares, std::shared_ptr<SquareState>* playerStateOut) {
 	std::shared_ptr<Screen> world = std::make_shared<Screen>(display, false);
 
 	//Add component managers to world
@@ -156,7 +156,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 
 	//Create square spawner
 	std::shared_ptr<Object> spawner = std::make_shared<Object>();
-	spawner->addComponent(std::make_shared<SquareSpawner>());
+	spawner->addComponent(std::make_shared<SquareSpawner>(maxSquares));
 
 	world->addObject(spawner);
 

@@ -28,7 +28,7 @@
 
 void StartButton::createGameWorld(Screen* current) {
 	std::shared_ptr<SquareState> playerState;
-	std::shared_ptr<Screen> world = ArenaGenerator::generateArena(current->getDisplay(), true, &playerState);
+	std::shared_ptr<Screen> world = ArenaGenerator::generateArena(current->getDisplay(), true, 1000, &playerState);
 
 	current->getDisplay().pushScreen(world);
 

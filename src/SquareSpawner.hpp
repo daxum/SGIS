@@ -22,14 +22,15 @@
 
 class SquareSpawner : public UpdateComponent {
 public:
-	SquareSpawner() : UpdateComponent() {}
+	SquareSpawner(unsigned int maxSquares = 1000) : UpdateComponent(), maxSquares(maxSquares) {}
 
 	void update(Screen* screen);
 
 private:
 	constexpr static unsigned int MAX_SPAWN_PER_TICK = 50;
-	constexpr static unsigned int MAX_SQUARES = 1000;
 	const float MAX_SQUARE_SIZE = 150.0f;
+
+	unsigned int maxSquares;
 
 	std::shared_ptr<Object> makeSquare(const AxisAlignedBB& baseBox);
 };

@@ -24,5 +24,5 @@
 #include "GameObjectStates.hpp"
 
 namespace ArenaGenerator {
-	std::shared_ptr<Screen> generateArena(DisplayEngine& display, bool playable, std::shared_ptr<SquareState>* playerStateOut = nullptr);
+	std::shared_ptr<Screen> generateArena(DisplayEngine& display, bool playable, unsigned int maxSquares = 1000, std::shared_ptr<SquareState>* playerStateOut = nullptr);
 };
