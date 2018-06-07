@@ -28,6 +28,7 @@
 #include "TextComponent.hpp"
 #include "DefaultCamera.hpp"
 #include "AnimationComponentManager.hpp"
+#include "ArenaGenerator.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -105,6 +106,11 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 }
 
 void Game::loadScreens(DisplayEngine& display) {
+	//Run a "demo" version of the game in the background.
+	std::shared_ptr<Screen> demoWorld = ArenaGenerator::generateArena(display, false);
+	display.pushScreen(demoWorld);
+
+	//Create main menu.
 	std::shared_ptr<Screen> mainMenu = std::make_shared<Screen>(display, false);
 
 	//Add component managers.
@@ -133,18 +139,13 @@ void Game::loadScreens(DisplayEngine& display) {
 	//For position, doesn't take input.
 	title->addComponent(std::make_shared<GuiComponent>(glm::vec3(textBox.min.x, 3.5, 0.0)));
 
-	//...Sky box?
-	std::shared_ptr<Object> sky = std::make_shared<Object>();
-	sky->addComponent(std::make_shared<RenderComponent>("sky"));
-
 	//Add buttons and title to menu.
 	mainMenu->addObject(quitButton);
 	mainMenu->addObject(startButton);
 	mainMenu->addObject(title);
-	mainMenu->addObject(sky);
 
 	//Set camera
 	std::static_pointer_cast<DefaultCamera>(mainMenu->getCamera())->pos = glm::vec3(0.0, 0.0, 10.0);
 
-	display.pushScreen(mainMenu);
+	display.pushOverlay(mainMenu);
 }
