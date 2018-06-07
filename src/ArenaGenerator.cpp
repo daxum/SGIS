@@ -141,16 +141,16 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 	}
 	else {
 		std::vector<std::pair<glm::vec3, glm::quat>> frames = {
-			{{0.0, 300.0, 1500.0}, {0.0, 0.0, 0.0, 0.0}},
+			{{-1500.0, 300.0, 0.0}, {0.0, 0.0, 0.0, 0.0}},
 			{{0.0, 300.0, 1500.0}, {0.0, 0.0, 0.0, 0.0}},
 			{{1500.0, 300.0, 0.0}, {0.0, 0.0, 0.0, 0.0}},
 			{{0.0, 300.0, -1500.0}, {0.0, 0.0, 0.0, 0.0}},
 			{{-1500.0, 300.0, 0.0}, {0.0, 0.0, 0.0, 0.0}},
 			{{0.0, 300.0, 1500.0}, {0.0, 0.0, 0.0, 0.0}},
-			{{0.0, 300.0, 1500.0}, {0.0, 0.0, 0.0, 0.0}}
+			{{1500.0, 300.0, 0.0}, {0.0, 0.0, 0.0, 0.0}}
 		};
 
-		std::shared_ptr<AnimatedCamera> camera = std::make_shared<AnimatedCamera>(frames, 4800.0f);
+		std::shared_ptr<AnimatedCamera> camera = std::make_shared<AnimatedCamera>(frames, 6400.0f);
 		world->setCamera(camera);
 	}
 

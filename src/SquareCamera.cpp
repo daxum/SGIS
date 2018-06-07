@@ -25,7 +25,7 @@ SquareCamera::SquareCamera(glm::vec3 startPos, glm::vec3 startLook, glm::vec3 st
 	up(startUp),
 	velocity(0.0, 0.0, 0.0),
 	near(0.1f),
-	far(10000.0f) {
+	far(6000.0f) {
 
 }
 

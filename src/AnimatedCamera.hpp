@@ -32,7 +32,7 @@ public:
 		anim(frames, time),
 		currentTime(0),
 		near(0.1f),
-		far(10000.0f) {
+		far(6000.0f) {
 
 	}
 
