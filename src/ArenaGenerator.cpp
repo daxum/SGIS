@@ -140,20 +140,17 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 		world->setCamera(camera);
 	}
 	else {
-		const float PI_OVER_4 = ExMath::PI / 4.0f;
-		const float PI_OVER_2 = ExMath::PI / 2.0f;
-
 		std::vector<std::pair<glm::vec3, glm::quat>> frames = {
-			{{0.0, 150.0, 1500.0}, glm::quat(glm::vec3(-PI_OVER_4, 0.0, 0.0))},
-			{{0.0, 150.0, 1500.0}, glm::quat(glm::vec3(-PI_OVER_4, 0.0, 0.0))},
-			{{1500.0, 150.0, 0.0}, glm::quat(glm::vec3(-PI_OVER_4, PI_OVER_2, 0.0))},
-			{{0.0, 150.0, -1500.0}, glm::quat(glm::vec3(-PI_OVER_4, ExMath::PI, 0.0))},
-			{{-1500.0, 150.0, 0.0}, glm::quat(glm::vec3(-PI_OVER_4, PI_OVER_2 + ExMath::PI, 0.0))},
-			{{0.0, 150.0, 1500.0}, glm::quat(glm::vec3(-PI_OVER_4, 0.0, 0.0))},
-			{{0.0, 150.0, 1500.0}, glm::quat(glm::vec3(-PI_OVER_4, 0.0, 0.0))}
+			{{0.0, 300.0, 1500.0}, {0.0, 0.0, 0.0, 0.0}},
+			{{0.0, 300.0, 1500.0}, {0.0, 0.0, 0.0, 0.0}},
+			{{1500.0, 300.0, 0.0}, {0.0, 0.0, 0.0, 0.0}},
+			{{0.0, 300.0, -1500.0}, {0.0, 0.0, 0.0, 0.0}},
+			{{-1500.0, 300.0, 0.0}, {0.0, 0.0, 0.0, 0.0}},
+			{{0.0, 300.0, 1500.0}, {0.0, 0.0, 0.0, 0.0}},
+			{{0.0, 300.0, 1500.0}, {0.0, 0.0, 0.0, 0.0}}
 		};
 
-		std::shared_ptr<AnimatedCamera> camera = std::make_shared<AnimatedCamera>(frames, 1200.0f);
+		std::shared_ptr<AnimatedCamera> camera = std::make_shared<AnimatedCamera>(frames, 4800.0f);
 		world->setCamera(camera);
 	}
 

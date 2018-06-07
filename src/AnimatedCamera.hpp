@@ -24,7 +24,6 @@
 #include "Camera.hpp"
 #include "Engine.hpp"
 #include "ExtraMath.hpp"
-#include "MatrixStack.hpp"
 #include "SplineAnimation.hpp"
 
 class AnimatedCamera : public Camera {
@@ -38,14 +37,8 @@ public:
 	}
 
 	glm::mat4 getView() {
-		MatrixStack matStack;
-
 		const std::pair<glm::vec3, glm::quat> loc = anim.getLocation((float)currentTime);
-
-		matStack.translate(loc.first);
-		matStack.rotate(loc.second);
-
-		return matStack.top();
+		return glm::lookAt(loc.first, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 	}
 
 	glm::mat4 getProjection() {
