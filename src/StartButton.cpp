@@ -17,14 +17,11 @@
  ******************************************************************************/
 
 #include "Buttons.hpp"
-#include "RenderComponent.hpp"
-#include "RenderComponentManager.hpp"
-#include "UpdateComponentManager.hpp"
 #include "SquareSpawner.hpp"
 #include "ScoreUpdater.hpp"
-#include "TextComponent.hpp"
 #include "GuiCamera.hpp"
 #include "ArenaGenerator.hpp"
+#include "ScreenComponents.hpp"
 
 void StartButton::createGameWorld(Screen* current) {
 	std::shared_ptr<SquareState> playerState;

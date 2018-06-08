@@ -18,24 +18,15 @@
 
 #include "ArenaGenerator.hpp"
 #include "ExtraMath.hpp"
-#include "RenderComponent.hpp"
 #include "ControlledAI.hpp"
-#include "RenderComponentManager.hpp"
-#include "AIComponentManager.hpp"
-#include "PhysicsComponentManager.hpp"
-#include "PhysicsComponent.hpp"
-#include "UpdateComponentManager.hpp"
 #include "SquareSpawner.hpp"
-#include "PlanePhysicsObject.hpp"
-#include "BoxPhysicsObject.hpp"
 #include "SquareCollider.hpp"
 #include "GameObjectStates.hpp"
-#include "DisplayEngine.hpp"
 #include "WorldUpdater.hpp"
 #include "SquareWorldState.hpp"
 #include "SquareCamera.hpp"
 #include "AnimatedCamera.hpp"
-#include "Engine.hpp"
+#include "ScreenComponents.hpp"
 
 namespace {
 	void addWall(std::shared_ptr<Screen> world, const AxisAlignedBB& box, const glm::vec3& pos, bool visible = false, const std::string& model = "", const glm::vec3& renderScale = glm::vec3(1.0, 1.0, 1.0)) {

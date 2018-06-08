@@ -18,16 +18,9 @@
 
 #pragma once
 
-#include "UpdateComponent.hpp"
-#include "RenderComponent.hpp"
-#include "RenderComponentManager.hpp"
-#include "GuiComponentManager.hpp"
 #include "Buttons.hpp"
-#include "PhysicsComponentManager.hpp"
-#include "BoxPhysicsObject.hpp"
-#include "Engine.hpp"
-#include "TextComponent.hpp"
 #include "DefaultCamera.hpp"
+#include "ScreenComponents.hpp"
 
 //Tracks the player to determine when the game should be over.
 class WorldUpdater : public UpdateComponent {
