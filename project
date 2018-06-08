@@ -65,7 +65,7 @@ if [ ${SETUP} -eq 1 ]; then
 	echo "Setting up debug directory..."
 	mkdir debug > /dev/null 2>&1
 	cd debug
-	cmake -DCMAKE_BUILD_TYPE=Debug ${CMAKE_VARS} ../src
+	cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ${CMAKE_VARS} ../src
 	cd ..
 
 	echo "Setting up release directory..."
