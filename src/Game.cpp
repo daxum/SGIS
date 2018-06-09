@@ -21,6 +21,7 @@
 #include "ArenaGenerator.hpp"
 #include "ScreenComponents.hpp"
 #include "DefaultCamera.hpp"
+#include "Shaders.hpp"
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
@@ -61,35 +62,22 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	ShaderInfo basicInfo;
 	basicInfo.vertex = "shaders/glsl/generic.vert";
 	basicInfo.fragment = "shaders/glsl/basic.frag";
-	basicInfo.modelView = true;
-	basicInfo.projection = true;
-	basicInfo.color = true;
-	basicInfo.tex0 = true;
+	basicInfo.shaderObject = std::make_shared<BasicShader>();
 
 	ShaderInfo phongInfo;
 	phongInfo.vertex = "shaders/glsl/generic.vert";
 	phongInfo.fragment = "shaders/glsl/blinnPhong.frag";
-	phongInfo.modelView = true;
-	phongInfo.projection = true;
-	phongInfo.color = true;
-	phongInfo.tex0 = true;
-	phongInfo.lightDir = true;
-	phongInfo.lighting = true;
+	phongInfo.shaderObject = std::make_shared<PhongShader>();
 
 	ShaderInfo textInfo;
 	textInfo.vertex = "shaders/glsl/text.vert";
 	textInfo.fragment = "shaders/glsl/text.frag";
-	textInfo.modelView = true;
-	textInfo.projection = true;
-	textInfo.color = true;
-	textInfo.tex0 = true;
+	textInfo.shaderObject = std::make_shared<BasicShader>();
 
 	ShaderInfo skyInfo;
 	skyInfo.vertex = "shaders/glsl/cubemap.vert";
 	skyInfo.fragment = "shaders/glsl/cubemap.frag";
-	skyInfo.modelView = true;
-	skyInfo.projection = true;
-	skyInfo.cubemap = true;
+	skyInfo.shaderObject = std::make_shared<SkyShader>();
 
 	loader->loadShader("basic", basicInfo);
 	loader->loadShader("phong", phongInfo);
