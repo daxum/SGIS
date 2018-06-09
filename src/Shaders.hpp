@@ -24,11 +24,11 @@
 
 class BasicShader : public Shader {
 public:
-	void setGlobalUniforms(std::shared_ptr<Camera> camera) {
+	void setGlobalUniforms(std::shared_ptr<Camera> camera, std::shared_ptr<ScreenState> state) {
 		shaderInterface->setUniform(UniformType::MAT4x4, "projection", glm::value_ptr(camera->getProjection()));
 	}
 
-	void setPerObjectUniforms(std::shared_ptr<RenderComponent> object, MatrixStack& matStack) {
+	void setPerObjectUniforms(std::shared_ptr<RenderComponent> object, MatrixStack& matStack, std::shared_ptr<ScreenState> state) {
 		matStack.translate(object->getTranslation());
 		matStack.rotate(object->getRotation());
 		matStack.scale(object->getScale());
@@ -41,12 +41,12 @@ public:
 
 class PhongShader : public Shader {
 public:
-	void setGlobalUniforms(std::shared_ptr<Camera> camera) {
+	void setGlobalUniforms(std::shared_ptr<Camera> camera, std::shared_ptr<ScreenState> state) {
 		shaderInterface->setUniform(UniformType::MAT4x4, "projection", glm::value_ptr(camera->getProjection()));
 		shaderInterface->setUniform(UniformType::VEC3, "lightDir", glm::value_ptr(glm::normalize(glm::vec3(camera->getView() * glm::vec4(1.0, 1.0, 0.01, 0.0)))));
 	}
 
-	void setPerObjectUniforms(std::shared_ptr<RenderComponent> object, MatrixStack& matStack) {
+	void setPerObjectUniforms(std::shared_ptr<RenderComponent> object, MatrixStack& matStack, std::shared_ptr<ScreenState> state) {
 		matStack.translate(object->getTranslation());
 		matStack.rotate(object->getRotation());
 		matStack.scale(object->getScale());
@@ -66,11 +66,11 @@ public:
 
 class SkyShader : public Shader {
 public:
-	void setGlobalUniforms(std::shared_ptr<Camera> camera) {
+	void setGlobalUniforms(std::shared_ptr<Camera> camera, std::shared_ptr<ScreenState> state) {
 		shaderInterface->setUniform(UniformType::MAT4x4, "projection", glm::value_ptr(camera->getProjection()));
 	}
 
-	void setPerObjectUniforms(std::shared_ptr<RenderComponent> object, MatrixStack& matStack) {
+	void setPerObjectUniforms(std::shared_ptr<RenderComponent> object, MatrixStack& matStack, std::shared_ptr<ScreenState> state) {
 		matStack.translate(object->getTranslation());
 		matStack.rotate(object->getRotation());
 		matStack.scale(object->getScale());
