@@ -24,12 +24,14 @@
 #include "Camera.hpp"
 #include "Engine.hpp"
 #include "ExtraMath.hpp"
+#include "InputListener.hpp"
 
 //Follows an object around at a fixed height.
-class SquareCamera : public Camera {
+class SquareCamera : public Camera, public InputListener {
 public:
 	/**
 	 * Creates a camera at the given position looking in the specific direction
+	 * @param parent The parent screen.
 	 * @param startPos The camera's starting position
 	 * @param startLook The place where the camera is looking
 	 * @param startup Which direction is "up" - should almost always be (0, 1, 0)
@@ -66,6 +68,11 @@ public:
 	 * Sets the object for the camera to track.
 	 */
 	void setTarget(std::shared_ptr<Object> object);
+
+	/**
+	 * Listens for mouse scroll events and zooms out/in accordingly.
+	 */
+	bool onEvent(const InputHandler* handler, const std::shared_ptr<const InputEvent> event);
 
 private:
 	//These three vectors define a camera - pos is position,

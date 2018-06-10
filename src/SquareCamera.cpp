@@ -17,6 +17,7 @@
  ******************************************************************************/
 
 #include <glm/gtc/matrix_transform.hpp>
+
 #include "SquareCamera.hpp"
 
 SquareCamera::SquareCamera(glm::vec3 startPos, glm::vec3 startLook, glm::vec3 startUp) :
@@ -53,9 +54,23 @@ void SquareCamera::update() {
 	}
 
 	pos += velocity;
+
+	ExMath::clamp(pos.y, 1.0f, 1000.0f);
+	ExMath::clamp(look.y, 1.0f, 1000.0f);
+
 	velocity *= 0.95f;
 }
 
 void SquareCamera::setTarget(std::shared_ptr<Object> object) {
 	target = object;
+}
+
+bool SquareCamera::onEvent(const InputHandler* handler, const std::shared_ptr<const InputEvent> event) {
+	if (event->type == EventType::MOUSE_SCROLL) {
+		velocity.y -= std::static_pointer_cast<const MouseScrollEvent>(event)->y;
+
+		return true;
+	}
+
+	return false;
 }
