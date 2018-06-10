@@ -47,7 +47,7 @@ public:
 			message->addComponent(std::make_shared<TextComponent>(U"Game Over", "font", "text", glm::vec3(0.025, 0.025, 0.025)));
 
 			AxisAlignedBB messageBox = message->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
-			message->addComponent(std::make_shared<GuiComponent>(glm::vec3(messageBox.min.x, 3.0, 0.0)));
+			message->addComponent(std::make_shared<GuiComponent>(glm::vec3(messageBox.min.x, 3.2, 0.0)));
 
 			gameOver->addObject(message);
 
@@ -56,16 +56,24 @@ public:
 			finalScore->addComponent(std::make_shared<TextComponent>(U"Final Score: " + numToString(trackedState->numEaten), "font", "text", glm::vec3(0.005, 0.005, 0.005)));
 
 			AxisAlignedBB scoreBox = finalScore->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
-			finalScore->addComponent(std::make_shared<GuiComponent>(glm::vec3(scoreBox.min.x, 0.5, 0.0)));
+			finalScore->addComponent(std::make_shared<GuiComponent>(glm::vec3(scoreBox.min.x, 0.7, 0.0)));
 
 			gameOver->addObject(finalScore);
+
+			//Retry button
+			std::shared_ptr<Object> retryButton = std::make_shared<Object>();
+
+			retryButton->addComponent(std::make_shared<RetryButton>(Key::R));
+			retryButton->addComponent(std::make_shared<RenderComponent>("button", glm::vec3(0.9, 0.9, 0.0)));
+			retryButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, -0.6, 0.0), 0.0f)));
+			gameOver->addObject(retryButton);
 
 			//Button to return to main menu
 			std::shared_ptr<Object> backButton = std::make_shared<Object>();
 
 			backButton->addComponent(std::make_shared<BackButton>(Key::ESCAPE));
 			backButton->addComponent(std::make_shared<RenderComponent>("button", glm::vec3(0.9, 0.1, 0.0)));
-			backButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, -0.8, 0.0), 0.0f)));
+			backButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModelManager().getModel("square").meshBox, glm::vec3(0.0, -1.6, 0.0), 0.0f)));
 			gameOver->addObject(backButton);
 
 			//Set camera

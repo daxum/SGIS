@@ -23,27 +23,38 @@
 #include "ArenaGenerator.hpp"
 #include "ScreenComponents.hpp"
 
-void StartButton::createGameWorld(Screen* current) {
-	std::shared_ptr<SquareState> playerState;
-	std::shared_ptr<Screen> world = ArenaGenerator::generateArena(current->getDisplay(), true, 1000, &playerState);
+namespace {
+	void createGameWorld(Screen* current) {
+		std::shared_ptr<SquareState> playerState;
+		std::shared_ptr<Screen> world = ArenaGenerator::generateArena(current->getDisplay(), true, 1000, &playerState);
 
-	current->getDisplay().pushScreen(world);
+		current->getDisplay().pushScreen(world);
 
-	//Add hud thing
-	std::shared_ptr<Screen> hud = std::make_shared<Screen>(current->getDisplay(), false);
+		//Add hud thing
+		std::shared_ptr<Screen> hud = std::make_shared<Screen>(current->getDisplay(), false);
 
-	hud->addComponentManager(std::make_shared<RenderComponentManager>());
-	hud->addComponentManager(std::make_shared<UpdateComponentManager>());
+		hud->addComponentManager(std::make_shared<RenderComponentManager>());
+		hud->addComponentManager(std::make_shared<UpdateComponentManager>());
 
-	//Score tracker for the player
-	std::shared_ptr<Object> score = std::make_shared<Object>();
+		//Score tracker for the player
+		std::shared_ptr<Object> score = std::make_shared<Object>();
 
-	score->addComponent(std::make_shared<ScoreUpdater>(playerState));
-	score->addComponent(std::make_shared<TextComponent>(U"Score: 0", "font", "text", glm::vec3(0.8, 0.8, 0.8)));
-	score->addComponent(std::make_shared<GuiComponent>(glm::vec3(0.0, 1080.0, 0.0)));
+		score->addComponent(std::make_shared<ScoreUpdater>(playerState));
+		score->addComponent(std::make_shared<TextComponent>(U"Score: 0", "font", "text", glm::vec3(0.8, 0.8, 0.8)));
+		score->addComponent(std::make_shared<GuiComponent>(glm::vec3(0.0, 1080.0, 0.0)));
 
-	hud->addObject(score);
-	hud->setCamera(std::make_shared<GuiCamera>());
+		hud->addObject(score);
+		hud->setCamera(std::make_shared<GuiCamera>());
 
-	current->getDisplay().pushOverlay(hud);
+		current->getDisplay().pushOverlay(hud);
+	}
+}
+
+void StartButton::doButtonAction(Screen* screen) {
+	createGameWorld(screen);
+}
+
+void RetryButton::doButtonAction(Screen* screen) {
+	screen->getDisplay().popScreen();
+	createGameWorld(screen);
 }

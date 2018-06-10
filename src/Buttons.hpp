@@ -79,8 +79,13 @@ class StartButton : public Button {
 public:
 	StartButton(Key shortcut) : Button(shortcut) {}
 
-	void doButtonAction(Screen* screen) { createGameWorld(screen); }
+	void doButtonAction(Screen* screen);
+};
 
-private:
-	void createGameWorld(Screen* current);
+//Retry after losing.
+class RetryButton : public Button {
+public:
+	RetryButton(Key shortcut) : Button(shortcut) {}
+
+	void doButtonAction(Screen* screen);
 };
