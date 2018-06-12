@@ -53,7 +53,7 @@ public:
 
 			//Final Score
 			std::shared_ptr<Object> finalScore = std::make_shared<Object>();
-			finalScore->addComponent(std::make_shared<TextComponent>(U"Final Score: " + numToString(trackedState->numEaten), "font", "text", glm::vec3(0.005, 0.005, 0.005)));
+			finalScore->addComponent(std::make_shared<TextComponent>(U"Final Score: " + TextComponent::convToU32(std::to_string(trackedState->numEaten)), "font", "text", glm::vec3(0.005, 0.005, 0.005)));
 
 			AxisAlignedBB scoreBox = finalScore->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
 			finalScore->addComponent(std::make_shared<GuiComponent>(glm::vec3(scoreBox.min.x, 0.7, 0.0)));
@@ -89,32 +89,5 @@ public:
 private:
 	//The object the updater tracks.
 	std::shared_ptr<Object> tracking;
-
-	/**
-	 * Taken from ScoreUpdate.hpp, find better place later.
-	 */
-	std::u32string numToString(unsigned int num) {
-		std::string conv = std::to_string(num);
-		std::u32string out;
-		out.reserve(conv.size());
-
-		for (const char& c : conv) {
-			switch(c) {
-				case '0': out.push_back(U'0'); break;
-				case '1': out.push_back(U'1'); break;
-				case '2': out.push_back(U'2'); break;
-				case '3': out.push_back(U'3'); break;
-				case '4': out.push_back(U'4'); break;
-				case '5': out.push_back(U'5'); break;
-				case '6': out.push_back(U'6'); break;
-				case '7': out.push_back(U'7'); break;
-				case '8': out.push_back(U'8'); break;
-				case '9': out.push_back(U'9'); break;
-				default: out.push_back(U'?'); break;
-			}
-		}
-
-		return out;
-	}
 };
 
