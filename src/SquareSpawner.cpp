@@ -33,7 +33,6 @@ void SquareSpawner::update(Screen* screen) {
 	const AxisAlignedBB& squareBox(Engine::instance->getModelManager().getModel("square").meshBox);
 
 	while(state->squareCount < maxSquares && spawned < MAX_SPAWN_PER_TICK) {
-
 		screen->addObject(makeSquare(squareBox));
 
 		spawned++;
