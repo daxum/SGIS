@@ -29,7 +29,6 @@ set_target_properties(squareGame PROPERTIES
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "GNU")
 	target_compile_options(squareGame PRIVATE "-Wall")
-	set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fopenmp")
 endif()
 
 target_link_libraries(squareGame Engine)
