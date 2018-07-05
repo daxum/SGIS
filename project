@@ -37,30 +37,34 @@ if [ ${SETUP} -eq 1 ]; then
 	select INSTALLED_BULLET in "Yes" "No"; do
 		case ${INSTALLED_BULLET} in
 			Yes) ADD_BULLET_INSTALL="${ADD_BULLET_INSTALL}ON"; break;;
-			No) ADD_BULLET_INSTALL=""; break;;
+			No) ADD_BULLET_INSTALL="${ADD_BULLET_INSTALL}OFF"; break;;
 		esac
 	done
 
-	if [ -z "${ADD_BULLET_INSTALL}" ]; then
+	if [ "${INSTALLED_BULLET}" = "No" ]; then
 		read -p "Enter bullet directory: " BULLET_DIR
-		ADD_BULLET_INSTALL="-DBULLET_DIR=${BULLET_DIR}"
+		ADD_BULLET_INSTALL="${ADD_BULLET_INSTALL} -DBULLET_DIR=${BULLET_DIR}"
 	fi
 
 	echo "Use installed glfw?"
 	select INSTALLED_GLFW in "Yes" "No"; do
 		case ${INSTALLED_GLFW} in
 			Yes) ADD_GLFW_INSTALL="${ADD_GLFW_INSTALL}ON"; break;;
-			No) ADD_GLFW_INSTALL=""; break;;
+			No) ADD_GLFW_INSTALL="${ADD_GLFW_INSTALL}OFF"; break;;
 		esac
 	done
 
-	if [ -z "${ADD_GLFW_INSTALL}" ]; then
+	if [ "${INSTALLED_GLFW}" = "No" ]; then
 		read -p "Enter glfw directory: " GLFW_DIR
 		ADD_GLFW_INSTALL="-DGLFW_DIR=${GLFW_DIR}"
 		ADD_GLFW_INSTALL="${ADD_GLFW_INSTALL} -DGLFW_BUILD_DOCS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_INSTALL=OFF"
 	fi
 
-	CMAKE_VARS="${ADD_BULLET_INSTALL} ${ADD_GLFW_INSTALL}"
+	read -p "Enter freetype 2 include directory: " FREETYPE_DIR
+	read -p "Enter tbb include directory: " TBB_INCLUDE
+	read -p "Enter tbb library directory: " TBB_LIB
+
+	CMAKE_VARS="${ADD_BULLET_INSTALL} ${ADD_GLFW_INSTALL} -DFREETYPE_INCLUDE_DIR=${FREETYPE_DIR} -DBULLET2_TBB_INCLUDE_DIR=${TBB_INCLUDE} -DBULLET2_TBB_LIB_DIR=${TBB_LIB}"
 
 	echo "Setting up debug directory..."
 	mkdir debug > /dev/null 2>&1
