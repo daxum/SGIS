@@ -27,7 +27,7 @@ public:
 	void update(Screen* screen);
 
 private:
-	constexpr static unsigned int MAX_SPAWN_PER_TICK = 50;
+	constexpr static unsigned int MAX_SPAWN_PER_TICK = 10;
 	const float MAX_SQUARE_SIZE = 150.0f;
 
 	unsigned int maxSquares;
