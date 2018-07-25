@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <atomic>
+
 #include "Object.hpp"
 
 enum class ObjectType {
@@ -36,9 +38,9 @@ struct SquareState : public GameObjectState {
 	SquareState(AxisAlignedBB box, bool player, bool block = false) : GameObjectState(block ? ObjectType::BLOCK : ObjectType::SQUARE), box(box), eaten(false), player(player), numEaten(0) {}
 
 	AxisAlignedBB box;
-	bool eaten;
+	std::atomic<bool> eaten;
 	bool player;
-	size_t numEaten;
+	std::atomic<size_t> numEaten;
 };
 
 struct WallState : public GameObjectState {

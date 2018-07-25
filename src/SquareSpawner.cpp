@@ -26,7 +26,7 @@
 #include "Engine.hpp"
 
 void SquareSpawner::update(Screen* screen) {
-	unsigned int spawned = 0;
+	size_t spawned = 0;
 
 	std::shared_ptr<SquareWorldState> state = std::static_pointer_cast<SquareWorldState>(screen->getState());
 

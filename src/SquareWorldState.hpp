@@ -18,10 +18,12 @@
 
 #pragma once
 
+#include <atomic>
+
 #include "Screen.hpp"
 
 struct SquareWorldState : public ScreenState {
 	SquareWorldState() : squareCount(0) {}
 
-	size_t squareCount;
+	std::atomic<size_t> squareCount;
 };

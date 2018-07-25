@@ -49,8 +49,10 @@ private:
 	}
 
 	void doSquareCollision(Screen* screen, PhysicsComponent* hitObject, std::shared_ptr<SquareState> parentState, std::shared_ptr<SquareState> hitState) {
-		//If one has already been eaten, don't check again or else squareCount might get messed up. Also, blocks can't be eaten
-		if (parentState->eaten || hitState->eaten || parentState->type == ObjectType::BLOCK || hitState->type == ObjectType::BLOCK) {
+		//If one has already been eaten, don't check again or else squareCount might get messed up. Also, blocks can't be eaten.
+		//The eaten checks here are only coarse-grained for if either object was eaten in a previous physics pass,
+		//but before the screen update finished.
+		if (parentState->eaten.load(std::memory_order_relaxed) || hitState->eaten.load(std::memory_order_relaxed) || parentState->type == ObjectType::BLOCK || hitState->type == ObjectType::BLOCK) {
 			return;
 		}
 
@@ -59,19 +61,23 @@ private:
 
 		//Who gets eaten?
 		if (parentState->box.xLength() > hitState->box.xLength()) {
-			screen->removeObject(hitObject->getParent());
-			hitState->eaten = true;
-			parentState->numEaten++;
+			bool expectedEaten = false;
+			//If another thread has marked this object as eaten (happens in three-way collisions),
+			//don't change it again or else squareCount and numEaten will get messed up.
+			if (hitState->eaten.compare_exchange_strong(expectedEaten, true, std::memory_order_relaxed)) {
+				screen->removeObject(hitObject->getParent());
+				parentState->numEaten.fetch_add(1, std::memory_order_relaxed);
 
-			std::shared_ptr<SquareWorldState> worldState = std::static_pointer_cast<SquareWorldState>(screen->getState());
+				std::shared_ptr<SquareWorldState> worldState = std::static_pointer_cast<SquareWorldState>(screen->getState());
 
-			worldState->squareCount--;
+				worldState->squareCount.fetch_sub(1, std::memory_order_relaxed);
+			}
 		}
 	}
 
 	void doWallCollision(Screen* screen, std::shared_ptr<SquareState> parentState, PhysicsComponent* wall) {
 		//Players can hit the wall all they want, and squares can't be re-eaten
-		if (parentState->player || parentState->eaten) {
+		if (parentState->player || parentState->eaten.load(std::memory_order_relaxed)) {
 			return;
 		}
 
@@ -83,13 +89,17 @@ private:
 
 		//Squares can also be on top of the wall, they should only be destroyed when hit from the side
 		if (squareBox.getCenter().y <= wallBox.max.y) {
-			screen->removeObject(parent->getParent());
+			bool expectedEaten = false;
+
 			//Eaten by a wall! Oh, the horror!
-			parentState->eaten = true;
+			//(Don't re-eat if another thread has already consumed this square)
+			if (parentState->eaten.compare_exchange_strong(expectedEaten, true, std::memory_order_relaxed)) {
+				screen->removeObject(parent->getParent());
 
-			std::shared_ptr<SquareWorldState> worldState = std::static_pointer_cast<SquareWorldState>(screen->getState());
+				std::shared_ptr<SquareWorldState> worldState = std::static_pointer_cast<SquareWorldState>(screen->getState());
 
-			worldState->squareCount--;
+				worldState->squareCount.fetch_sub(1, std::memory_order_relaxed);
+			}
 		}
 	}
 };
