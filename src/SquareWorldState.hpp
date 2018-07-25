@@ -23,5 +23,5 @@
 struct SquareWorldState : public ScreenState {
 	SquareWorldState() : squareCount(0) {}
 
-	unsigned int squareCount;
+	size_t squareCount;
 };

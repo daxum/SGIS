@@ -40,7 +40,7 @@ namespace {
 		std::shared_ptr<Object> score = std::make_shared<Object>();
 
 		score->addComponent(std::make_shared<ScoreUpdater>(playerState));
-		score->addComponent(std::make_shared<TextComponent>(U"Score: 0", "font", "text", glm::vec3(0.8, 0.8, 0.8)));
+		score->addComponent(std::make_shared<TextComponent>(U"Score: 0", "font", "text", "text", glm::vec3(0.8, 0.8, 0.8)));
 		score->addComponent(std::make_shared<GuiComponent>(glm::vec3(0.0, 1080.0, 0.0)));
 
 		hud->addObject(score);

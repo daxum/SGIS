@@ -96,7 +96,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 		//Player
 		std::shared_ptr<Object> square = std::make_shared<Object>();
 
-		std::shared_ptr<SquareState> playerState = std::make_shared<SquareState>(Engine::instance->getModelManager().getModel("square").meshBox, true);
+		std::shared_ptr<SquareState> playerState = std::make_shared<SquareState>(Engine::instance->getModel("square")->getMesh().getBox(), true);
 		square->setState(playerState);
 
 		if (playerStateOut) {
@@ -106,7 +106,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 		square->addComponent(std::make_shared<RenderComponent>("square", glm::vec3(0.1f, 0.9f, 0.1f)));
 		square->addComponent(std::make_shared<ControlledAI>());
 
-		AxisAlignedBB playerBox = Engine::instance->getModelManager().getModel("square").meshBox;
+		AxisAlignedBB playerBox = Engine::instance->getModel("square")->getMesh().getBox();
 		std::shared_ptr<BoxPhysicsObject> playerPhysicsObject = std::make_shared<BoxPhysicsObject>(playerBox);
 
 		std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(playerPhysicsObject, std::make_shared<SquareCollider>());

@@ -36,12 +36,12 @@ public:
 
 	}
 
-	glm::mat4 getView() {
+	glm::mat4 getView() const {
 		const std::pair<glm::vec3, glm::quat> loc = anim.getLocation((float)currentTime);
 		return glm::lookAt(loc.first, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 	}
 
-	glm::mat4 getProjection() {
+	glm::mat4 getProjection() const {
 		return projection;
 	}
 
@@ -52,9 +52,11 @@ public:
 		projection = glm::perspective(ExMath::PI / 4.0f, width / height, near, far);
 	}
 
-	std::pair<float, float> getNearFar() {
+	std::pair<float, float> getNearFar() const {
 		return {near, far};
 	}
+
+	float getFOV() const { return ExMath::PI / 4.0f; }
 
 	void update() {
 		currentTime++;

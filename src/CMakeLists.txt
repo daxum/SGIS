@@ -23,7 +23,7 @@ add_executable(squareGame
 )
 
 set_target_properties(squareGame PROPERTIES
-	CXX_STANDARD 11
+	CXX_STANDARD 14
 	CXX_STANDARD_REQUIRED ON
 )
 

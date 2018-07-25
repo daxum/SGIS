@@ -35,7 +35,11 @@ public:
 
 		shaderInterface->setUniform(UniformType::MAT4x4, "modelView", glm::value_ptr(matStack.top()));
 		shaderInterface->setUniform(UniformType::VEC3, "color", glm::value_ptr(object->getColor()));
-		shaderInterface->setTexture(object->getModel().texture, 0);
+
+		std::shared_ptr<const ModelRef> modelRef = object->getModel();
+		const std::string& texture = *std::static_pointer_cast<std::string>(modelRef->getModel().uniformMap.at("texture"));
+
+		shaderInterface->setTexture(texture, 0);
 	}
 };
 
@@ -54,13 +58,16 @@ public:
 		shaderInterface->setUniform(UniformType::MAT4x4, "modelView", glm::value_ptr(matStack.top()));
 		shaderInterface->setUniform(UniformType::VEC3, "color", glm::value_ptr(object->getColor()));
 
-		const Model& model = object->getModel();
+		std::shared_ptr<const ModelRef> modelRef = object->getModel();
+		const std::string& texture = *std::static_pointer_cast<std::string>(modelRef->getModel().uniformMap.at("texture"));
 
-		shaderInterface->setTexture(model.texture, 0);
+		shaderInterface->setTexture(texture, 0);
 
-		shaderInterface->setUniform(UniformType::VEC3, "ka", glm::value_ptr(model.lighting.ka));
-		shaderInterface->setUniform(UniformType::VEC3, "ks", glm::value_ptr(model.lighting.ks));
-		shaderInterface->setUniform(UniformType::FLOAT, "s", &model.lighting.s);
+		const LightInfo& lighting = *std::static_pointer_cast<LightInfo>(modelRef->getModel().uniformMap.at("light"));
+
+		shaderInterface->setUniform(UniformType::VEC3, "ka", glm::value_ptr(lighting.ka));
+		shaderInterface->setUniform(UniformType::VEC3, "ks", glm::value_ptr(lighting.ks));
+		shaderInterface->setUniform(UniformType::FLOAT, "s", &lighting.s);
 	}
 };
 
@@ -76,6 +83,10 @@ public:
 		matStack.scale(object->getScale());
 
 		shaderInterface->setUniform(UniformType::MAT4x4, "modelView", glm::value_ptr(matStack.top()));
-		shaderInterface->setTexture(object->getModel().texture, 0);
+
+		std::shared_ptr<const ModelRef> modelRef = object->getModel();
+		const std::string& texture = *std::static_pointer_cast<std::string>(modelRef->getModel().uniformMap.at("texture"));
+
+		shaderInterface->setTexture(texture, 0);
 	}
 };

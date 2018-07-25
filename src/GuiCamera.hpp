@@ -17,7 +17,7 @@
  ******************************************************************************/
 
 #pragma once
-
+#include <iostream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -26,16 +26,18 @@
 
 class GuiCamera : public Camera {
 public:
-	GuiCamera() : near(0.1), far(100.0) {}
+	GuiCamera() : near(1.0), far(100.0) {}
 
-	glm::mat4 getView() { return glm::lookAt(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, 1.0, 0.0)); }
-	glm::mat4 getProjection() { return projection; }
+	glm::mat4 getView() const { return glm::lookAt(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, 1.0, 0.0)); }
+	glm::mat4 getProjection() const { return projection; }
 
 	void setProjection() {
 		projection = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f, near, far);
 	}
 
-	std::pair<float, float> getNearFar() { return {near, far}; }
+	std::pair<float, float> getNearFar() const { return {near, far}; }
+
+	float getFOV() const { return 0.0f; }
 
 	void update() {}
 

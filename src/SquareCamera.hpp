@@ -42,12 +42,12 @@ public:
 	 * Calculates a view matrix to use in rendering
 	 * @return the view matrix
 	 */
-	glm::mat4 getView();
+	glm::mat4 getView() const { return glm::lookAt(pos, look, up); }
 
 	/**
 	 * Gets the projection matrix.
 	 */
-	glm::mat4 getProjection() { return projection; }
+	glm::mat4 getProjection() const { return projection; }
 
 	/**
 	 * Sets the projection matrix.
@@ -57,7 +57,12 @@ public:
 	/**
 	 * Gets the near and far planes.
 	 */
-	std::pair<float, float> getNearFar() { return {near, far}; }
+	std::pair<float, float> getNearFar() const { return {near, far}; }
+
+	/**
+	 * Gets field of view.
+	 */
+	float getFOV() const { return ExMath::PI / 4.0f; }
 
 	/**
 	 * Updates the camera. This currently moves it to track the object it is following.

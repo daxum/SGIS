@@ -38,7 +38,7 @@ struct SquareState : public GameObjectState {
 	AxisAlignedBB box;
 	bool eaten;
 	bool player;
-	unsigned int numEaten;
+	size_t numEaten;
 };
 
 struct WallState : public GameObjectState {

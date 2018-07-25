@@ -30,10 +30,6 @@ SquareCamera::SquareCamera(glm::vec3 startPos, glm::vec3 startLook, glm::vec3 st
 
 }
 
-glm::mat4 SquareCamera::getView() {
-	return glm::lookAt(pos, look, up);
-}
-
 void SquareCamera::setProjection() {
 	float width = Engine::instance->getWindowInterface().getWindowWidth();
 	float height = Engine::instance->getWindowInterface().getWindowHeight();

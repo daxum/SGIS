@@ -42,6 +42,9 @@ int main(int argc, char** argv) {
 	config.loaderLog.type = LogType::STDOUT;
 	config.loaderLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
 
+	config.modelLog.type = LogType::STDOUT;
+	config.modelLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
+
 	try {
 		Engine engine(config);
 
