@@ -32,6 +32,7 @@ int main(int argc, char** argv) {
 	config.renderer.windowTitle = "Squares";
 	config.timestep = 1000.0 / 60.0;
 	config.physicsTimestep = 1.0f / 120.0f;
+	config.frameReportFrequency = 5000;
 
 	config.generalLog.type = LogType::STDOUT;
 	config.generalLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
