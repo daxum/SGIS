@@ -21,15 +21,98 @@
 #include "ArenaGenerator.hpp"
 #include "ScreenComponents.hpp"
 #include "DefaultCamera.hpp"
-#include "Shaders.hpp"
 #include "Vertex.hpp"
+#include "Names.hpp"
+#include "SquareWorldState.hpp"
+
+namespace {
+	struct ShaderNames {
+		const char* const vertex;
+		const char* const fragment;
+	};
+
+	struct ShaderPaths {
+		ShaderNames basic;
+		ShaderNames phong;
+		ShaderNames text;
+		ShaderNames sky;
+	};
+
+	const ShaderPaths glShaders = {
+		{"shaders/glsl/generic.vert", "shaders/glsl/basic.frag"},
+		{"shaders/glsl/generic.vert", "shaders/glsl/blinnPhong.frag"},
+		{"shaders/glsl/text.vert", "shaders/glsl/text.frag"},
+		{"shaders/glsl/cubemap.vert", "shaders/glsl/cubemap.frag"}
+	};
+
+	const ShaderPaths vkShaders = {
+		{"shaders/spirv/generic.vert.spv", "shaders/spirv/basic.frag.spv"},
+		{"shaders/spirv/generic.vert.spv", "shaders/spirv/blinnPhong.frag.spv"},
+		{"shaders/spirv/text.vert.spv", "shaders/spirv/text.frag.spv"},
+		{"shaders/spirv/cubemap.vert.spv", "shaders/spirv/cubemap.frag.spv"}
+	};
+
+	const ShaderPaths* const shaderFiles = Game::USE_VULKAN ? &vkShaders : &glShaders;
+}
+
+void Game::createRenderObjects(std::shared_ptr<RenderInitializer> renderInit) {
+	renderInit->createBuffer(GENERIC_BUFFER, VertexBufferInfo{{
+		{VERTEX_ELEMENT_POSITION, VertexElementType::VEC3},
+		{VERTEX_ELEMENT_NORMAL, VertexElementType::VEC3},
+		{VERTEX_ELEMENT_TEXTURE, VertexElementType::VEC2}},
+		BufferUsage::DEDICATED_LAZY,
+		1048576
+	});
+
+	renderInit->createBuffer(TEXT_BUFFER, VertexBufferInfo{{
+		{VERTEX_ELEMENT_POSITION, VertexElementType::VEC2},
+		{VERTEX_ELEMENT_TEXTURE, VertexElementType::VEC2}},
+		BufferUsage::DEDICATED_SINGLE,
+		1048576
+	});
+
+	renderInit->addUniformSet(PHONG_SET, UniformSet{
+		UniformSetType::MODEL_STATIC,
+		3,
+		//Textures are broken at the moment
+		{{UniformType::SAMPLER_2D, SQUARE_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
+		{UniformType::VEC3, "ka", UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
+		{UniformType::VEC3, "ks", UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
+		{UniformType::FLOAT, "s", UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+	});
+
+	renderInit->addUniformSet(BASIC_SET, UniformSet{
+		UniformSetType::MODEL_STATIC,
+		1,
+		{{UniformType::SAMPLER_2D, SQUARE_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+	});
+
+	renderInit->addUniformSet(CUBE_SET, UniformSet{
+		UniformSetType::MODEL_STATIC,
+		1,
+		{{UniformType::SAMPLER_CUBE, SKY_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+	});
+
+	renderInit->addUniformSet(TEXT_SET, UniformSet{
+		UniformSetType::MODEL_DYNAMIC,
+		1,
+		{{UniformType::SAMPLER_2D, FONT_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+	});
+
+	renderInit->addUniformSet(SCREEN_SET, UniformSet{
+		UniformSetType::PER_SCREEN,
+		3,
+		{{UniformType::MAT4, "projection", UniformProviderType::CAMERA_PROJECTION, USE_VERTEX_SHADER},
+		{UniformType::VEC3, "light", UniformProviderType::SCREEN_STATE, USE_FRAGMENT_SHADER}}
+	});
+}
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
-	loader->loadTexture("square", "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
-	loader->loadTexture("arena", "textures/arena.png", Filter::NEAREST, Filter::NEAREST, true);
-	loader->loadTexture("wall", "textures/wall.png", Filter::LINEAR, Filter::LINEAR, true);
-	loader->loadFont("font", {"fonts/DejaVuSans.ttf"}, U"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:;'\".,-!?", 90);
-	loader->loadCubeMap("skybox", std::vector<std::string>(6, "textures/sky.png"), Filter::NEAREST, Filter::NEAREST, true);
+	loader->loadTexture(SQUARE_TEX, "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
+	loader->loadTexture(ARENA_TEX, "textures/arena.png", Filter::LINEAR, Filter::LINEAR, true);
+	loader->loadTexture(WALL_TEX, "textures/wall.png", Filter::LINEAR, Filter::LINEAR, true);
+	loader->loadFont(FONT_TEX, {"fonts/DejaVuSans.ttf"}, U"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:;'\".,-!?", 90);
+	loader->loadCubeMap(SKY_TEX, {"textures/sky.png", "textures/sky.png", "textures/sky.png", "textures/sky.png", "textures/sky.png", "textures/sky.png"}, Filter::NEAREST, Filter::NEAREST, true);
 }
 
 void Game::loadModels(ModelLoader& loader) {
@@ -55,57 +138,60 @@ void Game::loadModels(ModelLoader& loader) {
 		200.0f
 	};
 
-	loader.loadModel("square", "models/square.obj", "square", "phong", "generic", squareLight);
-	loader.loadModel("button", "models/square.obj", "square", "basic", "generic", squareLight);
-	loader.loadModel("arena", "models/arena.obj", "arena", "phong", "generic", arenaLight);
-	loader.loadModel("wall", "models/cube.obj", "wall", "phong", "generic", wallLight);
-	loader.loadModel("sky", "models/cube_cw.obj", "skybox", "cubemap", "generic", squareLight, false);
+	loader.loadModel(SQUARE_MODEL, "models/square.obj", SQUARE_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET, squareLight);
+	loader.loadModel(BUTTON_MODEL, "models/square.obj", SQUARE_TEX, BASIC_SHADER, GENERIC_BUFFER, BASIC_SET, squareLight);
+	loader.loadModel(ARENA_MODEL, "models/arena.obj", ARENA_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET, arenaLight);
+	loader.loadModel(WALL_MODEL, "models/cube.obj", WALL_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET, wallLight);
+	loader.loadModel(SKY_MODEL, "models/cube_cw.obj", SKY_TEX, SKYBOX_SHADER, GENERIC_BUFFER, CUBE_SET, squareLight, false);
 }
 
 void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
-	loader->createBuffer("generic", VertexBufferInfo{{
-		{VERTEX_ELEMENT_POSITION, VertexElementType::VEC3},
-		{VERTEX_ELEMENT_NORMAL, VertexElementType::VEC3},
-		{VERTEX_ELEMENT_TEXTURE, VertexElementType::VEC2}},
-		BufferUsage::DEDICATED_LAZY,
-		1048576}
-	);
-
-	loader->createBuffer("text", VertexBufferInfo{{
-		{VERTEX_ELEMENT_POSITION, VertexElementType::VEC2},
-		{VERTEX_ELEMENT_TEXTURE, VertexElementType::VEC2}},
-		BufferUsage::DEDICATED_SINGLE,
-		1048576}
-	);
-
 	ShaderInfo basicInfo;
-	basicInfo.vertex = "shaders/glsl/generic.vert";
-	basicInfo.fragment = "shaders/glsl/basic.frag";
-	basicInfo.shaderObject = std::make_shared<BasicShader>();
+	basicInfo.vertex = shaderFiles->basic.vertex;
+	basicInfo.fragment = shaderFiles->basic.fragment;
 	basicInfo.pass = RenderPass::OPAQUE;
+	basicInfo.buffer = GENERIC_BUFFER;
+	basicInfo.uniformSets = {SCREEN_SET, BASIC_SET};
+	basicInfo.pushConstants = {{
+		{UniformType::MAT4, "transform", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
+		{UniformType::VEC3, "color", UniformProviderType::OBJECT_STATE, USE_FRAGMENT_SHADER}
+	}};
 
 	ShaderInfo phongInfo;
-	phongInfo.vertex = "shaders/glsl/generic.vert";
-	phongInfo.fragment = "shaders/glsl/blinnPhong.frag";
-	phongInfo.shaderObject = std::make_shared<PhongShader>();
+	phongInfo.vertex = shaderFiles->phong.vertex;
+	phongInfo.fragment = shaderFiles->phong.fragment;
 	phongInfo.pass = RenderPass::OPAQUE;
+	phongInfo.buffer = GENERIC_BUFFER;
+	phongInfo.uniformSets = {SCREEN_SET, PHONG_SET};
+	phongInfo.pushConstants = {{
+		{UniformType::MAT4, "transform", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
+		{UniformType::VEC3, "color", UniformProviderType::OBJECT_STATE, USE_FRAGMENT_SHADER}
+	}};
 
 	ShaderInfo textInfo;
-	textInfo.vertex = "shaders/glsl/text.vert";
-	textInfo.fragment = "shaders/glsl/text.frag";
-	textInfo.shaderObject = std::make_shared<BasicShader>();
+	textInfo.vertex = shaderFiles->text.vertex;
+	textInfo.fragment = shaderFiles->text.fragment;
 	textInfo.pass = RenderPass::TRANSLUCENT;
+	textInfo.buffer = TEXT_BUFFER;
+	textInfo.uniformSets = {SCREEN_SET, TEXT_SET};
+	textInfo.pushConstants = {{
+		{UniformType::MAT4, "transform", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
+	}};
 
 	ShaderInfo skyInfo;
-	skyInfo.vertex = "shaders/glsl/cubemap.vert";
-	skyInfo.fragment = "shaders/glsl/cubemap.frag";
-	skyInfo.shaderObject = std::make_shared<SkyShader>();
+	skyInfo.vertex = shaderFiles->sky.vertex;
+	skyInfo.fragment = shaderFiles->sky.fragment;
 	skyInfo.pass = RenderPass::OPAQUE;
+	skyInfo.buffer = GENERIC_BUFFER;
+	skyInfo.uniformSets = {SCREEN_SET, CUBE_SET};
+	skyInfo.pushConstants = {{
+		{UniformType::MAT4, "transform", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
+	}};
 
-	loader->loadShader("basic", basicInfo);
-	loader->loadShader("phong", phongInfo);
-	loader->loadShader("text", textInfo);
-	loader->loadShader("cubemap", skyInfo);
+	loader->loadShader(BASIC_SHADER, basicInfo);
+	loader->loadShader(PHONG_SHADER, phongInfo);
+	loader->loadShader(TEXT_SHADER, textInfo);
+	loader->loadShader(SKYBOX_SHADER, skyInfo);
 }
 
 void Game::loadScreens(DisplayEngine& display) {
@@ -115,6 +201,7 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	//Create main menu.
 	std::shared_ptr<Screen> mainMenu = std::make_shared<Screen>(display, false);
+	mainMenu->setState(std::make_shared<EmptyScreenState>());
 
 	//Add component managers.
 	mainMenu->addComponentManager(std::make_shared<RenderComponentManager>());
@@ -125,18 +212,21 @@ void Game::loadScreens(DisplayEngine& display) {
 	std::shared_ptr<Object> quitButton = std::make_shared<Object>();
 	std::shared_ptr<Object> startButton = std::make_shared<Object>();
 
+	quitButton->setState(std::make_shared<ButtonState>(glm::vec3(0.9, 0.1, 0.0)));
+	startButton->setState(std::make_shared<ButtonState>(glm::vec3(0.0, 1.0, 0.0)));
+
 	quitButton->addComponent(std::make_shared<BackButton>(Key::ESCAPE));
-	quitButton->addComponent(std::make_shared<RenderComponent>("button", glm::vec3(0.9, 0.1, 0.0)));
-	quitButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel("square")->getMesh().getBox(), glm::vec3(0.0, -0.6, 0.0), 0.0f)));
+	quitButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
+	quitButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox(), glm::vec3(0.0, -0.6, 0.0), 0.0f)));
 
 	startButton->addComponent(std::make_shared<StartButton>(Key::ENTER));
-	startButton->addComponent(std::make_shared<RenderComponent>("button", glm::vec3(0.0, 1.0, 0.0)));
-	startButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel("square")->getMesh().getBox(), glm::vec3(0.0, 0.4, 0.0), 0.0f)));
+	startButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
+	startButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox(), glm::vec3(0.0, 0.4, 0.0), 0.0f)));
 
 	//Add a title thingy.
 	std::shared_ptr<Object> title = std::make_shared<Object>();
 
-	title->addComponent(std::make_shared<TextComponent>(U"Main Menu", "font", "text", "text", glm::vec3(0.02, 0.02, 0.02)));
+	title->addComponent(std::make_shared<TextComponent>(U"Main Menu", FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET, glm::vec3(0.02, 0.02, 0.02)));
 
 	AxisAlignedBB textBox = title->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
 	//For position, doesn't take input.
@@ -148,7 +238,7 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->addObject(title);
 
 	//Set camera
-	std::static_pointer_cast<DefaultCamera>(mainMenu->getCamera())->pos = glm::vec3(0.0, 0.0, 10.0);
+	std::static_pointer_cast<DefaultCamera>(mainMenu->getCamera())->setPos(glm::vec3(0.0, 0.0, 10.0));
 
 	display.pushOverlay(mainMenu);
 }

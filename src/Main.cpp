@@ -18,6 +18,7 @@
 
 #include <stdexcept>
 #include <iostream>
+
 #include "Engine.hpp"
 #include "Game.hpp"
 
@@ -26,10 +27,11 @@ int main(int argc, char** argv) {
 	EngineConfig config = {};
 	config.gameName = "simpleSquareGame";
 	config.gameVersion = 1;
-	config.renderer.renderType = Renderer::OPEN_GL;
+	config.renderer.renderType = Game::USE_VULKAN ? Renderer::VULKAN : Renderer::OPEN_GL;
 	config.renderer.windowWidth = 960;
 	config.renderer.windowHeight = 540;
 	config.renderer.windowTitle = "Squares";
+	config.renderer.validationLayers = { "VK_LAYER_LUNARG_standard_validation" };
 	config.timestep = 1000.0 / 60.0;
 	config.physicsTimestep = 1.0f / 120.0f;
 	config.frameReportFrequency = 5000;
@@ -44,7 +46,10 @@ int main(int argc, char** argv) {
 	config.loaderLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
 
 	config.modelLog.type = LogType::STDOUT;
-	config.modelLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
+	config.modelLog.mask = INFO | WARN | ERROR | FATAL;
+
+	config.componentLog.type =  LogType::STDOUT;
+	config.componentLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
 
 	try {
 		Engine engine(config);

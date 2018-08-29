@@ -19,7 +19,6 @@
 #pragma once
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
 #include "Camera.hpp"
 #include "Engine.hpp"
@@ -36,12 +35,12 @@ public:
 
 	}
 
-	glm::mat4 getView() const {
+	const glm::mat4 getView() const override {
 		const std::pair<glm::vec3, glm::quat> loc = anim.getLocation((float)currentTime);
 		return glm::lookAt(loc.first, glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 	}
 
-	glm::mat4 getProjection() const {
+	const glm::mat4 getProjection() const override {
 		return projection;
 	}
 

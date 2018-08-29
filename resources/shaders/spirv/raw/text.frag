@@ -16,33 +16,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-#pragma once
+#version 450 core
+#extension GL_ARB_separate_shader_objects : enable
 
-#include <glm/glm.hpp>
+layout(location = 0) in vec2 tex;
 
-#include "Camera.hpp"
-#include "Engine.hpp"
+layout(location = 0) out vec4 outColor;
 
-class GuiCamera : public Camera {
-public:
-	GuiCamera() : near(1.0), far(100.0) {}
+layout(set = 1, binding = 0) uniform sampler2D fontTex;
 
-	const glm::mat4 getView() const override { return glm::lookAt(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, 1.0, 0.0)); }
-	const glm::mat4 getProjection() const override { return projection; }
-
-	void setProjection() {
-		projection = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f, near, far);
-	}
-
-	std::pair<float, float> getNearFar() const { return {near, far}; }
-
-	float getFOV() const { return 0.0f; }
-
-	void update() {}
-
-private:
-	//Near plane, far plane, and projection matrix.
-	float near;
-	float far;
-	glm::mat4 projection;
-};
+void main() {
+	outColor = vec4(0.0, 0.0, 0.0, texture(fontTex, tex).r);
+}

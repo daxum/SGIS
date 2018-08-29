@@ -24,13 +24,14 @@
 #include "SquareCollider.hpp"
 #include "SquareWorldState.hpp"
 #include "Engine.hpp"
+#include "Names.hpp"
 
 void SquareSpawner::update(Screen* screen) {
 	size_t spawned = 0;
 
 	std::shared_ptr<SquareWorldState> state = std::static_pointer_cast<SquareWorldState>(screen->getState());
 
-	const AxisAlignedBB& squareBox(Engine::instance->getModel("square")->getMesh().getBox());
+	const AxisAlignedBB& squareBox(Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox());
 
 	while(state->squareCount < maxSquares && spawned < MAX_SPAWN_PER_TICK) {
 		screen->addObject(makeSquare(squareBox));
@@ -80,19 +81,16 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 	//Walls are currently 10 units high
 	translation.y = 10.0f + box.yLength() / 2.0f;
 
-	glm::vec3 color(0.0, 0.0, 0.0);
-
 	std::shared_ptr<Object> square = std::make_shared<Object>();
 
 	//Is square a block (blue square, can't eat/be eaten)?
 	if (ExMath::randomFloat(0.0f, 1.0f) > 0.9f) {
-		color = glm::vec3(0.0, 0.35, 1.0);
-		square->setState(std::make_shared<SquareState>(box, false, true));
+		square->setState(std::make_shared<SquareState>(box, glm::vec3(0.0, 0.35, 1.0), false, true));
 	}
 	else {
 		//Big - red, small - yellow
-		color = scale <= scaleFactor ? glm::vec3(0.95f, 0.95f, 0.04f) : glm::vec3(0.9f, 0.06f, 0.06f);
-		square->setState(std::make_shared<SquareState>(box, false));
+		glm::vec3 color = scale <= scaleFactor ? glm::vec3(0.95f, 0.95f, 0.04f) : glm::vec3(0.9f, 0.06f, 0.06f);
+		square->setState(std::make_shared<SquareState>(box, color, false));
 	}
 
 	std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(box, translation), std::make_shared<SquareCollider>());
@@ -100,7 +98,7 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 	physics->setVelocity(velocity);
 
 	square->addComponent(physics);
-	square->addComponent(std::make_shared<RenderComponent>("square", color, glm::vec3(scale, scale, scale)));
+	square->addComponent(std::make_shared<RenderComponent>(SQUARE_MODEL, glm::vec3(scale, scale, scale)));
 
 	return square;
 }

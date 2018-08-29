@@ -21,6 +21,7 @@
 #include "Buttons.hpp"
 #include "DefaultCamera.hpp"
 #include "ScreenComponents.hpp"
+#include "Names.hpp"
 
 //Tracks the player to determine when the game should be over.
 class WorldUpdater : public UpdateComponent {
@@ -37,6 +38,7 @@ public:
 
 			//Add game over screen
 			std::shared_ptr<Screen> gameOver = std::make_shared<Screen>(screen->getDisplay(), false);
+			gameOver->setState(std::make_shared<EmptyScreenState>());
 
 			gameOver->addComponentManager(std::make_shared<PhysicsComponentManager>());
 			gameOver->addComponentManager(std::make_shared<GuiComponentManager>());
@@ -44,7 +46,7 @@ public:
 
 			//Game over message
 			std::shared_ptr<Object> message = std::make_shared<Object>();
-			message->addComponent(std::make_shared<TextComponent>(U"Game Over", "font", "text", "text", glm::vec3(0.025, 0.025, 0.025)));
+			message->addComponent(std::make_shared<TextComponent>(U"Game Over", FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET, glm::vec3(0.025, 0.025, 0.025)));
 
 			AxisAlignedBB messageBox = message->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
 			message->addComponent(std::make_shared<GuiComponent>(glm::vec3(messageBox.min.x, 3.2, 0.0)));
@@ -53,7 +55,8 @@ public:
 
 			//Final Score
 			std::shared_ptr<Object> finalScore = std::make_shared<Object>();
-			finalScore->addComponent(std::make_shared<TextComponent>(U"Final Score: " + TextComponent::convToU32(std::to_string(trackedState->numEaten)), "font", "text", "text", glm::vec3(0.005, 0.005, 0.005)));
+			std::u32string eatenString = TextComponent::convToU32(std::to_string(trackedState->numEaten));
+			finalScore->addComponent(std::make_shared<TextComponent>(U"Final Score: " + eatenString, FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET, glm::vec3(0.005, 0.005, 0.005)));
 
 			AxisAlignedBB scoreBox = finalScore->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
 			finalScore->addComponent(std::make_shared<GuiComponent>(glm::vec3(scoreBox.min.x, 0.7, 0.0)));
@@ -62,22 +65,24 @@ public:
 
 			//Retry button
 			std::shared_ptr<Object> retryButton = std::make_shared<Object>();
+			retryButton->setState(std::make_shared<ButtonState>(glm::vec3(0.9, 0.9, 0.0)));
 
 			retryButton->addComponent(std::make_shared<RetryButton>(Key::R));
-			retryButton->addComponent(std::make_shared<RenderComponent>("button", glm::vec3(0.9, 0.9, 0.0)));
-			retryButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel("square")->getMesh().getBox(), glm::vec3(0.0, -0.6, 0.0), 0.0f)));
+			retryButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
+			retryButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel(BUTTON_MODEL)->getMesh().getBox(), glm::vec3(0.0, -0.6, 0.0), 0.0f)));
 			gameOver->addObject(retryButton);
 
 			//Button to return to main menu
 			std::shared_ptr<Object> backButton = std::make_shared<Object>();
+			backButton->setState(std::make_shared<ButtonState>(glm::vec3(0.9, 0.1, 0.0)));
 
 			backButton->addComponent(std::make_shared<BackButton>(Key::ESCAPE));
-			backButton->addComponent(std::make_shared<RenderComponent>("button", glm::vec3(0.9, 0.1, 0.0)));
-			backButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel("square")->getMesh().getBox(), glm::vec3(0.0, -1.6, 0.0), 0.0f)));
+			backButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
+			backButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel(BUTTON_MODEL)->getMesh().getBox(), glm::vec3(0.0, -1.6, 0.0), 0.0f)));
 			gameOver->addObject(backButton);
 
 			//Set camera
-			std::static_pointer_cast<DefaultCamera>(gameOver->getCamera())->pos = glm::vec3(0.0, 0.0, 10.0);
+			std::static_pointer_cast<DefaultCamera>(gameOver->getCamera())->setPos(glm::vec3(0.0, 0.0, 10.0));
 
 			screen->getDisplay().pushOverlay(gameOver);
 

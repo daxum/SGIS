@@ -16,33 +16,30 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-#pragma once
+#version 450 core
+#extension GL_ARB_separate_shader_objects : enable
 
-#include <glm/glm.hpp>
+layout (location = 0) in vec3 posIn;
+//Currently ignored, needed because cube is in the static buffer
+layout (location = 1) in vec3 normIn;
+layout (location = 2) in vec2 texIn;
 
-#include "Camera.hpp"
-#include "Engine.hpp"
-
-class GuiCamera : public Camera {
-public:
-	GuiCamera() : near(1.0), far(100.0) {}
-
-	const glm::mat4 getView() const override { return glm::lookAt(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, 1.0, 0.0)); }
-	const glm::mat4 getProjection() const override { return projection; }
-
-	void setProjection() {
-		projection = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f, near, far);
-	}
-
-	std::pair<float, float> getNearFar() const { return {near, far}; }
-
-	float getFOV() const { return 0.0f; }
-
-	void update() {}
-
-private:
-	//Near plane, far plane, and projection matrix.
-	float near;
-	float far;
-	glm::mat4 projection;
+out gl_PerVertex {
+    vec4 gl_Position;
 };
+
+layout(location = 0) out vec3 tex;
+
+layout(set = 0, binding = 0, std140) uniform ScreenData {
+	mat4 projection;
+} screen;
+
+layout(push_constant, std430) uniform ObjectData {
+	layout(offset = 0) mat4 modelView;
+} object;
+
+void main() {
+	tex = posIn;
+	gl_Position = (screen.projection * object.modelView * vec4(posIn, 0.0)).xyww;
+}
+

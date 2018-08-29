@@ -18,10 +18,22 @@
 
 #pragma once
 
-#include "GuiComponent.hpp"
 #include "KeyList.hpp"
-#include "Screen.hpp"
-#include "DisplayEngine.hpp"
+#include "ScreenComponents.hpp"
+
+struct ButtonState : public ObjectState {
+	ButtonState(glm::vec3 color) : color(color) {}
+
+	const void* getRenderValue(const std::string& name) const override {
+		if (name == "color") {
+			return &color;
+		}
+
+		throw std::runtime_error("Bad render value!");
+	}
+
+	glm::vec3 color;
+};
 
 class Button : public GuiComponent {
 public:

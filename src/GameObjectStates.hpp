@@ -25,22 +25,42 @@
 enum class ObjectType {
 	SQUARE,
 	WALL,
-	BLOCK
+	BLOCK,
+	FLOOR
 };
 
 struct GameObjectState : public ObjectState {
 	GameObjectState(ObjectType type) : type(type) {}
 
+	const void* getRenderValue(const std::string& name) const override {
+		static const glm::vec3 defaultColor(1.0f, 1.0f, 1.0f);
+
+		if (name == "color") {
+			return &defaultColor;
+		}
+
+		throw std::runtime_error("Bad render value!");
+	}
+
 	const ObjectType type;
 };
 
 struct SquareState : public GameObjectState {
-	SquareState(AxisAlignedBB box, bool player, bool block = false) : GameObjectState(block ? ObjectType::BLOCK : ObjectType::SQUARE), box(box), eaten(false), player(player), numEaten(0) {}
+	SquareState(AxisAlignedBB box, glm::vec3 color, bool player, bool block = false) : GameObjectState(block ? ObjectType::BLOCK : ObjectType::SQUARE), box(box), eaten(false), player(player), numEaten(0), color(color) {}
+
+	const void* getRenderValue(const std::string& name) const override {
+		if (name == "color") {
+			return &color;
+		}
+
+		throw std::runtime_error("Bad render value!");
+	}
 
 	AxisAlignedBB box;
 	std::atomic<bool> eaten;
 	bool player;
 	std::atomic<size_t> numEaten;
+	glm::vec3 color;
 };
 
 struct WallState : public GameObjectState {

@@ -42,12 +42,12 @@ public:
 	 * Calculates a view matrix to use in rendering
 	 * @return the view matrix
 	 */
-	glm::mat4 getView() const { return glm::lookAt(pos, look, up); }
+	const glm::mat4 getView() const override { return glm::lookAt(pos, look, up); }
 
 	/**
 	 * Gets the projection matrix.
 	 */
-	glm::mat4 getProjection() const { return projection; }
+	const glm::mat4 getProjection() const override { return projection; }
 
 	/**
 	 * Sets the projection matrix.

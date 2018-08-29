@@ -24,11 +24,6 @@
 
 class SquareCollider : public CollisionHandler {
 	void handleCollision(Screen* screen, PhysicsComponent* hitObject) {
-		//Happens when colliding with floor.
-		if (!parent->getParent()->getState() || !hitObject->getParent()->getState()) {
-			return;
-		}
-
 		//Get parent's state (store later, as it probably won't change?)
 		std::shared_ptr<SquareState> parentState = std::static_pointer_cast<SquareState>(parent->getParent()->getState());
 
@@ -39,6 +34,7 @@ class SquareCollider : public CollisionHandler {
 			case ObjectType::SQUARE: doSquareCollision(screen, hitObject, parentState, std::static_pointer_cast<SquareState>(hitObject->getParent()->getState())); break;
 			case ObjectType::WALL: doWallCollision(screen, parentState, hitObject); break;
 			case ObjectType::BLOCK: break;
+			case ObjectType::FLOOR: return;
 			default: throw 5; //Why not?
 		}
 	}

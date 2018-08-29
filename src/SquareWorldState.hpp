@@ -23,7 +23,28 @@
 #include "Screen.hpp"
 
 struct SquareWorldState : public ScreenState {
-	SquareWorldState() : squareCount(0) {}
+	SquareWorldState() : squareCount(0), lightDir(1.0, 1.0, 0.01) {}
+
+	const void* getRenderValue(const std::string& name) const override {
+		if (name == "light") {
+			return &lightDir;
+		}
+
+		throw std::runtime_error("Bad screen render value!");
+	}
 
 	std::atomic<size_t> squareCount;
+	glm::vec3 lightDir;
+};
+
+struct EmptyScreenState : public ScreenState {
+	const void* getRenderValue(const std::string& name) const override {
+		static const glm::vec3 light = {0.0f, 0.0f, 0.0f};
+
+		if (name == "light") {
+			return &light;
+		}
+
+		throw std::runtime_error("Bad screen render value!");
+	}
 };

@@ -27,6 +27,7 @@
 #include "SquareCamera.hpp"
 #include "AnimatedCamera.hpp"
 #include "ScreenComponents.hpp"
+#include "Names.hpp"
 
 namespace {
 	void addWall(std::shared_ptr<Screen> world, const AxisAlignedBB& box, const glm::vec3& pos, bool visible = false, const std::string& model = "", const glm::vec3& renderScale = glm::vec3(1.0, 1.0, 1.0)) {
@@ -35,7 +36,7 @@ namespace {
 		wall->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(box, pos, 0.0f)));
 
 		if (visible) {
-			wall->addComponent(std::make_shared<RenderComponent>(model, glm::vec3(1.0, 1.0, 1.0), renderScale));
+			wall->addComponent(std::make_shared<RenderComponent>(model, renderScale));
 		}
 
 		wall->setState(std::make_shared<WallState>(box));
@@ -54,9 +55,10 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 
 	//Create ground
 	std::shared_ptr<Object> ground = std::make_shared<Object>();
+	ground->setState(std::make_shared<GameObjectState>(ObjectType::FLOOR));
 
 	ground->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PlanePhysicsObject>()));
-	ground->addComponent(std::make_shared<RenderComponent>("arena", glm::vec3(1.0, 1.0, 1.0), glm::vec3(1000.0, 1.0, 1000.0)));
+	ground->addComponent(std::make_shared<RenderComponent>(ARENA_MODEL, glm::vec3(1000.0, 1.0, 1000.0)));
 
 	world->addObject(ground);
 
@@ -65,10 +67,10 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 	AxisAlignedBB ewWall(glm::vec3(-600.0, -5000.0, -50.0), glm::vec3(600.0, 5000.0, 50.0));
 
 	//North, east, south, then west
-	addWall(world, ewWall, glm::vec3(0.0, -4992.0, -550.0), true, "wall", glm::vec3(500.0, 5000.0, 50.0));
-	addWall(world, nsWall, glm::vec3(550.0, -4992.0, 0.0), true, "wall", glm::vec3(50.0, 5000.0, 600.0));
-	addWall(world, ewWall, glm::vec3(0.0, -4992.0, 550.0), true, "wall", glm::vec3(500.0, 5000.0, 50.0));
-	addWall(world, nsWall, glm::vec3(-550.0, -4992.0, 0.0), true, "wall", glm::vec3(50.0, 5000.0, 600.0));
+	addWall(world, ewWall, glm::vec3(0.0, -4992.0, -550.0), true, WALL_MODEL, glm::vec3(500.0, 5000.0, 50.0));
+	addWall(world, nsWall, glm::vec3(550.0, -4992.0, 0.0), true, WALL_MODEL, glm::vec3(50.0, 5000.0, 600.0));
+	addWall(world, ewWall, glm::vec3(0.0, -4992.0, 550.0), true, WALL_MODEL, glm::vec3(500.0, 5000.0, 50.0));
+	addWall(world, nsWall, glm::vec3(-550.0, -4992.0, 0.0), true, WALL_MODEL, glm::vec3(50.0, 5000.0, 600.0));
 
 	//Create boundary walls
 	AxisAlignedBB ewBound(glm::vec3(-610.0, -50000.0, -50.0), glm::vec3(610.0, 50000.0, 50.0));
@@ -82,7 +84,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 
 	//Create sky
 	std::shared_ptr<Object> sky = std::make_shared<Object>();
-	sky->addComponent(std::make_shared<RenderComponent>("sky"));
+	sky->addComponent(std::make_shared<RenderComponent>(SKY_MODEL));
 
 	world->addObject(sky);
 
@@ -96,17 +98,17 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 		//Player
 		std::shared_ptr<Object> square = std::make_shared<Object>();
 
-		std::shared_ptr<SquareState> playerState = std::make_shared<SquareState>(Engine::instance->getModel("square")->getMesh().getBox(), true);
+		std::shared_ptr<SquareState> playerState = std::make_shared<SquareState>(Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox(), glm::vec3(0.1f, 0.9f, 0.1f), true);
 		square->setState(playerState);
 
 		if (playerStateOut) {
 			*playerStateOut = playerState;
 		}
 
-		square->addComponent(std::make_shared<RenderComponent>("square", glm::vec3(0.1f, 0.9f, 0.1f)));
+		square->addComponent(std::make_shared<RenderComponent>(SQUARE_MODEL));
 		square->addComponent(std::make_shared<ControlledAI>());
 
-		AxisAlignedBB playerBox = Engine::instance->getModel("square")->getMesh().getBox();
+		AxisAlignedBB playerBox = Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox();
 		std::shared_ptr<BoxPhysicsObject> playerPhysicsObject = std::make_shared<BoxPhysicsObject>(playerBox);
 
 		std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(playerPhysicsObject, std::make_shared<SquareCollider>());

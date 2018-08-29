@@ -22,6 +22,8 @@
 #include "GuiCamera.hpp"
 #include "ArenaGenerator.hpp"
 #include "ScreenComponents.hpp"
+#include "Names.hpp"
+#include "SquareWorldState.hpp"
 
 namespace {
 	void createGameWorld(Screen* current) {
@@ -32,6 +34,7 @@ namespace {
 
 		//Add hud thing
 		std::shared_ptr<Screen> hud = std::make_shared<Screen>(current->getDisplay(), false);
+		hud->setState(std::make_shared<EmptyScreenState>());
 
 		hud->addComponentManager(std::make_shared<RenderComponentManager>());
 		hud->addComponentManager(std::make_shared<UpdateComponentManager>());
@@ -40,7 +43,7 @@ namespace {
 		std::shared_ptr<Object> score = std::make_shared<Object>();
 
 		score->addComponent(std::make_shared<ScoreUpdater>(playerState));
-		score->addComponent(std::make_shared<TextComponent>(U"Score: 0", "font", "text", "text", glm::vec3(0.8, 0.8, 0.8)));
+		score->addComponent(std::make_shared<TextComponent>(U"Score: 0", FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET, glm::vec3(0.8, 0.8, 0.8)));
 		score->addComponent(std::make_shared<GuiComponent>(glm::vec3(0.0, 1080.0, 0.0)));
 
 		hud->addObject(score);

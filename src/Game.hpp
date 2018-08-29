@@ -22,6 +22,14 @@
 
 class Game : public GameInterface {
 public:
+	static constexpr bool USE_VULKAN = true;
+
+	/**
+	 * Bleh.
+	 * @param renderInit buffer / uniform set loader.
+	 */
+	void createRenderObjects(std::shared_ptr<RenderInitializer> renderInit);
+
 	/**
 	 * Called from the engine, loads the game's textures.
 	 * @param loader The texture loader provided by the engine.

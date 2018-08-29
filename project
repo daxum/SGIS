@@ -1,12 +1,49 @@
 #!/usr/bin/env bash
 
+###############################################################################
+#SGIS - A simple game involving squares
+#Copyright (C) 2017
+#
+#This program is free software: you can redistribute it and/or modify
+#it under the terms of the GNU Lesser General Public License as published by
+#the Free Software Foundation, either version 3 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU Lesser General Public License for more details.
+#
+#You should have received a copy of the GNU Lesser General Public License
+#along with this program.  If not, see <http://www.gnu.org/licenses/>.
+###############################################################################
+
 RUN=0
 BUILD=0
 SETUP=0
 MODE="none"
 
+function buildShader() {
+	glslangValidator -V -o $1.spv raw/$1
+}
+
 function build {
 	if [ $BUILD -eq 1 ]; then
+		#TODO: find way to do with cmake
+		OLD_DIR=$(pwd)
+		cd ../resources/shaders/spirv/
+
+		buildShader "cubemap.vert"
+		buildShader "generic.vert"
+		buildShader "text.vert"
+
+		buildShader "basic.frag"
+		buildShader "blinnPhong.frag"
+		buildShader "cubemap.frag"
+		buildShader "text.frag"
+
+		cd "${OLD_DIR}"
+
 		echo "Building mode \"${MODE}\"..."
 		rm squareGame > /dev/null 2>&1
 		make -j$(nproc)
