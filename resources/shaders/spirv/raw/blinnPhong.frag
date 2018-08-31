@@ -22,14 +22,11 @@
 layout(location = 0) in vec3 pos;
 layout(location = 1) in vec3 norm;
 layout(location = 2) in vec2 tex;
+layout(location = 3) in vec3 lightDir;
 
 layout(location = 0) out vec4 outColor;
 
 layout(set = 1, binding = 0) uniform sampler2D diffuseTex;
-
-layout(set = 0, binding = 0, std140) uniform ScreenData {
-	layout(offset = 64) vec3 lightDir;
-} screen;
 
 layout(set = 1, binding = 1, std140) uniform ModelData {
 	vec3 ka;
@@ -43,11 +40,13 @@ layout(push_constant, std430) uniform ObjectData {
 
 vec3 directionalLight(float intensity) {
 	vec3 normal = normalize(norm);
+	vec3 position = -normalize(pos);
 
-	vec3 diffuse = texture(diffuseTex, tex).xyz * max(0, dot(screen.lightDir, normal));
-	vec3 specular = model.ks * pow(max(0, dot(normalize(screen.lightDir + screen.lightDir), normal)), model.s);
+	vec3 ambient = texture(diffuseTex, tex).xyz * model.ka;
+	vec3 diffuse = texture(diffuseTex, tex).xyz * max(0, dot(normalize(lightDir), normal));
+	vec3 specular = model.ks * pow(max(0, dot(normalize(normalize(lightDir) + position), normal)), model.s);
 
-	return intensity * object.color * (model.ka + diffuse + specular);
+	return intensity * (object.color * (ambient + diffuse) + specular);
 }
 
 vec3 pointLight(vec3 lightPos) {
@@ -56,10 +55,11 @@ vec3 pointLight(vec3 lightPos) {
 
 	vec3 light = normalize(lightPos - pos);
 
+	vec3 ambient = texture(diffuseTex, tex).xyz * model.ka;
 	vec3 diffuse = texture(diffuseTex, tex).xyz * max(0, dot(light, normal));
 	vec3 specular = model.ks * pow(max(0, dot(normalize(light + position), normal)), model.s);
 
-	return object.color * (model.ka + diffuse + specular);
+	return object.color * (ambient + diffuse) + specular;
 }
 
 vec3 cel(vec3 color, float factor) {
@@ -76,5 +76,5 @@ void main() {
 	outColor = vec4(directionalLight(1.0), 1.0);
 
 	//Comment/uncomment to toggle cel shading
-	//outColor = vec4(cel(outColor.xyz, 20.0), outColor.w);
+	outColor = vec4(cel(outColor.xyz, 20.0), outColor.w);
 }

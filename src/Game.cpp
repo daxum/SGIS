@@ -103,7 +103,8 @@ void Game::createRenderObjects(std::shared_ptr<RenderInitializer> renderInit) {
 		UniformSetType::PER_SCREEN,
 		3,
 		{{UniformType::MAT4, "projection", UniformProviderType::CAMERA_PROJECTION, USE_VERTEX_SHADER},
-		{UniformType::VEC3, "light", UniformProviderType::SCREEN_STATE, USE_FRAGMENT_SHADER}}
+		{UniformType::MAT4, "view", UniformProviderType::CAMERA_VIEW, USE_VERTEX_SHADER},
+		{UniformType::VEC3, "light", UniformProviderType::SCREEN_STATE, USE_VERTEX_SHADER}}
 	});
 }
 
@@ -127,7 +128,7 @@ void Game::loadModels(ModelLoader& loader) {
 	LightInfo arenaLight = {
 		glm::vec3(0.27, 0.27, 0.27),
 		glm::vec3(0.0, 0.0, 0.0),
-		glm::vec3(0.95, 0.95, 0.95),
+		glm::vec3(0.5, 0.7, 0.75),
 		200.0f
 	};
 

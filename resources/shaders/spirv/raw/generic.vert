@@ -30,9 +30,12 @@ out gl_PerVertex {
 layout(location = 0) out vec3 pos;
 layout(location = 1) out vec3 norm;
 layout(location = 2) out vec2 tex;
+layout(location = 3) out vec3 lightDir;
 
 layout(set = 0, binding = 0, std140) uniform ScreenData {
 	mat4 projection;
+	mat4 view;
+	vec3 lightDir;
 } screen;
 
 layout(push_constant, std430) uniform ObjectData {
@@ -45,6 +48,7 @@ void main() {
 	pos = posCameraSpace.xyz;
 	norm = (object.modelView * vec4(normIn, 0.0)).xyz;
 	tex = texIn;
+	lightDir = (screen.view * vec4(screen.lightDir, 0.0)).xyz;
 
 	gl_Position = screen.projection * posCameraSpace;
 }
