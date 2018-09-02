@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
 	config.generalLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
 
 	config.rendererLog.type = LogType::STDOUT;
-	config.rendererLog.mask = INFO | WARN | ERROR | FATAL;
+	config.rendererLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
 
 	config.loaderLog.type = LogType::STDOUT;
 	config.loaderLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;

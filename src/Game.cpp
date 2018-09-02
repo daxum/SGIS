@@ -227,7 +227,9 @@ void Game::loadScreens(DisplayEngine& display) {
 	//Add a title thingy.
 	std::shared_ptr<Object> title = std::make_shared<Object>();
 
-	title->addComponent(std::make_shared<TextComponent>(U"Main Menu", FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET, glm::vec3(0.02, 0.02, 0.02)));
+	title->addComponent(std::make_shared<TextComponent>(U"Main Menu", FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET));
+	std::shared_ptr<TextComponent> menuText = title->getComponent<TextComponent>(TEXT_COMPONENT_NAME);
+	menuText->fitToBox(glm::vec2(9.8, 9.8));
 
 	AxisAlignedBB textBox = title->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
 	//For position, doesn't take input.
