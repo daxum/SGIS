@@ -46,7 +46,9 @@ public:
 
 			//Game over message
 			std::shared_ptr<Object> message = std::make_shared<Object>();
-			message->addComponent(std::make_shared<TextComponent>(U"Game Over", FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET, glm::vec3(0.025, 0.025, 0.025)));
+			message->addComponent(std::make_shared<TextComponent>(U"Game Over", FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET));
+			std::shared_ptr<TextComponent> gameOverText = message->getComponent<TextComponent>(TEXT_COMPONENT_NAME);
+			gameOverText->fitToBox(glm::vec2(12.5, 12.5));
 
 			AxisAlignedBB messageBox = message->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
 			message->addComponent(std::make_shared<GuiComponent>(glm::vec3(messageBox.min.x, 3.2, 0.0)));
