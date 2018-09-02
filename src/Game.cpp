@@ -112,7 +112,7 @@ void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 	loader->loadTexture(SQUARE_TEX, "textures/square.png", Filter::NEAREST, Filter::NEAREST, true);
 	loader->loadTexture(ARENA_TEX, "textures/arena.png", Filter::LINEAR, Filter::LINEAR, true);
 	loader->loadTexture(WALL_TEX, "textures/wall.png", Filter::LINEAR, Filter::LINEAR, true);
-	loader->loadFont(FONT_TEX, {"fonts/DejaVuSans.ttf"}, U"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:;'\".,-!?", 90);
+	loader->loadFont(FONT_TEX, {"fonts/DejaVuSans.ttf"}, U"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789:;'\".,-!?", 191);
 	loader->loadCubeMap(SKY_TEX, {"textures/sky.png", "textures/sky.png", "textures/sky.png", "textures/sky.png", "textures/sky.png", "textures/sky.png"}, Filter::NEAREST, Filter::NEAREST, true);
 }
 
