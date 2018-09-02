@@ -58,7 +58,9 @@ public:
 			//Final Score
 			std::shared_ptr<Object> finalScore = std::make_shared<Object>();
 			std::u32string eatenString = TextComponent::convToU32(std::to_string(trackedState->numEaten));
-			finalScore->addComponent(std::make_shared<TextComponent>(U"Final Score: " + eatenString, FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET, glm::vec3(0.005, 0.005, 0.005)));
+			finalScore->addComponent(std::make_shared<TextComponent>(U"Final Score: " + eatenString, FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET));
+			std::shared_ptr<TextComponent> finalScoreText = finalScore->getComponent<TextComponent>(TEXT_COMPONENT_NAME);
+			finalScoreText->fitToBox(glm::vec2(3.25, 3.25));
 
 			AxisAlignedBB scoreBox = finalScore->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
 			finalScore->addComponent(std::make_shared<GuiComponent>(glm::vec3(scoreBox.min.x, 0.7, 0.0)));
