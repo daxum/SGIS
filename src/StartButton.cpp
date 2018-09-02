@@ -44,7 +44,7 @@ namespace {
 
 		score->addComponent(std::make_shared<ScoreUpdater>(playerState));
 		score->addComponent(std::make_shared<TextComponent>(U"Score: 0", FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET, glm::vec3(0.8, 0.8, 0.8)));
-		score->addComponent(std::make_shared<GuiComponent>(glm::vec3(0.0, 1080.0, 0.0)));
+		score->addComponent(std::make_shared<GuiComponent>(glm::vec3(0.0, 1080.0, -1.5)));
 
 		hud->addObject(score);
 		hud->setCamera(std::make_shared<GuiCamera>());

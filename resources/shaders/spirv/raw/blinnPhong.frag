@@ -76,5 +76,5 @@ void main() {
 	outColor = vec4(directionalLight(1.0), 1.0);
 
 	//Comment/uncomment to toggle cel shading
-	outColor = vec4(cel(outColor.xyz, 20.0), outColor.w);
+	//outColor = vec4(cel(outColor.xyz, 20.0), outColor.w);
 }
