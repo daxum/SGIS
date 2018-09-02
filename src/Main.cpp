@@ -31,6 +31,8 @@ int main(int argc, char** argv) {
 	config.renderer.windowWidth = 960;
 	config.renderer.windowHeight = 540;
 	config.renderer.windowTitle = "Squares";
+	config.renderer.deviceOverride = false;
+	config.renderer.forceIndex = 1;
 	config.renderer.validationLayers = { "VK_LAYER_LUNARG_standard_validation" };
 	config.timestep = 1000.0 / 60.0;
 	config.physicsTimestep = 1.0f / 120.0f;
