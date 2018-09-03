@@ -38,30 +38,6 @@ layout(push_constant, std430) uniform ObjectData {
 	layout(offset = 64) vec3 color;
 } object;
 
-vec3 directionalLight(float intensity) {
-	vec3 normal = normalize(norm);
-	vec3 position = -normalize(pos);
-
-	vec3 ambient = texture(diffuseTex, tex).xyz * model.ka;
-	vec3 diffuse = texture(diffuseTex, tex).xyz * max(0, dot(normalize(lightDir), normal));
-	vec3 specular = model.ks * pow(max(0, dot(normalize(normalize(lightDir) + position), normal)), model.s);
-
-	return intensity * (object.color * (ambient + diffuse) + specular);
-}
-
-vec3 pointLight(vec3 lightPos) {
-	vec3 normal = normalize(norm);
-	vec3 position = -normalize(pos);
-
-	vec3 light = normalize(lightPos - pos);
-
-	vec3 ambient = texture(diffuseTex, tex).xyz * model.ka;
-	vec3 diffuse = texture(diffuseTex, tex).xyz * max(0, dot(light, normal));
-	vec3 specular = model.ks * pow(max(0, dot(normalize(light + position), normal)), model.s);
-
-	return object.color * (ambient + diffuse) + specular;
-}
-
 vec3 cel(vec3 color, float factor) {
 	float average = (color.x + color.y + color.z) / 3.0;
 	float adjAverage = ((ceil(average * factor) / factor) + (floor(average * factor) / factor)) / 2.0;
@@ -70,6 +46,34 @@ vec3 cel(vec3 color, float factor) {
 	color.z = color.z * (adjAverage / average);
 
 	return color;
+}
+
+vec3 directionalLight(float intensity) {
+	vec3 texColor = object.color * texture(diffuseTex, tex).xyz;
+
+	vec3 normal = normalize(norm);
+	vec3 position = -normalize(pos);
+
+	vec3 ambient = texColor * model.ka;
+	vec3 diffuse = texColor * max(0, dot(normalize(lightDir), normal));
+	vec3 specular = texColor * model.ks * pow(max(0, dot(normalize(normalize(lightDir) + position), normal)), model.s);
+
+	return intensity * (ambient + diffuse + specular);
+}
+
+vec3 pointLight(vec3 lightPos) {
+	vec3 texColor = object.color * texture(diffuseTex, tex).xyz;
+
+	vec3 normal = normalize(norm);
+	vec3 position = -normalize(pos);
+
+	vec3 light = normalize(lightPos - pos);
+
+	vec3 ambient = texColor * model.ka;
+	vec3 diffuse = texColor * max(0, dot(light, normal));
+	vec3 specular = texColor * model.ks * pow(max(0, dot(normalize(light + position), normal)), model.s);
+
+	return ambient + diffuse + specular;
 }
 
 void main() {
