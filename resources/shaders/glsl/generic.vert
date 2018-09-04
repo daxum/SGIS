@@ -18,16 +18,22 @@
 
 #version 410 core
 
-layout (location = 0) in vec3 posIn;
-layout (location = 1) in vec3 normIn;
-layout (location = 2) in vec2 texIn;
+layout(location = 0) in vec3 posIn;
+layout(location = 1) in vec3 normIn;
+layout(location = 2) in vec2 texIn;
 
 out vec3 pos;
 out vec3 norm;
 out vec2 tex;
+out vec3 lightDir;
 
-uniform mat4 modelView;
+//Screen set
 uniform mat4 projection;
+uniform mat4 view;
+uniform vec3 light;
+
+//Object set
+uniform mat4 modelView;
 
 void main() {
 	vec4 posCameraSpace = modelView * vec4(posIn, 1.0);
@@ -35,6 +41,7 @@ void main() {
 	pos = posCameraSpace.xyz;
 	norm = (modelView * vec4(normIn, 0.0)).xyz;
 	tex = texIn;
+	lightDir = (view * vec4(light, 0.0)).xyz;
 
 	gl_Position = projection * posCameraSpace;
 }

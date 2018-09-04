@@ -19,15 +19,20 @@
 #version 410 core
 
 layout (location = 0) in vec3 posIn;
-
 //Currently ignored, needed because cube is in the static buffer
 layout (location = 1) in vec3 normIn;
 layout (location = 2) in vec2 texIn;
 
 out vec3 tex;
 
-uniform mat4 modelView;
+//Screen set
 uniform mat4 projection;
+uniform mat4 view;
+uniform vec3 light;
+
+//Object set
+uniform mat4 modelView;
+
 
 void main() {
 	tex = posIn;

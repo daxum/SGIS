@@ -22,9 +22,9 @@ in vec3 tex;
 
 out vec4 outColor;
 
-uniform samplerCube cubemap;
+uniform samplerCube skyTex;
 
 void main() {
-	outColor = texture(cubemap, tex);
+	outColor = texture(skyTex, tex);
 }
 

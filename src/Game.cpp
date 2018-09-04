@@ -74,7 +74,6 @@ void Game::createRenderObjects(std::shared_ptr<RenderInitializer> renderInit) {
 	renderInit->addUniformSet(PHONG_SET, UniformSet{
 		UniformSetType::MODEL_STATIC,
 		3,
-		//Textures are broken at the moment
 		{{UniformType::SAMPLER_2D, SQUARE_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
 		{UniformType::VEC3, "ka", UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
 		{UniformType::VEC3, "ks", UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
@@ -154,7 +153,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	basicInfo.buffer = GENERIC_BUFFER;
 	basicInfo.uniformSets = {SCREEN_SET, BASIC_SET};
 	basicInfo.pushConstants = {{
-		{UniformType::MAT4, "transform", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
+		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
 		{UniformType::VEC3, "color", UniformProviderType::OBJECT_STATE, USE_FRAGMENT_SHADER}
 	}};
 
@@ -165,7 +164,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	phongInfo.buffer = GENERIC_BUFFER;
 	phongInfo.uniformSets = {SCREEN_SET, PHONG_SET};
 	phongInfo.pushConstants = {{
-		{UniformType::MAT4, "transform", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
+		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
 		{UniformType::VEC3, "color", UniformProviderType::OBJECT_STATE, USE_FRAGMENT_SHADER}
 	}};
 
@@ -176,7 +175,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	textInfo.buffer = TEXT_BUFFER;
 	textInfo.uniformSets = {SCREEN_SET, TEXT_SET};
 	textInfo.pushConstants = {{
-		{UniformType::MAT4, "transform", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
+		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
 	}};
 
 	ShaderInfo skyInfo;
@@ -186,7 +185,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	skyInfo.buffer = GENERIC_BUFFER;
 	skyInfo.uniformSets = {SCREEN_SET, CUBE_SET};
 	skyInfo.pushConstants = {{
-		{UniformType::MAT4, "transform", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
+		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
 	}};
 
 	loader->loadShader(BASIC_SHADER, basicInfo);
