@@ -25,6 +25,11 @@ MODE="none"
 
 function buildShader() {
 	glslangValidator -V -o $1.spv raw/$1
+
+	if [ $? -ne 0 ]; then
+		echo "Failed to compile shader, aborting!"
+		exit 1
+	fi
 }
 
 function build {
