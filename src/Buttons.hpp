@@ -35,6 +35,9 @@ struct ButtonState : public ObjectState {
 	glm::vec3 color;
 };
 
+//TODO: Fix properly later
+#define BUTTON_SIZE_CHANGE glm::vec3(0.05, 0.05, 0.05)
+
 class Button : public GuiComponent {
 public:
 	Button(Key shortcut) : GuiComponent(), actionKey(shortcut) {}
@@ -74,9 +77,10 @@ public:
 	virtual void doButtonAction(Screen* screen) = 0;
 
 protected:
-	constexpr static const glm::vec3 BUTTON_SIZE_CHANGE = glm::vec3(0.05, 0.05, 0.05);
 	Key actionKey;
 };
+
+#undef BUTTON_SIZE_CHANGE
 
 //Pops the screen stack.
 class BackButton : public Button {
