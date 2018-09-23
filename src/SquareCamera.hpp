@@ -52,22 +52,22 @@ public:
 	/**
 	 * Sets the projection matrix.
 	 */
-	void setProjection();
+	void setProjection() override;
 
 	/**
 	 * Gets the near and far planes.
 	 */
-	std::pair<float, float> getNearFar() const { return {near, far}; }
+	std::pair<float, float> getNearFar() const override { return {near, far}; }
 
 	/**
 	 * Gets field of view.
 	 */
-	float getFOV() const { return ExMath::PI / 4.0f; }
+	float getFOV() const override { return ExMath::PI / 4.0f; }
 
 	/**
 	 * Updates the camera. This currently moves it to track the object it is following.
 	 */
-	void update();
+	void update() override;
 
 	/**
 	 * Sets the object for the camera to track.
@@ -77,7 +77,7 @@ public:
 	/**
 	 * Listens for mouse scroll events and zooms out/in accordingly.
 	 */
-	bool onEvent(const InputHandler* handler, const std::shared_ptr<const InputEvent> event);
+	bool onEvent(const InputHandler* handler, const std::shared_ptr<const InputEvent> event) override;
 
 private:
 	//These three vectors define a camera - pos is position,

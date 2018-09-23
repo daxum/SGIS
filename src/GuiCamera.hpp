@@ -30,15 +30,15 @@ public:
 	const glm::mat4 getView() const override { return glm::lookAt(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, 1.0, 0.0)); }
 	const glm::mat4 getProjection() const override { return projection; }
 
-	void setProjection() {
+	void setProjection() override {
 		projection = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f, near, far);
 	}
 
-	std::pair<float, float> getNearFar() const { return {near, far}; }
+	std::pair<float, float> getNearFar() const override { return {near, far}; }
 
-	float getFOV() const { return 0.0f; }
+	float getFOV() const override { return 0.0f; }
 
-	void update() {}
+	void update() override {}
 
 private:
 	//Near plane, far plane, and projection matrix.

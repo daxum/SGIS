@@ -44,20 +44,20 @@ public:
 		return projection;
 	}
 
-	void setProjection() {
+	void setProjection() override {
 		float width = Engine::instance->getWindowInterface().getWindowWidth();
 		float height = Engine::instance->getWindowInterface().getWindowHeight();
 
 		projection = glm::perspective(ExMath::PI / 4.0f, width / height, near, far);
 	}
 
-	std::pair<float, float> getNearFar() const {
+	std::pair<float, float> getNearFar() const override {
 		return {near, far};
 	}
 
-	float getFOV() const { return ExMath::PI / 4.0f; }
+	float getFOV() const override { return ExMath::PI / 4.0f; }
 
-	void update() {
+	void update() override {
 		currentTime++;
 	}
 
