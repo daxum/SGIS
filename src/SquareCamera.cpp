@@ -49,8 +49,8 @@ void SquareCamera::update() {
 
 	pos += velocity;
 
-	ExMath::clamp(pos.y, 1.0f, 1000.0f);
-	ExMath::clamp(look.y, 1.0f, 1000.0f);
+	pos.y = ExMath::clamp(pos.y, 1.0f, 1000.0f);
+	look.y = ExMath::clamp(look.y, 1.0f, 1000.0f);
 
 	velocity *= 0.95f;
 }
