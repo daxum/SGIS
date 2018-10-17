@@ -23,6 +23,8 @@ BUILD=0
 SETUP=0
 MODE="none"
 
+SPIRV_DIR="resources/shaders/spirv"
+
 function buildShader() {
 	glslangValidator -V -o $1.spv raw/$1
 
@@ -36,7 +38,7 @@ function build {
 	if [ $BUILD -eq 1 ]; then
 		#TODO: find way to do with cmake
 		OLD_DIR=$(pwd)
-		cd ../resources/shaders/spirv/
+		cd ../${SPIRV_DIR}
 
 		buildShader "cubemap.vert"
 		buildShader "generic.vert"

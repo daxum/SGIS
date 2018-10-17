@@ -31,12 +31,13 @@ int main(int argc, char** argv) {
 	config.renderer.windowWidth = 960;
 	config.renderer.windowHeight = 540;
 	config.renderer.windowTitle = "Squares";
-	config.renderer.deviceOverride = true;
+	config.renderer.deviceOverride = false;
 	config.renderer.forceIndex = 1;
 	config.renderer.validationLayers = { "VK_LAYER_LUNARG_standard_validation" };
 	config.timestep = 1000.0 / 60.0;
 	config.physicsTimestep = 1.0f / 120.0f;
 	config.frameReportFrequency = 5000;
+	config.resourceBase = "";
 
 	config.generalLog.type = LogType::STDOUT;
 	config.generalLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
@@ -48,7 +49,7 @@ int main(int argc, char** argv) {
 	config.loaderLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
 
 	config.modelLog.type = LogType::STDOUT;
-	config.modelLog.mask = INFO | WARN | ERROR | FATAL;
+	config.modelLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
 
 	config.componentLog.type =  LogType::STDOUT;
 	config.componentLog.mask = DEBUG | INFO | WARN | ERROR | FATAL;
