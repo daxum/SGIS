@@ -33,7 +33,14 @@ namespace {
 	void addWall(std::shared_ptr<Screen> world, const AxisAlignedBB& box, const glm::vec3& pos, bool visible = false, const std::string& model = "", const glm::vec3& renderScale = glm::vec3(1.0, 1.0, 1.0)) {
 		std::shared_ptr<Object> wall = std::make_shared<Object>();
 
-		wall->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(box, pos, 0.0f)));
+		PhysicsInfo wallInfo = {
+			.shape = PhysicsShape::BOX,
+			.box = box,
+			.pos = pos,
+			.mass = 0.0f,
+		};
+
+		wall->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(wallInfo)));
 
 		if (visible) {
 			wall->addComponent(std::make_shared<RenderComponent>(model, renderScale));
@@ -57,7 +64,14 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 	std::shared_ptr<Object> ground = std::make_shared<Object>();
 	ground->setState(std::make_shared<GameObjectState>(ObjectType::FLOOR));
 
-	ground->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PlanePhysicsObject>()));
+	PhysicsInfo planeInfo = {
+		.shape = PhysicsShape::PLANE,
+		.box = Aabb<float>({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}),
+		.pos = glm::vec3(0.0, 0.0, 0.0),
+		.mass = 0.0f,
+	};
+
+	ground->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(planeInfo)));
 	ground->addComponent(std::make_shared<RenderComponent>(ARENA_MODEL, glm::vec3(1000.0, 1.0, 1000.0)));
 
 	world->addObject(ground);
@@ -108,8 +122,14 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 		square->addComponent(std::make_shared<RenderComponent>(SQUARE_MODEL));
 		square->addComponent(std::make_shared<ControlledAI>());
 
-		AxisAlignedBB playerBox = Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox();
-		std::shared_ptr<BoxPhysicsObject> playerPhysicsObject = std::make_shared<BoxPhysicsObject>(playerBox);
+		PhysicsInfo playerInfo = {
+			.shape = PhysicsShape::BOX,
+			.box = Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox(),
+			.pos = glm::vec3(0.0, 0.0, 0.0),
+			.mass = 1.0f,
+		};
+
+		std::shared_ptr<PhysicsObject> playerPhysicsObject = std::make_shared<PhysicsObject>(playerInfo);
 
 		std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(playerPhysicsObject, std::make_shared<SquareCollider>());
 		physics->velocityReduction(false);

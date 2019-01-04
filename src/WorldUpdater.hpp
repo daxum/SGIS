@@ -73,7 +73,15 @@ public:
 
 			retryButton->addComponent(std::make_shared<RetryButton>(Key::R));
 			retryButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
-			retryButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel(BUTTON_MODEL)->getMesh().getBox(), glm::vec3(0.0, -0.6, 0.0), 0.0f)));
+
+			PhysicsInfo buttonInfo = {
+				.shape = PhysicsShape::BOX,
+				.box = Engine::instance->getModel(BUTTON_MODEL)->getMesh().getBox(),
+				.pos = glm::vec3(0.0, -0.6, 0.0),
+				.mass = 0.0f,
+			};
+
+			retryButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo)));
 			gameOver->addObject(retryButton);
 
 			//Button to return to main menu
@@ -82,7 +90,10 @@ public:
 
 			backButton->addComponent(std::make_shared<BackButton>(Key::ESCAPE));
 			backButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
-			backButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel(BUTTON_MODEL)->getMesh().getBox(), glm::vec3(0.0, -1.6, 0.0), 0.0f)));
+
+			buttonInfo.pos = glm::vec3(0.0, -1.6, 0.0);
+
+			backButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo)));
 			gameOver->addObject(backButton);
 
 			//Set camera

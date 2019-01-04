@@ -217,11 +217,22 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	quitButton->addComponent(std::make_shared<BackButton>(Key::ESCAPE));
 	quitButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
-	quitButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox(), glm::vec3(0.0, -0.6, 0.0), 0.0f)));
+
+	PhysicsInfo buttonInfo = {
+		.shape = PhysicsShape::BOX,
+		.box = Engine::instance->getModel(BUTTON_MODEL)->getMesh().getBox(),
+		.pos = glm::vec3(0.0, -0.6, 0.0),
+		.mass = 0.0f,
+	};
+
+	quitButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo)));
 
 	startButton->addComponent(std::make_shared<StartButton>(Key::ENTER));
 	startButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
-	startButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox(), glm::vec3(0.0, 0.4, 0.0), 0.0f)));
+
+	buttonInfo.pos = glm::vec3(0.0, 0.4, 0.0);
+
+	startButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo)));
 
 	//Add a title thingy.
 	std::shared_ptr<Object> title = std::make_shared<Object>();

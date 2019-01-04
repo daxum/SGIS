@@ -20,7 +20,6 @@
 #include "ExtraMath.hpp"
 #include "PhysicsComponent.hpp"
 #include "RenderComponent.hpp"
-#include "BoxPhysicsObject.hpp"
 #include "SquareCollider.hpp"
 #include "SquareWorldState.hpp"
 #include "Engine.hpp"
@@ -93,7 +92,14 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 		square->setState(std::make_shared<SquareState>(box, color, false));
 	}
 
-	std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(std::make_shared<BoxPhysicsObject>(box, translation), std::make_shared<SquareCollider>());
+	PhysicsInfo physInfo = {
+		.shape = PhysicsShape::BOX,
+		.box = box,
+		.pos = translation,
+		.mass = 1.0f,
+	};
+
+	std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(physInfo), std::make_shared<SquareCollider>());
 	physics->velocityReduction(false);
 	physics->setVelocity(velocity);
 
