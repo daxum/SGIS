@@ -26,25 +26,29 @@ void ControlledAI::update(Screen* screen) {
 	float speed = 80.0f;
 
 	if (handler.isKeyPressed(Key::A)) {
-		newVelocity.x -= speed;
+		newVelocity.x -= 1.0f;
 	}
 
 	//Yes, "north" is negative z. I don't like it either.
 	if (handler.isKeyPressed(Key::W)) {
-		newVelocity.z -= speed;
+		newVelocity.z -= 1.0f;
 	}
 
 	if (handler.isKeyPressed(Key::D)) {
-		newVelocity.x += speed;
+		newVelocity.x += 1.0f;
 	}
 
 	if (handler.isKeyPressed(Key::S)) {
-		newVelocity.z += speed;
+		newVelocity.z += 1.0f;
 	}
 
 	//Debugging only
 	if (handler.isKeyPressed(Key::SPACE)) {
-		newVelocity.y += speed;
+		newVelocity.y += 1.0f;
+	}
+
+	if (glm::length(newVelocity) != 0.0f) {
+		newVelocity = speed * glm::normalize(newVelocity);
 	}
 
 	lockParent()->getComponent<PhysicsComponent>(PHYSICS_COMPONENT_NAME)->setVelocity(newVelocity);
