@@ -38,6 +38,7 @@ namespace {
 			.box = box,
 			.pos = pos,
 			.mass = 0.0f,
+			.friction = 0.5f,
 		};
 
 		wall->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(wallInfo)));
@@ -69,6 +70,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 		.box = Aabb<float>({0.0, 0.0, 0.0}, {0.0, 1.0, 0.0}),
 		.pos = glm::vec3(0.0, 0.0, 0.0),
 		.mass = 0.0f,
+		.friction = 0.5f,
 	};
 
 	ground->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(planeInfo)));
