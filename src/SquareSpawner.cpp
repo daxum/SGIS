@@ -97,6 +97,7 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 		.box = box,
 		.pos = translation,
 		.mass = 1.0f,
+		.friction = 0.5f,
 	};
 
 	std::shared_ptr<PhysicsComponent> physics = std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(physInfo), std::make_shared<SquareCollider>());

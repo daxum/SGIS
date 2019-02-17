@@ -127,6 +127,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 			.box = Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox(),
 			.pos = glm::vec3(0.0, 0.0, 0.0),
 			.mass = 1.0f,
+			.friction = 0.5f,
 		};
 
 		std::shared_ptr<PhysicsObject> playerPhysicsObject = std::make_shared<PhysicsObject>(playerInfo);
