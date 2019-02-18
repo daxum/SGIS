@@ -70,7 +70,7 @@ void ArenaRenderer::render(RenderManager& renderer, float partialTicks) {
 
 	glBindVertexArray(squareVao);
 
-	glm::mat4 model;
+	glm::mat4 model(1.0);
 	model = glm::scale(model, glm::vec3(arena->sizeX / 2.0f + MAX_CAMERA_HEIGHT, 1.0f, arena->sizeY / 2.0f + MAX_CAMERA_HEIGHT));
 
 	arenaShader->setUniformMat4("model", model);
@@ -106,7 +106,7 @@ void ArenaRenderer::renderSquare(RenderManager& renderer, const Shader* shader, 
 
 	interpolatedBox.getCenter(centerX, centerY);
 
-	glm::mat4 model;
+	glm::mat4 model(1.0);
 	model = glm::translate(model, glm::vec3(centerX, 0.315477f * square.sideLength(), centerY));
 	model = glm::scale(model, glm::vec3(square.sideLength() / 2.0f, square.sideLength() / 2.0f, square.sideLength() / 2.0f));
 
