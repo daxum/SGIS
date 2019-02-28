@@ -23,6 +23,8 @@ BUILD=0
 SETUP=0
 MODE="none"
 
+#Set to !0 to disable spirv compilation
+NO_SPIRV=0
 #Location of files to be compiled into spirv, relative to the build folder
 SPIRV_SRC_DIR="shaders/spirv"
 #Location compiled spirv files will be placed, also relative to the build folder
@@ -38,7 +40,7 @@ function buildShader() {
 	glslangValidator -V -o ${SPIRV_DST_DIR}/$1.spv ${SPIRV_SRC_DIR}/$1
 
 	if [ $? -ne 0 ]; then
-		echo "Failed to compile shader, aborting!"
+		echo "Failed to compile $1, aborting!"
 		exit 1
 	fi
 }
@@ -56,14 +58,16 @@ function build {
 
 		#TODO: find way to do with cmake
 
-		echo "Compiling shaders..."
+		if [ ${NO_SPIRV} -eq 0 ]; then
+			echo "Compiling shaders..."
 
-		for shader in ${SPIRV_SRC_DIR}/*; do
-			if [[ -f ${shader} ]]; then
-				shader=${shader##*/}
-				buildShader "${shader}"
-			fi
-		done
+			for shader in ${SPIRV_SRC_DIR}/*; do
+				if [ -f "${shader}" ] && ! [ -z $(echo "${shader}" | grep -v "\.spv$") ]; then
+					shader=${shader##*/}
+					buildShader "${shader}"
+				fi
+			done
+		fi
 
 		echo "Build complete!"
 	fi
