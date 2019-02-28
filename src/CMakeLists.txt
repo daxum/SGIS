@@ -1,16 +1,13 @@
 cmake_minimum_required(VERSION 3.1)
 project(SGIS)
 
-#Note: To build this, the engine repository must be within the same directory as this repository.
-#That means the directory structure should look like this:
-#
-#    parent directory --> game repository
-#           |
-#           +-----------> engine repository (folder currently needs to be named "engine")
-#
-#Hopefully I can think of a better way to handle this later.
+set(ENGINE_DIR "" CACHE STRING "Engine repository directory")
 
-add_subdirectory(../../engine ${CMAKE_CURRENT_BINARY_DIR}/engine)
+if ("${ENGINE_DIR}" STREQUAL "")
+	message(FATAL_ERROR "Engine directory not set")
+endif()
+
+add_subdirectory("${ENGINE_DIR}" ${CMAKE_CURRENT_BINARY_DIR}/engine)
 
 add_executable(squareGame
 	Main.cpp

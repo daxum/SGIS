@@ -23,10 +23,19 @@ BUILD=0
 SETUP=0
 MODE="none"
 
-SPIRV_DIR="resources/shaders/spirv"
+#Location of files to be compiled into spirv, relative to the build folder
+SPIRV_SRC_DIR="shaders/spirv"
+#Location compiled spirv files will be placed, also relative to the build folder
+SPIRV_DST_DIR="shaders/spirv"
+#Name of the created executable
+EXEC_NAME="squareGame"
+#Name of the directory the engine is in
+ENGINE_DIR="SGIS-Engine"
+#Upstream engine repository
+ENGINE_UPSTREAM="https://github.com/daxum/SGIS-Engine.git"
 
 function buildShader() {
-	glslangValidator -V -o $1.spv raw/$1
+	glslangValidator -V -o ${SPIRV_DST_DIR}/$1.spv ${SPIRV_SRC_DIR}/$1
 
 	if [ $? -ne 0 ]; then
 		echo "Failed to compile shader, aborting!"
@@ -36,24 +45,27 @@ function buildShader() {
 
 function build {
 	if [ $BUILD -eq 1 ]; then
-		#TODO: find way to do with cmake
-		OLD_DIR=$(pwd)
-		cd ../${SPIRV_DIR}
-
-		buildShader "cubemap.vert"
-		buildShader "generic.vert"
-		buildShader "text.vert"
-
-		buildShader "basic.frag"
-		buildShader "blinnPhong.frag"
-		buildShader "cubemap.frag"
-		buildShader "text.frag"
-
-		cd "${OLD_DIR}"
-
 		echo "Building mode \"${MODE}\"..."
-		rm squareGame > /dev/null 2>&1
+		rm ${EXEC_NAME} > /dev/null 2>&1
 		make -j$(nproc)
+
+		if [ $? -ne 0 ]; then
+			echo "Build failed!"
+			exit 1
+		fi
+
+		#TODO: find way to do with cmake
+
+		echo "Compiling shaders..."
+
+		for shader in ${SPIRV_SRC_DIR}/*; do
+			if [[ -f ${shader} ]]; then
+				shader=${shader##*/}
+				buildShader "${shader}"
+			fi
+		done
+
+		echo "Build complete!"
 	fi
 }
 
@@ -74,6 +86,14 @@ for ((i=1;i<=$#;i++)); do
 done;
 
 if [ ${SETUP} -eq 1 ]; then
+	echo "Use upstream engine (will clone to $(pwd)/${ENGINE_DIR})?"
+	select USE_UPSTREAM_ENGINE in "Yes" "No"; do
+		case ${USE_UPSTREAM_ENGINE} in
+			Yes) git clone "${ENGINE_UPSTREAM}"; break;;
+			No) read -p "Enter engine repository directory: " ENGINE_DIR; break;;
+		esac
+	done
+
 	ADD_BULLET_INSTALL="-DUSE_INSTALLED_BULLET="
 	ADD_GLFW_INSTALL="-DUSE_INSTALLED_GLFW="
 
@@ -111,7 +131,7 @@ if [ ${SETUP} -eq 1 ]; then
 	read -p "Enter tbb include directory: " TBB_INCLUDE
 	read -p "Enter tbb library directory: " TBB_LIB
 
-	CMAKE_VARS="${ADD_BULLET_INSTALL} ${ADD_GLFW_INSTALL} -DFREETYPE_INCLUDE_DIR=${FREETYPE_DIR} -DBULLET2_TBB_INCLUDE_DIR=${TBB_INCLUDE} -DBULLET2_TBB_LIB_DIR=${TBB_LIB}"
+	CMAKE_VARS="-DENGINE_DIR=${ENGINE_DIR} ${ADD_BULLET_INSTALL} ${ADD_GLFW_INSTALL} -DFREETYPE_INCLUDE_DIR=${FREETYPE_DIR} -DBULLET2_TBB_INCLUDE_DIR=${TBB_INCLUDE} -DBULLET2_TBB_LIB_DIR=${TBB_LIB}"
 
 	echo "Setting up debug directory..."
 	mkdir debug > /dev/null 2>&1
@@ -135,14 +155,14 @@ if [ ${MODE} = "debug" ]; then
 		export MESA_DEBUG="context"
 		export GALLIUM_HUD="cpu+GPU-load;.dfps;VRAM-usage"
 
-		./squareGame
+		./${EXEC_NAME}
 	fi
 elif [ ${MODE} = "release" ]; then
 	cd release
 	build
 	if [ ${RUN} -eq 1 ]; then
 		export GALLIUM_HUD="cpu+GPU-load;.dfps;VRAM-usage"
-		./squareGame
+		./${EXEC_NAME}
 	fi
 elif [ ${SETUP} -eq 0 ]; then
 	echo "Invalid mode, use \"debug\" or \"release\""
