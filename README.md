@@ -8,4 +8,4 @@ To build, run `./project setup build release`, and answer the given prompts.
 
 To run after building, either run the executable directly, or do `./project run release`.
 
-If you're on Windows, find a bash shell.
+If you're on Windows, find a bash shell, and open an issue about whatever inevitably breaks.
