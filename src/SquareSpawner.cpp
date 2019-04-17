@@ -30,7 +30,7 @@ void SquareSpawner::update(Screen* screen) {
 
 	std::shared_ptr<SquareWorldState> state = std::static_pointer_cast<SquareWorldState>(screen->getState());
 
-	const AxisAlignedBB& squareBox(Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox());
+	const AxisAlignedBB& squareBox(Engine::instance->getModelManager().getMesh(SQUARE_MODEL, CacheLevel::MEMORY)->getMesh()->getBox());
 
 	while(state->squareCount < maxSquares && spawned < MAX_SPAWN_PER_TICK) {
 		screen->addObject(makeSquare(squareBox));

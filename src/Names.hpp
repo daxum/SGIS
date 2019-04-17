@@ -20,8 +20,10 @@
 
 //Buffers
 
-const char* const GENERIC_BUFFER = "genericBuffer";
-const char* const TEXT_BUFFER = "textBuffer";
+const char* const GENERIC_VERTEX_BUFFER = "genericBfv";
+const char* const GENERIC_INDEX_BUFFER = "genericBfi";
+const char* const TEXT_VERTEX_BUFFER = "textBfv";
+const char* const TEXT_INDEX_BUFFER = "textBfi";
 
 //Textures
 
@@ -53,3 +55,8 @@ const char* const BASIC_SET = "basicSet";
 const char* const CUBE_SET = "cubeSet";
 const char* const TEXT_SET = "textSet";
 const char* const SCREEN_SET = "screenSet";
+
+//Vertex formats
+
+const char* const GENERIC_FORMAT = "genericFmt";
+const char* const TEXT_FORMAT = "textFmt";

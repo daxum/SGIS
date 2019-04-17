@@ -43,7 +43,7 @@ namespace {
 		std::shared_ptr<Object> score = std::make_shared<Object>();
 
 		score->addComponent(std::make_shared<ScoreUpdater>(playerState));
-		score->addComponent(std::make_shared<TextComponent>(U"Score: 0", FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET));
+		score->addComponent(std::make_shared<TextComponent>(TextMeshInfo{FONT_TEX, U"Score: 0", TEXT_VERTEX_BUFFER, TEXT_INDEX_BUFFER, TEXT_FORMAT}));
 		std::shared_ptr<TextComponent> scoreText = score->getComponent<TextComponent>(TEXT_COMPONENT_NAME);
 		scoreText->fitToBox(glm::vec2(380, 380));
 

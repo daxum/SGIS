@@ -21,6 +21,7 @@
 #include <atomic>
 
 #include "Object.hpp"
+#include "AxisAlignedBB.hpp"
 
 enum class ObjectType {
 	SQUARE,

@@ -28,7 +28,7 @@ public:
 	 * Bleh.
 	 * @param renderInit buffer / uniform set loader.
 	 */
-	void createRenderObjects(std::shared_ptr<RenderInitializer> renderInit);
+	void createRenderObjects(RenderInitializer& renderInit);
 
 	/**
 	 * Called from the engine, loads the game's textures.

@@ -21,7 +21,7 @@
 #include "ArenaGenerator.hpp"
 #include "ScreenComponents.hpp"
 #include "DefaultCamera.hpp"
-#include "Vertex.hpp"
+#include "Models/VertexFormat.hpp"
 #include "Names.hpp"
 #include "SquareWorldState.hpp"
 
@@ -55,56 +55,47 @@ namespace {
 	const ShaderPaths* const shaderFiles = Game::USE_VULKAN ? &vkShaders : &glShaders;
 }
 
-void Game::createRenderObjects(std::shared_ptr<RenderInitializer> renderInit) {
-	renderInit->createBuffer(GENERIC_BUFFER, VertexBufferInfo{{
-		{VERTEX_ELEMENT_POSITION, VertexElementType::VEC3},
-		{VERTEX_ELEMENT_NORMAL, VertexElementType::VEC3},
-		{VERTEX_ELEMENT_TEXTURE, VertexElementType::VEC2}},
-		BufferUsage::DEDICATED_LAZY,
-		1048576
-	});
+void Game::createRenderObjects(RenderInitializer& renderInit) {
+	renderInit.createBuffer(GENERIC_VERTEX_BUFFER, 1048576, BufferType::VERTEX, BufferStorage::DEVICE);
+	renderInit.createBuffer(GENERIC_INDEX_BUFFER, 1048576, BufferType::INDEX, BufferStorage::DEVICE);
+	renderInit.createBuffer(TEXT_VERTEX_BUFFER, 1048576, BufferType::VERTEX, BufferStorage::DEVICE);
+	renderInit.createBuffer(TEXT_INDEX_BUFFER, 1048576, BufferType::INDEX, BufferStorage::DEVICE);
 
-	renderInit->createBuffer(TEXT_BUFFER, VertexBufferInfo{{
-		{VERTEX_ELEMENT_POSITION, VertexElementType::VEC2},
-		{VERTEX_ELEMENT_TEXTURE, VertexElementType::VEC2}},
-		BufferUsage::DEDICATED_SINGLE,
-		1048576
-	});
+	renderInit.addVertexFormat(GENERIC_FORMAT, VertexFormat({
+		{VERTEX_ELEMENT_POSITION, VertexFormat::ElementType::VEC3},
+		{VERTEX_ELEMENT_NORMAL, VertexFormat::ElementType::VEC3},
+		{VERTEX_ELEMENT_TEXTURE, VertexFormat::ElementType::VEC2}
+	}));
 
-	renderInit->addUniformSet(PHONG_SET, UniformSet{
-		UniformSetType::MODEL_STATIC,
-		3,
+	renderInit.addVertexFormat(TEXT_FORMAT, VertexFormat({
+		{VERTEX_ELEMENT_POSITION, VertexFormat::ElementType::VEC2},
+		{VERTEX_ELEMENT_TEXTURE, VertexFormat::ElementType::VEC2}
+	}));
+
+	renderInit.addUniformSet(PHONG_SET, UniformSetType::MATERIAL, 3,
 		{{UniformType::SAMPLER_2D, SQUARE_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
 		{UniformType::VEC3, "ka", UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
 		{UniformType::VEC3, "ks", UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
 		{UniformType::FLOAT, "s", UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
-	});
+	);
 
-	renderInit->addUniformSet(BASIC_SET, UniformSet{
-		UniformSetType::MODEL_STATIC,
-		1,
+	renderInit.addUniformSet(BASIC_SET, UniformSetType::MATERIAL, 1,
 		{{UniformType::SAMPLER_2D, SQUARE_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
-	});
+	);
 
-	renderInit->addUniformSet(CUBE_SET, UniformSet{
-		UniformSetType::MODEL_STATIC,
-		1,
+	renderInit.addUniformSet(CUBE_SET, UniformSetType::MATERIAL, 1,
 		{{UniformType::SAMPLER_CUBE, SKY_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
-	});
+	);
 
-	renderInit->addUniformSet(TEXT_SET, UniformSet{
-		UniformSetType::MODEL_DYNAMIC,
-		1,
+	renderInit.addUniformSet(TEXT_SET, UniformSetType::MATERIAL, 1,
 		{{UniformType::SAMPLER_2D, FONT_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
-	});
+	);
 
-	renderInit->addUniformSet(SCREEN_SET, UniformSet{
-		UniformSetType::PER_SCREEN,
-		3,
+	renderInit.addUniformSet(SCREEN_SET, UniformSetType::PER_SCREEN, 3,
 		{{UniformType::MAT4, "projection", UniformProviderType::CAMERA_PROJECTION, USE_VERTEX_SHADER},
 		{UniformType::MAT4, "view", UniformProviderType::CAMERA_VIEW, USE_VERTEX_SHADER},
 		{UniformType::VEC3, "light", UniformProviderType::SCREEN_STATE, USE_VERTEX_SHADER}}
-	});
+	);
 }
 
 void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
@@ -116,33 +107,11 @@ void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 }
 
 void Game::loadModels(ModelLoader& loader) {
-	//These should really be in material files, but the object loader is having problems with non-absolute paths...
-	LightInfo squareLight = {
-		glm::vec3(0.25, 0.25, 0.25),
-		glm::vec3(0.0, 0.0, 0.0),
-		glm::vec3(1.0, 1.0, 1.0),
-		200.0f
-	};
-
-	LightInfo arenaLight = {
-		glm::vec3(0.27, 0.27, 0.27),
-		glm::vec3(0.0, 0.0, 0.0),
-		glm::vec3(0.5, 0.7, 0.75),
-		200.0f
-	};
-
-	LightInfo wallLight = {
-		glm::vec3(0.05, 0.05, 0.05),
-		glm::vec3(0.0, 0.0, 0.0),
-		glm::vec3(0.5, 0.5, 0.5),
-		200.0f
-	};
-
-	loader.loadModel(SQUARE_MODEL, "models/square.obj", SQUARE_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET, squareLight);
-	loader.loadModel(BUTTON_MODEL, "models/square.obj", SQUARE_TEX, BASIC_SHADER, GENERIC_BUFFER, BASIC_SET, squareLight);
-	loader.loadModel(ARENA_MODEL, "models/arena.obj", ARENA_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET, arenaLight);
-	loader.loadModel(WALL_MODEL, "models/cube.obj", WALL_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET, wallLight);
-	loader.loadModel(SKY_MODEL, "models/cube_cw.obj", SKY_TEX, SKYBOX_SHADER, GENERIC_BUFFER, CUBE_SET, squareLight, false);
+	loader.loadModel(SQUARE_MODEL, "models/square.obj", SQUARE_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET);
+	loader.loadModel(BUTTON_MODEL, "models/square.obj", SQUARE_TEX, BASIC_SHADER, GENERIC_BUFFER, BASIC_SET);
+	loader.loadModel(ARENA_MODEL, "models/arena.obj", ARENA_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET);
+	loader.loadModel(WALL_MODEL, "models/cube.obj", WALL_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET);
+	loader.loadModel(SKY_MODEL, "models/cube_cw.obj", SKY_TEX, SKYBOX_SHADER, GENERIC_BUFFER, CUBE_SET, false);
 }
 
 void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
@@ -150,7 +119,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	basicInfo.vertex = shaderFiles->basic.vertex;
 	basicInfo.fragment = shaderFiles->basic.fragment;
 	basicInfo.pass = RenderPass::OPAQUE;
-	basicInfo.buffer = GENERIC_BUFFER;
+	basicInfo.format = GENERIC_FORMAT;
 	basicInfo.uniformSets = {SCREEN_SET, BASIC_SET};
 	basicInfo.pushConstants = {{
 		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
@@ -161,7 +130,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	phongInfo.vertex = shaderFiles->phong.vertex;
 	phongInfo.fragment = shaderFiles->phong.fragment;
 	phongInfo.pass = RenderPass::OPAQUE;
-	phongInfo.buffer = GENERIC_BUFFER;
+	phongInfo.format = GENERIC_FORMAT;
 	phongInfo.uniformSets = {SCREEN_SET, PHONG_SET};
 	phongInfo.pushConstants = {{
 		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
@@ -172,7 +141,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	textInfo.vertex = shaderFiles->text.vertex;
 	textInfo.fragment = shaderFiles->text.fragment;
 	textInfo.pass = RenderPass::TRANSLUCENT;
-	textInfo.buffer = TEXT_BUFFER;
+	textInfo.format = TEXT_FORMAT;
 	textInfo.uniformSets = {SCREEN_SET, TEXT_SET};
 	textInfo.pushConstants = {{
 		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
@@ -182,7 +151,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	skyInfo.vertex = shaderFiles->sky.vertex;
 	skyInfo.fragment = shaderFiles->sky.fragment;
 	skyInfo.pass = RenderPass::OPAQUE;
-	skyInfo.buffer = GENERIC_BUFFER;
+	skyInfo.format = GENERIC_FORMAT;
 	skyInfo.uniformSets = {SCREEN_SET, CUBE_SET};
 	skyInfo.pushConstants = {{
 		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}

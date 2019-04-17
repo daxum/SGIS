@@ -19,6 +19,7 @@
 #pragma once
 
 #include "UpdateComponent.hpp"
+#include "AxisAlignedBB.hpp"
 
 class SquareSpawner : public UpdateComponent {
 public:
