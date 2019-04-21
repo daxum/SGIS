@@ -30,7 +30,7 @@
 #include "Names.hpp"
 
 namespace {
-	void addWall(std::shared_ptr<Screen> world, const AxisAlignedBB& box, const glm::vec3& pos, bool visible = false, const std::string& model = "", const glm::vec3& renderScale = glm::vec3(1.0, 1.0, 1.0)) {
+	void addWall(std::shared_ptr<Screen> world, const AxisAlignedBB& box, const glm::vec3& pos, bool visible = false, const glm::vec3& renderScale = glm::vec3(1.0, 1.0, 1.0)) {
 		std::shared_ptr<Object> wall = std::make_shared<Object>();
 
 		PhysicsInfo wallInfo = {
@@ -44,7 +44,7 @@ namespace {
 		wall->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(wallInfo)));
 
 		if (visible) {
-			wall->addComponent(std::make_shared<RenderComponent>(model, renderScale));
+			wall->addComponent(std::make_shared<RenderComponent>(WALL_MAT, WALL_MESH, renderScale));
 		}
 
 		wall->setState(std::make_shared<WallState>(box));
@@ -74,7 +74,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 	};
 
 	ground->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(planeInfo)));
-	ground->addComponent(std::make_shared<RenderComponent>(ARENA_MODEL, glm::vec3(1000.0, 1.0, 1000.0)));
+	ground->addComponent(std::make_shared<RenderComponent>(ARENA_MAT, ARENA_MESH, glm::vec3(1000.0, 1.0, 1000.0)));
 
 	world->addObject(ground);
 
@@ -83,10 +83,10 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 	AxisAlignedBB ewWall(glm::vec3(-600.0, -5000.0, -50.0), glm::vec3(600.0, 5000.0, 50.0));
 
 	//North, east, south, then west
-	addWall(world, ewWall, glm::vec3(0.0, -4992.0, -550.0), true, WALL_MODEL, glm::vec3(500.0, 5000.0, 50.0));
-	addWall(world, nsWall, glm::vec3(550.0, -4992.0, 0.0), true, WALL_MODEL, glm::vec3(50.0, 5000.0, 600.0));
-	addWall(world, ewWall, glm::vec3(0.0, -4992.0, 550.0), true, WALL_MODEL, glm::vec3(500.0, 5000.0, 50.0));
-	addWall(world, nsWall, glm::vec3(-550.0, -4992.0, 0.0), true, WALL_MODEL, glm::vec3(50.0, 5000.0, 600.0));
+	addWall(world, ewWall, glm::vec3(0.0, -4992.0, -550.0), true, glm::vec3(500.0, 5000.0, 50.0));
+	addWall(world, nsWall, glm::vec3(550.0, -4992.0, 0.0), true, glm::vec3(50.0, 5000.0, 600.0));
+	addWall(world, ewWall, glm::vec3(0.0, -4992.0, 550.0), true, glm::vec3(500.0, 5000.0, 50.0));
+	addWall(world, nsWall, glm::vec3(-550.0, -4992.0, 0.0), true, glm::vec3(50.0, 5000.0, 600.0));
 
 	//Create boundary walls
 	AxisAlignedBB ewBound(glm::vec3(-610.0, -50000.0, -50.0), glm::vec3(610.0, 50000.0, 50.0));
@@ -100,7 +100,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 
 	//Create sky
 	std::shared_ptr<Object> sky = std::make_shared<Object>();
-	sky->addComponent(std::make_shared<RenderComponent>(SKY_MODEL));
+	sky->addComponent(std::make_shared<RenderComponent>(SKY_MAT, SKY_MESH));
 
 	world->addObject(sky);
 
@@ -114,19 +114,19 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 		//Player
 		std::shared_ptr<Object> square = std::make_shared<Object>();
 
-		std::shared_ptr<SquareState> playerState = std::make_shared<SquareState>(Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox(), glm::vec3(0.1f, 0.9f, 0.1f), true);
+		std::shared_ptr<SquareState> playerState = std::make_shared<SquareState>(Engine::instance->getModelManager().getMesh(SQUARE_MESH, CacheLevel::MEMORY)->getMesh()->getBox(), glm::vec3(0.1f, 0.9f, 0.1f), true);
 		square->setState(playerState);
 
 		if (playerStateOut) {
 			*playerStateOut = playerState;
 		}
 
-		square->addComponent(std::make_shared<RenderComponent>(SQUARE_MODEL));
+		square->addComponent(std::make_shared<RenderComponent>(SQUARE_MAT, SQUARE_MESH));
 		square->addComponent(std::make_shared<ControlledAI>());
 
 		PhysicsInfo playerInfo = {
 			.shape = PhysicsShape::BOX,
-			.box = Engine::instance->getModel(SQUARE_MODEL)->getMesh().getBox(),
+			.box = Engine::instance->getModelManager().getMesh(SQUARE_MESH, CacheLevel::MEMORY)->getMesh()->getBox(),
 			.pos = glm::vec3(0.0, 0.0, 0.0),
 			.mass = 1.0f,
 			.friction = 0.5f,

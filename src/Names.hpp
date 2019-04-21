@@ -20,26 +20,34 @@
 
 //Buffers
 
-const char* const GENERIC_VERTEX_BUFFER = "genericBfv";
-const char* const GENERIC_INDEX_BUFFER = "genericBfi";
-const char* const TEXT_VERTEX_BUFFER = "textBfv";
-const char* const TEXT_INDEX_BUFFER = "textBfi";
+const char* const GENERIC_VERTEX_BUFFER = "gnrcBfv";
+const char* const GENERIC_INDEX_BUFFER = "gnrcBfi";
+const char* const TEXT_VERTEX_BUFFER = "txtBfv";
+const char* const TEXT_INDEX_BUFFER = "txtBfi";
 
 //Textures
 
-const char* const SQUARE_TEX = "squareTex";
-const char* const ARENA_TEX = "arenaTex";
-const char* const WALL_TEX = "wallTex";
-const char* const FONT_TEX = "fontTex";
+const char* const SQUARE_TEX = "sqrTex";
+const char* const ARENA_TEX = "arnTex";
+const char* const WALL_TEX = "wllTex";
+const char* const FONT_TEX = "fntTex";
 const char* const SKY_TEX = "skyTex";
+
+//Materials
+
+const char* const SQUARE_MAT = "sqrMat";
+const char* const BUTTON_MAT = "btnMat";
+const char* const ARENA_MAT = "arnMat";
+const char* const WALL_MAT = "wllMat";
+const char* const TEXT_MAT = "txtMat";
+const char* const SKY_MAT = "skyMat";
 
 //Models
 
-const char* const SQUARE_MODEL = "squareMdl";
-const char* const BUTTON_MODEL = "buttonMdl";
-const char* const ARENA_MODEL = "arenaMdl";
-const char* const WALL_MODEL = "wallMdl";
-const char* const SKY_MODEL = "skyMdl";
+const char* const SQUARE_MESH = "sqrMsh";
+const char* const ARENA_MESH = "arnMsh";
+const char* const WALL_MESH = "wllMsh";
+const char* const SKY_MESH = "skyMsh";
 
 //Shaders
 

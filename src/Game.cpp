@@ -24,6 +24,7 @@
 #include "Models/VertexFormat.hpp"
 #include "Names.hpp"
 #include "SquareWorldState.hpp"
+#include "Models/ModelLoader.hpp"
 
 namespace {
 	struct ShaderNames {
@@ -73,22 +74,22 @@ void Game::createRenderObjects(RenderInitializer& renderInit) {
 	}));
 
 	renderInit.addUniformSet(PHONG_SET, UniformSetType::MATERIAL, 3,
-		{{UniformType::SAMPLER_2D, SQUARE_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
-		{UniformType::VEC3, "ka", UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
-		{UniformType::VEC3, "ks", UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
-		{UniformType::FLOAT, "s", UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KD_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
+		{UniformType::VEC3, UNIFORM_NAME_KA, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
+		{UniformType::VEC3, UNIFORM_NAME_KS, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
+		{UniformType::FLOAT, UNIFORM_NAME_SHININESS, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
 	);
 
 	renderInit.addUniformSet(BASIC_SET, UniformSetType::MATERIAL, 1,
-		{{UniformType::SAMPLER_2D, SQUARE_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KA_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
 	);
 
 	renderInit.addUniformSet(CUBE_SET, UniformSetType::MATERIAL, 1,
-		{{UniformType::SAMPLER_CUBE, SKY_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+		{{UniformType::SAMPLER_CUBE, UNIFORM_NAME_KA_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
 	);
 
 	renderInit.addUniformSet(TEXT_SET, UniformSetType::MATERIAL, 1,
-		{{UniformType::SAMPLER_2D, FONT_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KA_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
 	);
 
 	renderInit.addUniformSet(SCREEN_SET, UniformSetType::PER_SCREEN, 3,
@@ -107,11 +108,83 @@ void Game::loadTextures(std::shared_ptr<TextureLoader> loader) {
 }
 
 void Game::loadModels(ModelLoader& loader) {
-	loader.loadModel(SQUARE_MODEL, "models/square.obj", SQUARE_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET);
-	loader.loadModel(BUTTON_MODEL, "models/square.obj", SQUARE_TEX, BASIC_SHADER, GENERIC_BUFFER, BASIC_SET);
-	loader.loadModel(ARENA_MODEL, "models/arena.obj", ARENA_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET);
-	loader.loadModel(WALL_MODEL, "models/cube.obj", WALL_TEX, PHONG_SHADER, GENERIC_BUFFER, PHONG_SET);
-	loader.loadModel(SKY_MODEL, "models/cube_cw.obj", SKY_TEX, SKYBOX_SHADER, GENERIC_BUFFER, CUBE_SET, false);
+	MaterialCreateInfo squareMatInfo = {
+		.filename = "models/square.mtl",
+		.shader = PHONG_SHADER,
+		.uniformSet = PHONG_SET,
+		.viewCull = true,
+	};
+
+	MaterialCreateInfo buttonMatInfo = {
+		.filename = "models/square.mtl",
+		.shader = BASIC_SHADER,
+		.uniformSet = BASIC_SET,
+		.viewCull = true,
+	};
+
+	MaterialCreateInfo arenaMatInfo = {
+		.filename = "models/arena.mtl",
+		.shader = PHONG_SHADER,
+		.uniformSet = PHONG_SET,
+		.viewCull = true,
+	};
+
+	MaterialCreateInfo wallMatInfo = {
+		.filename = "models/wall.mtl",
+		.shader = PHONG_SHADER,
+		.uniformSet = PHONG_SET,
+		.viewCull = true,
+	};
+
+	MaterialCreateInfo skyMatInfo = {
+		.filename = "models/sky.mtl",
+		.shader = SKYBOX_SHADER,
+		.uniformSet = CUBE_SET,
+		.viewCull = false,
+	};
+
+	loader.loadMaterial(SQUARE_MAT, squareMatInfo);
+	loader.loadMaterial(BUTTON_MAT, buttonMatInfo);
+	loader.loadMaterial(ARENA_MAT, arenaMatInfo);
+	loader.loadMaterial(WALL_MAT, wallMatInfo);
+	loader.loadMaterial(SKY_MAT, skyMatInfo);
+
+	MeshCreateInfo squareMeshInfo = {
+		.filename = "models/square.obj",
+		.vertexBuffer = GENERIC_VERTEX_BUFFER,
+		.indexBuffer = GENERIC_INDEX_BUFFER,
+		.vertexFormat = GENERIC_FORMAT,
+		.renderable = true,
+	};
+
+	MeshCreateInfo arenaMeshInfo = {
+		.filename = "models/arena.obj",
+		.vertexBuffer = GENERIC_VERTEX_BUFFER,
+		.indexBuffer = GENERIC_INDEX_BUFFER,
+		.vertexFormat = GENERIC_FORMAT,
+		.renderable = true,
+	};
+
+	MeshCreateInfo wallMeshInfo = {
+		.filename = "models/cube.obj",
+		.vertexBuffer = GENERIC_VERTEX_BUFFER,
+		.indexBuffer = GENERIC_INDEX_BUFFER,
+		.vertexFormat = GENERIC_FORMAT,
+		.renderable = true,
+	};
+
+	MeshCreateInfo skyMeshInfo = {
+		.filename = "models/cube_cw.obj",
+		.vertexBuffer = GENERIC_VERTEX_BUFFER,
+		.indexBuffer = GENERIC_INDEX_BUFFER,
+		.vertexFormat = GENERIC_FORMAT,
+		.renderable = true,
+	};
+
+	loader.loadMesh(SQUARE_MESH, squareMeshInfo);
+	loader.loadMesh(ARENA_MESH, arenaMeshInfo);
+	loader.loadMesh(WALL_MESH, wallMeshInfo);
+	loader.loadMesh(SKY_MESH, skyMeshInfo);
 }
 
 void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
@@ -185,11 +258,11 @@ void Game::loadScreens(DisplayEngine& display) {
 	startButton->setState(std::make_shared<ButtonState>(glm::vec3(0.0, 1.0, 0.0)));
 
 	quitButton->addComponent(std::make_shared<BackButton>(Key::ESCAPE));
-	quitButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
+	quitButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MAT, SQUARE_MESH));
 
 	PhysicsInfo buttonInfo = {
 		.shape = PhysicsShape::BOX,
-		.box = Engine::instance->getModel(BUTTON_MODEL)->getMesh().getBox(),
+		.box = Engine::instance->getModelManager().getMesh(SQUARE_MESH, CacheLevel::MEMORY)->getMesh()->getBox(),
 		.pos = glm::vec3(0.0, -0.6, 0.0),
 		.mass = 0.0f,
 	};
@@ -197,16 +270,24 @@ void Game::loadScreens(DisplayEngine& display) {
 	quitButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo)));
 
 	startButton->addComponent(std::make_shared<StartButton>(Key::ENTER));
-	startButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
+	startButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MAT, SQUARE_MESH));
 
 	buttonInfo.pos = glm::vec3(0.0, 0.4, 0.0);
 
 	startButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo)));
 
 	//Add a title thingy.
+	TextMeshInfo textInfo = {
+		.font = FONT_TEX,
+		.text = U"Main Menu",
+		.vertexBuffer = TEXT_VERTEX_BUFFER,
+		.indexBuffer = TEXT_INDEX_BUFFER,
+		.format = TEXT_FORMAT,
+	};
+
 	std::shared_ptr<Object> title = std::make_shared<Object>();
 
-	title->addComponent(std::make_shared<TextComponent>(U"Main Menu", FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET));
+	title->addComponent(std::make_shared<TextComponent>(textInfo, TEXT_MAT));
 	std::shared_ptr<TextComponent> menuText = title->getComponent<TextComponent>(TEXT_COMPONENT_NAME);
 	menuText->fitToBox(glm::vec2(9.8, 9.8));
 

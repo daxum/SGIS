@@ -44,9 +44,17 @@ public:
 			gameOver->addComponentManager(std::make_shared<GuiComponentManager>());
 			gameOver->addComponentManager(std::make_shared<RenderComponentManager>());
 
+			TextMeshInfo textInfo = {
+				.font = FONT_TEX,
+				.text = U"Game Over",
+				.vertexBuffer = TEXT_VERTEX_BUFFER,
+				.indexBuffer = TEXT_INDEX_BUFFER,
+				.format = TEXT_FORMAT,
+			};
+
 			//Game over message
 			std::shared_ptr<Object> message = std::make_shared<Object>();
-			message->addComponent(std::make_shared<TextComponent>(U"Game Over", FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET));
+			message->addComponent(std::make_shared<TextComponent>(textInfo, TEXT_MAT));
 			std::shared_ptr<TextComponent> gameOverText = message->getComponent<TextComponent>(TEXT_COMPONENT_NAME);
 			gameOverText->fitToBox(glm::vec2(12.5, 12.5));
 
@@ -56,9 +64,11 @@ public:
 			gameOver->addObject(message);
 
 			//Final Score
-			std::shared_ptr<Object> finalScore = std::make_shared<Object>();
 			std::u32string eatenString = TextComponent::convToU32(std::to_string(trackedState->numEaten));
-			finalScore->addComponent(std::make_shared<TextComponent>(U"Final Score: " + eatenString, FONT_TEX, TEXT_SHADER, TEXT_BUFFER, TEXT_SET));
+			textInfo.text = U"Final Score: " + eatenString;
+
+			std::shared_ptr<Object> finalScore = std::make_shared<Object>();
+			finalScore->addComponent(std::make_shared<TextComponent>(textInfo, TEXT_MAT));
 			std::shared_ptr<TextComponent> finalScoreText = finalScore->getComponent<TextComponent>(TEXT_COMPONENT_NAME);
 			finalScoreText->fitToBox(glm::vec2(3.25, 3.25));
 
@@ -72,11 +82,11 @@ public:
 			retryButton->setState(std::make_shared<ButtonState>(glm::vec3(0.9, 0.9, 0.0)));
 
 			retryButton->addComponent(std::make_shared<RetryButton>(Key::R));
-			retryButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
+			retryButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MAT, SQUARE_MESH));
 
 			PhysicsInfo buttonInfo = {
 				.shape = PhysicsShape::BOX,
-				.box = Engine::instance->getModel(BUTTON_MODEL)->getMesh().getBox(),
+				.box = Engine::instance->getModelManager().getMesh(SQUARE_MESH, CacheLevel::MEMORY)->getMesh()->getBox(),
 				.pos = glm::vec3(0.0, -0.6, 0.0),
 				.mass = 0.0f,
 			};
@@ -89,7 +99,7 @@ public:
 			backButton->setState(std::make_shared<ButtonState>(glm::vec3(0.9, 0.1, 0.0)));
 
 			backButton->addComponent(std::make_shared<BackButton>(Key::ESCAPE));
-			backButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MODEL));
+			backButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MAT, SQUARE_MESH));
 
 			buttonInfo.pos = glm::vec3(0.0, -1.6, 0.0);
 
