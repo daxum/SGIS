@@ -26,9 +26,9 @@ layout(location = 3) in vec3 lightDir;
 
 layout(location = 0) out vec4 outColor;
 
-layout(set = 1, binding = 0) uniform sampler2D diffuseTex;
+layout(set = 1, binding = 1) uniform sampler2D diffuseTex;
 
-layout(set = 1, binding = 1, std140) uniform ModelData {
+layout(set = 1, binding = 0, std140) uniform ModelData {
 	vec3 ka;
 	vec3 ks;
 	float s;

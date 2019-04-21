@@ -81,15 +81,15 @@ void Game::createRenderObjects(RenderInitializer& renderInit) {
 	);
 
 	renderInit.addUniformSet(BASIC_SET, UniformSetType::MATERIAL, 1,
-		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KA_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KD_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
 	);
 
 	renderInit.addUniformSet(CUBE_SET, UniformSetType::MATERIAL, 1,
-		{{UniformType::SAMPLER_CUBE, UNIFORM_NAME_KA_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+		{{UniformType::SAMPLER_CUBE, UNIFORM_NAME_KD_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
 	);
 
 	renderInit.addUniformSet(TEXT_SET, UniformSetType::MATERIAL, 1,
-		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KA_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KD_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
 	);
 
 	renderInit.addUniformSet(SCREEN_SET, UniformSetType::PER_SCREEN, 3,
@@ -143,14 +143,19 @@ void Game::loadModels(ModelLoader& loader) {
 		.viewCull = false,
 	};
 
+	MaterialCreateInfo textMatInfo = {
+		.filename = "models/text.mtl",
+		.shader = TEXT_SHADER,
+		.uniformSet = TEXT_SET,
+		.viewCull = true,
+	};
+
 	loader.loadMaterial(SQUARE_MAT, squareMatInfo);
 	loader.loadMaterial(BUTTON_MAT, buttonMatInfo);
 	loader.loadMaterial(ARENA_MAT, arenaMatInfo);
 	loader.loadMaterial(WALL_MAT, wallMatInfo);
 	loader.loadMaterial(SKY_MAT, skyMatInfo);
-
-	Material textMat(TEXT_MAT, TEXT_SHADER, TEXT_SET, Engine::instance->getModelManager().getMemoryManager()->getUniformSet(TEXT_SET));
-	Engine::instance->getModelManager().addMaterial(TEXT_MAT, std::move(textMat));
+	loader.loadMaterial(TEXT_MAT, textMatInfo);
 
 	MeshCreateInfo squareMeshInfo = {
 		.filename = "models/square.obj",

@@ -1,0 +1,5 @@
+newmtl Square
+Ka 0.25, 0.25, 0.25
+Ks 1.0, 1.0, 1.0
+s 200.0
+map_Kd sqrTex
