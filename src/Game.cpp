@@ -149,6 +149,9 @@ void Game::loadModels(ModelLoader& loader) {
 	loader.loadMaterial(WALL_MAT, wallMatInfo);
 	loader.loadMaterial(SKY_MAT, skyMatInfo);
 
+	Material textMat(TEXT_MAT, TEXT_SHADER, TEXT_SET, Engine::instance->getModelManager().getMemoryManager()->getUniformSet(TEXT_SET));
+	Engine::instance->getModelManager().addMaterial(TEXT_MAT, std::move(textMat));
+
 	MeshCreateInfo squareMeshInfo = {
 		.filename = "models/square.obj",
 		.vertexBuffer = GENERIC_VERTEX_BUFFER,
