@@ -41,10 +41,10 @@ namespace {
 			.friction = 0.5f,
 		};
 
-		wall->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(wallInfo)));
+		wall->addComponent<PhysicsComponent>(std::make_shared<PhysicsObject>(wallInfo));
 
 		if (visible) {
-			wall->addComponent(std::make_shared<RenderComponent>(WALL_MAT, WALL_MESH, renderScale));
+			wall->addComponent<RenderComponent>(WALL_MAT, WALL_MESH, renderScale);
 		}
 
 		wall->setState(std::make_shared<WallState>(box));
@@ -56,10 +56,10 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 	std::shared_ptr<Screen> world = std::make_shared<Screen>(display, false);
 
 	//Add component managers to world
-	world->addComponentManager(std::make_shared<RenderComponentManager>());
-	world->addComponentManager(std::make_shared<AIComponentManager>());
-	world->addComponentManager(std::make_shared<PhysicsComponentManager>());
-	world->addComponentManager(std::make_shared<UpdateComponentManager>());
+	world->addComponentManager<RenderComponentManager>();
+	world->addComponentManager<AIComponentManager>();
+	world->addComponentManager<PhysicsComponentManager>();
+	world->addComponentManager<UpdateComponentManager>();
 
 	//Create ground
 	std::shared_ptr<Object> ground = std::make_shared<Object>();
@@ -73,8 +73,8 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 		.friction = 0.5f,
 	};
 
-	ground->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(planeInfo)));
-	ground->addComponent(std::make_shared<RenderComponent>(ARENA_MAT, ARENA_MESH, glm::vec3(1000.0, 1.0, 1000.0)));
+	ground->addComponent<PhysicsComponent>(std::make_shared<PhysicsObject>(planeInfo));
+	ground->addComponent<RenderComponent>(ARENA_MAT, ARENA_MESH, glm::vec3(1000.0, 1.0, 1000.0));
 
 	world->addObject(ground);
 
@@ -100,7 +100,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 
 	//Create sky
 	std::shared_ptr<Object> sky = std::make_shared<Object>();
-	sky->addComponent(std::make_shared<RenderComponent>(SKY_MAT, SKY_MESH));
+	sky->addComponent<RenderComponent>(SKY_MAT, SKY_MESH);
 
 	world->addObject(sky);
 
@@ -121,8 +121,8 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 			*playerStateOut = playerState;
 		}
 
-		square->addComponent(std::make_shared<RenderComponent>(SQUARE_MAT, SQUARE_MESH));
-		square->addComponent(std::make_shared<ControlledAI>());
+		square->addComponent<RenderComponent>(SQUARE_MAT, SQUARE_MESH);
+		square->addComponent<ControlledAI>();
 
 		PhysicsInfo playerInfo = {
 			.shape = PhysicsShape::BOX,
@@ -145,7 +145,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 
 		//Game over
 		std::shared_ptr<Object> gameOverTracker = std::make_shared<Object>();
-		gameOverTracker->addComponent(std::make_shared<WorldUpdater>(square));
+		gameOverTracker->addComponent<WorldUpdater>(square);
 
 		world->addObject(gameOverTracker);
 
@@ -173,7 +173,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 
 	//Create square spawner
 	std::shared_ptr<Object> spawner = std::make_shared<Object>();
-	spawner->addComponent(std::make_shared<SquareSpawner>(maxSquares));
+	spawner->addComponent<SquareSpawner>(maxSquares);
 
 	world->addObject(spawner);
 

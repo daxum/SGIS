@@ -40,9 +40,9 @@ public:
 			std::shared_ptr<Screen> gameOver = std::make_shared<Screen>(screen->getDisplay(), false);
 			gameOver->setState(std::make_shared<EmptyScreenState>());
 
-			gameOver->addComponentManager(std::make_shared<PhysicsComponentManager>());
-			gameOver->addComponentManager(std::make_shared<GuiComponentManager>());
-			gameOver->addComponentManager(std::make_shared<RenderComponentManager>());
+			gameOver->addComponentManager<PhysicsComponentManager>();
+			gameOver->addComponentManager<GuiComponentManager>();
+			gameOver->addComponentManager<RenderComponentManager>();
 
 			TextMeshInfo textInfo = {
 				.font = FONT_TEX,
@@ -54,12 +54,12 @@ public:
 
 			//Game over message
 			std::shared_ptr<Object> message = std::make_shared<Object>();
-			message->addComponent(std::make_shared<TextComponent>(textInfo, TEXT_MAT));
-			std::shared_ptr<TextComponent> gameOverText = message->getComponent<TextComponent>(TEXT_COMPONENT_NAME);
+			message->addComponent<TextComponent>(textInfo, TEXT_MAT);
+			std::shared_ptr<TextComponent> gameOverText = message->getComponent<TextComponent>();
 			gameOverText->fitToBox(glm::vec2(12.5, 12.5));
 
-			AxisAlignedBB messageBox = message->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
-			message->addComponent(std::make_shared<GuiComponent>(glm::vec3(messageBox.min.x, 3.2, 0.0)));
+			AxisAlignedBB messageBox = message->getComponent<TextComponent>()->getTextBox();
+			message->addComponent<GuiComponent>(glm::vec3(messageBox.min.x, 3.2, 0.0));
 
 			gameOver->addObject(message);
 
@@ -68,12 +68,12 @@ public:
 			textInfo.text = U"Final Score: " + eatenString;
 
 			std::shared_ptr<Object> finalScore = std::make_shared<Object>();
-			finalScore->addComponent(std::make_shared<TextComponent>(textInfo, TEXT_MAT));
-			std::shared_ptr<TextComponent> finalScoreText = finalScore->getComponent<TextComponent>(TEXT_COMPONENT_NAME);
+			finalScore->addComponent<TextComponent>(textInfo, TEXT_MAT);
+			std::shared_ptr<TextComponent> finalScoreText = finalScore->getComponent<TextComponent>();
 			finalScoreText->fitToBox(glm::vec2(3.25, 3.25));
 
-			AxisAlignedBB scoreBox = finalScore->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
-			finalScore->addComponent(std::make_shared<GuiComponent>(glm::vec3(scoreBox.min.x, 0.7, 0.0)));
+			AxisAlignedBB scoreBox = finalScore->getComponent<TextComponent>()->getTextBox();
+			finalScore->addComponent<GuiComponent>(glm::vec3(scoreBox.min.x, 0.7, 0.0));
 
 			gameOver->addObject(finalScore);
 
@@ -81,8 +81,8 @@ public:
 			std::shared_ptr<Object> retryButton = std::make_shared<Object>();
 			retryButton->setState(std::make_shared<ButtonState>(glm::vec3(0.9, 0.9, 0.0)));
 
-			retryButton->addComponent(std::make_shared<RetryButton>(Key::R));
-			retryButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MAT, SQUARE_MESH));
+			retryButton->addComponent<RetryButton>(Key::R);
+			retryButton->addComponent<RenderComponent>(BUTTON_MAT, SQUARE_MESH);
 
 			PhysicsInfo buttonInfo = {
 				.shape = PhysicsShape::BOX,
@@ -91,19 +91,19 @@ public:
 				.mass = 0.0f,
 			};
 
-			retryButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo)));
+			retryButton->addComponent<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo));
 			gameOver->addObject(retryButton);
 
 			//Button to return to main menu
 			std::shared_ptr<Object> backButton = std::make_shared<Object>();
 			backButton->setState(std::make_shared<ButtonState>(glm::vec3(0.9, 0.1, 0.0)));
 
-			backButton->addComponent(std::make_shared<BackButton>(Key::ESCAPE));
-			backButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MAT, SQUARE_MESH));
+			backButton->addComponent<BackButton>(Key::ESCAPE);
+			backButton->addComponent<RenderComponent>(BUTTON_MAT, SQUARE_MESH);
 
 			buttonInfo.pos = glm::vec3(0.0, -1.6, 0.0);
 
-			backButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo)));
+			backButton->addComponent<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo));
 			gameOver->addObject(backButton);
 
 			//Set camera

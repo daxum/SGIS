@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "PhysicsComponent.hpp"
+#include "Components/PhysicsComponent.hpp"
 #include "GameObjectStates.hpp"
 #include "SquareWorldState.hpp"
 

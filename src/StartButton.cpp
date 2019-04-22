@@ -36,18 +36,18 @@ namespace {
 		std::shared_ptr<Screen> hud = std::make_shared<Screen>(current->getDisplay(), false);
 		hud->setState(std::make_shared<EmptyScreenState>());
 
-		hud->addComponentManager(std::make_shared<RenderComponentManager>());
-		hud->addComponentManager(std::make_shared<UpdateComponentManager>());
+		hud->addComponentManager<RenderComponentManager>();
+		hud->addComponentManager<UpdateComponentManager>();
 
 		//Score tracker for the player
 		std::shared_ptr<Object> score = std::make_shared<Object>();
 
-		score->addComponent(std::make_shared<ScoreUpdater>(playerState));
-		score->addComponent(std::make_shared<TextComponent>(TextMeshInfo{FONT_TEX, U"Score: 0", TEXT_VERTEX_BUFFER, TEXT_INDEX_BUFFER, TEXT_FORMAT}, TEXT_MAT));
-		std::shared_ptr<TextComponent> scoreText = score->getComponent<TextComponent>(TEXT_COMPONENT_NAME);
+		score->addComponent<ScoreUpdater>(playerState);
+		score->addComponent<TextComponent>(TextMeshInfo{FONT_TEX, U"Score: 0", TEXT_VERTEX_BUFFER, TEXT_INDEX_BUFFER, TEXT_FORMAT}, TEXT_MAT);
+		std::shared_ptr<TextComponent> scoreText = score->getComponent<TextComponent>();
 		scoreText->fitToBox(glm::vec2(380, 380));
 
-		score->addComponent(std::make_shared<GuiComponent>(glm::vec3(0.0, 1080.0, -1.5)));
+		score->addComponent<GuiComponent>(glm::vec3(0.0, 1080.0, -1.5));
 
 		hud->addObject(score);
 		hud->setCamera(std::make_shared<GuiCamera>());

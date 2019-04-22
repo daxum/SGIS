@@ -18,9 +18,9 @@
 
 #pragma once
 
-#include "UpdateComponent.hpp"
+#include "Components/UpdateComponent.hpp"
 #include "GameObjectStates.hpp"
-#include "TextComponent.hpp"
+#include "Components/TextComponent.hpp"
 
 class ScoreUpdater : public UpdateComponent {
 public:

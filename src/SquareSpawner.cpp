@@ -18,8 +18,8 @@
 
 #include "SquareSpawner.hpp"
 #include "ExtraMath.hpp"
-#include "PhysicsComponent.hpp"
-#include "RenderComponent.hpp"
+#include "Components/PhysicsComponent.hpp"
+#include "Components/RenderComponent.hpp"
 #include "SquareCollider.hpp"
 #include "SquareWorldState.hpp"
 #include "Engine.hpp"
@@ -105,7 +105,7 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 	physics->setVelocity(velocity);
 
 	square->addComponent(physics);
-	square->addComponent(std::make_shared<RenderComponent>(SQUARE_MAT, SQUARE_MESH, glm::vec3(scale, scale, scale)));
+	square->addComponent<RenderComponent>(SQUARE_MAT, SQUARE_MESH, glm::vec3(scale, scale, scale));
 
 	return square;
 }

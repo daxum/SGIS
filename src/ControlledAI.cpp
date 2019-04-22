@@ -17,7 +17,7 @@
  ******************************************************************************/
 
 #include "ControlledAI.hpp"
-#include "PhysicsComponent.hpp"
+#include "Components/PhysicsComponent.hpp"
 
 void ControlledAI::update(Screen* screen) {
 	InputHandler& handler = screen->getInputHandler();

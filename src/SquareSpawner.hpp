@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "UpdateComponent.hpp"
+#include "Components/UpdateComponent.hpp"
 #include "AxisAlignedBB.hpp"
 
 class SquareSpawner : public UpdateComponent {

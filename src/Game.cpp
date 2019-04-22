@@ -254,9 +254,9 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->setState(std::make_shared<EmptyScreenState>());
 
 	//Add component managers.
-	mainMenu->addComponentManager(std::make_shared<RenderComponentManager>());
-	mainMenu->addComponentManager(std::make_shared<GuiComponentManager>());
-	mainMenu->addComponentManager(std::make_shared<PhysicsComponentManager>());
+	mainMenu->addComponentManager<RenderComponentManager>();
+	mainMenu->addComponentManager<GuiComponentManager>();
+	mainMenu->addComponentManager<PhysicsComponentManager>();
 
 	//Create buttons.
 	std::shared_ptr<Object> quitButton = std::make_shared<Object>();
@@ -265,8 +265,8 @@ void Game::loadScreens(DisplayEngine& display) {
 	quitButton->setState(std::make_shared<ButtonState>(glm::vec3(0.9, 0.1, 0.0)));
 	startButton->setState(std::make_shared<ButtonState>(glm::vec3(0.0, 1.0, 0.0)));
 
-	quitButton->addComponent(std::make_shared<BackButton>(Key::ESCAPE));
-	quitButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MAT, SQUARE_MESH));
+	quitButton->addComponent<BackButton>(Key::ESCAPE);
+	quitButton->addComponent<RenderComponent>(BUTTON_MAT, SQUARE_MESH);
 
 	PhysicsInfo buttonInfo = {
 		.shape = PhysicsShape::BOX,
@@ -275,14 +275,14 @@ void Game::loadScreens(DisplayEngine& display) {
 		.mass = 0.0f,
 	};
 
-	quitButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo)));
+	quitButton->addComponent<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo));
 
-	startButton->addComponent(std::make_shared<StartButton>(Key::ENTER));
-	startButton->addComponent(std::make_shared<RenderComponent>(BUTTON_MAT, SQUARE_MESH));
+	startButton->addComponent<StartButton>(Key::ENTER);
+	startButton->addComponent<RenderComponent>(BUTTON_MAT, SQUARE_MESH);
 
 	buttonInfo.pos = glm::vec3(0.0, 0.4, 0.0);
 
-	startButton->addComponent(std::make_shared<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo)));
+	startButton->addComponent<PhysicsComponent>(std::make_shared<PhysicsObject>(buttonInfo));
 
 	//Add a title thingy.
 	TextMeshInfo textInfo = {
@@ -295,13 +295,13 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	std::shared_ptr<Object> title = std::make_shared<Object>();
 
-	title->addComponent(std::make_shared<TextComponent>(textInfo, TEXT_MAT));
-	std::shared_ptr<TextComponent> menuText = title->getComponent<TextComponent>(TEXT_COMPONENT_NAME);
+	title->addComponent<TextComponent>(textInfo, TEXT_MAT);
+	std::shared_ptr<TextComponent> menuText = title->getComponent<TextComponent>();
 	menuText->fitToBox(glm::vec2(9.8, 9.8));
 
-	AxisAlignedBB textBox = title->getComponent<TextComponent>(TEXT_COMPONENT_NAME)->getTextBox();
+	AxisAlignedBB textBox = title->getComponent<TextComponent>()->getTextBox();
 	//For position, doesn't take input.
-	title->addComponent(std::make_shared<GuiComponent>(glm::vec3(textBox.min.x, 3.5, 0.0)));
+	title->addComponent<GuiComponent>(glm::vec3(textBox.min.x, 3.5, 0.0));
 
 	//Add buttons and title to menu.
 	mainMenu->addObject(quitButton);
