@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-#version 410 core
+#version 430 core
 
 layout (location = 0) in vec3 posIn;
 //Currently ignored, needed because cube is in the static buffer
@@ -26,16 +26,17 @@ layout (location = 2) in vec2 texIn;
 out vec3 tex;
 
 //Screen set
-uniform mat4 projection;
-uniform mat4 view;
-uniform vec3 light;
+layout(binding = 0, std140) uniform ScreenData {
+	mat4 projection;
+	mat4 view;
+	vec3 light;
+} screen;
 
 //Object set
 uniform mat4 modelView;
 
-
 void main() {
 	tex = posIn;
-	gl_Position = (projection * modelView * vec4(posIn, 0.0)).xyww;
+	gl_Position = (screen.projection * modelView * vec4(posIn, 0.0)).xyww;
 }
 

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-#version 410 core
+#version 430 core
 
 in vec3 pos;
 in vec3 norm;
@@ -27,9 +27,12 @@ out vec4 outColor;
 
 //Model set
 uniform sampler2D diffuseTex;
-uniform vec3 ka;
-uniform vec3 ks;
-uniform float s;
+
+layout(binding = 1, std140) uniform MaterialData {
+	vec3 ka;
+	vec3 ks;
+	float s;
+} material;
 
 //Object set
 uniform vec3 color;
@@ -40,9 +43,9 @@ vec3 directionalLight(float intensity) {
 	vec3 normal = normalize(norm);
 	vec3 position = -normalize(pos);
 
-	vec3 ambient = texColor * ka;
+	vec3 ambient = texColor * material.ka;
 	vec3 diffuse = texColor * max(0, dot(normalize(lightDir), normal));
-	vec3 specular = texColor * ks * pow(max(0, dot(normalize(normalize(lightDir) + position), normal)), s);
+	vec3 specular = texColor * material.ks * pow(max(0, dot(normalize(normalize(lightDir) + position), normal)), material.s);
 
 	return intensity * (ambient + diffuse + specular);
 }
@@ -55,9 +58,9 @@ vec3 pointLight(vec3 lightPos) {
 
 	vec3 light = normalize(lightPos - pos);
 
-	vec3 ambient = texColor * ka;
+	vec3 ambient = texColor * material.ka;
 	vec3 diffuse = texColor * max(0, dot(light, normal));
-	vec3 specular = texColor * ks * pow(max(0, dot(normalize(light + position), normal)), s);
+	vec3 specular = texColor * material.ks * pow(max(0, dot(normalize(light + position), normal)), material.s);
 
 	return ambient + diffuse + specular;
 }

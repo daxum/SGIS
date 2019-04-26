@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-#version 410 core
+#version 430 core
 
 layout(location = 0) in vec3 posIn;
 layout(location = 1) in vec3 normIn;
@@ -28,9 +28,11 @@ out vec2 tex;
 out vec3 lightDir;
 
 //Screen set
-uniform mat4 projection;
-uniform mat4 view;
-uniform vec3 light;
+layout(binding = 0, std140) uniform ScreenData {
+	uniform mat4 projection;
+	uniform mat4 view;
+	uniform vec3 light;
+} screen;
 
 //Object set
 uniform mat4 modelView;
@@ -41,7 +43,7 @@ void main() {
 	pos = posCameraSpace.xyz;
 	norm = (modelView * vec4(normIn, 0.0)).xyz;
 	tex = texIn;
-	lightDir = (view * vec4(light, 0.0)).xyz;
+	lightDir = (screen.view * vec4(screen.light, 0.0)).xyz;
 
-	gl_Position = projection * posCameraSpace;
+	gl_Position = screen.projection * posCameraSpace;
 }

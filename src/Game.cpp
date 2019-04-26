@@ -202,10 +202,10 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	basicInfo.pass = RenderPass::OPAQUE;
 	basicInfo.format = GENERIC_FORMAT;
 	basicInfo.uniformSets = {SCREEN_SET, BASIC_SET};
-	basicInfo.pushConstants = {{
+	basicInfo.pushConstants = {
 		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
 		{UniformType::VEC3, "color", UniformProviderType::OBJECT_STATE, USE_FRAGMENT_SHADER}
-	}};
+	};
 
 	ShaderInfo phongInfo;
 	phongInfo.vertex = shaderFiles->phong.vertex;
@@ -213,10 +213,10 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	phongInfo.pass = RenderPass::OPAQUE;
 	phongInfo.format = GENERIC_FORMAT;
 	phongInfo.uniformSets = {SCREEN_SET, PHONG_SET};
-	phongInfo.pushConstants = {{
+	phongInfo.pushConstants = {
 		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
 		{UniformType::VEC3, "color", UniformProviderType::OBJECT_STATE, USE_FRAGMENT_SHADER}
-	}};
+	};
 
 	ShaderInfo textInfo;
 	textInfo.vertex = shaderFiles->text.vertex;
@@ -224,9 +224,9 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	textInfo.pass = RenderPass::TRANSLUCENT;
 	textInfo.format = TEXT_FORMAT;
 	textInfo.uniformSets = {SCREEN_SET, TEXT_SET};
-	textInfo.pushConstants = {{
+	textInfo.pushConstants = {
 		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
-	}};
+	};
 
 	ShaderInfo skyInfo;
 	skyInfo.vertex = shaderFiles->sky.vertex;
@@ -234,9 +234,9 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	skyInfo.pass = RenderPass::OPAQUE;
 	skyInfo.format = GENERIC_FORMAT;
 	skyInfo.uniformSets = {SCREEN_SET, CUBE_SET};
-	skyInfo.pushConstants = {{
+	skyInfo.pushConstants = {
 		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
-	}};
+	};
 
 	loader->loadShader(BASIC_SHADER, basicInfo);
 	loader->loadShader(PHONG_SHADER, phongInfo);

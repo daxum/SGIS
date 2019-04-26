@@ -22,7 +22,7 @@
 
 class Game : public GameInterface {
 public:
-	static constexpr bool USE_VULKAN = true;
+	static constexpr bool USE_VULKAN = false;
 
 	/**
 	 * Bleh.
