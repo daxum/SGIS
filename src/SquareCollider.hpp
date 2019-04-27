@@ -25,13 +25,13 @@
 class SquareCollider : public CollisionHandler {
 	void handleCollision(Screen* screen, PhysicsComponent* hitObject) {
 		//Get parent's state (store later, as it probably won't change?)
-		std::shared_ptr<SquareState> parentState = std::static_pointer_cast<SquareState>(parent->getParent()->getState());
+		std::shared_ptr<SquareState> parentState = parent->getParent()->getState<SquareState>();
 
 		//Get what was hit
 		ObjectType hitType = getType(hitObject);
 
 		switch(hitType) {
-			case ObjectType::SQUARE: doSquareCollision(screen, hitObject, parentState, std::static_pointer_cast<SquareState>(hitObject->getParent()->getState())); break;
+			case ObjectType::SQUARE: doSquareCollision(screen, hitObject, parentState, hitObject->getParent()->getState<SquareState>()); break;
 			case ObjectType::WALL: doWallCollision(screen, parentState, hitObject); break;
 			case ObjectType::BLOCK: break;
 			case ObjectType::FLOOR: return;
@@ -41,7 +41,7 @@ class SquareCollider : public CollisionHandler {
 
 private:
 	ObjectType getType(PhysicsComponent* comp) {
-		return std::static_pointer_cast<GameObjectState>(comp->getParent()->getState())->type;
+		return comp->getParent()->getState<GameObjectState>()->type;
 	}
 
 	void doSquareCollision(Screen* screen, PhysicsComponent* hitObject, std::shared_ptr<SquareState> parentState, std::shared_ptr<SquareState> hitState) {
@@ -64,7 +64,7 @@ private:
 				screen->removeObject(hitObject->getParent());
 				parentState->numEaten.fetch_add(1, std::memory_order_relaxed);
 
-				std::shared_ptr<SquareWorldState> worldState = std::static_pointer_cast<SquareWorldState>(screen->getState());
+				std::shared_ptr<SquareWorldState> worldState = screen->getState<SquareWorldState>();
 
 				worldState->squareCount.fetch_sub(1, std::memory_order_relaxed);
 			}
@@ -77,7 +77,7 @@ private:
 			return;
 		}
 
-		AxisAlignedBB wallBox = std::static_pointer_cast<WallState>(wall->getParent()->getState())->box;
+		AxisAlignedBB wallBox = wall->getParent()->getState<WallState>()->box;
 		wallBox.translate(wall->getTranslation());
 
 		AxisAlignedBB squareBox = parentState->box;
@@ -92,7 +92,7 @@ private:
 			if (parentState->eaten.compare_exchange_strong(expectedEaten, true, std::memory_order_relaxed)) {
 				screen->removeObject(parent->getParent());
 
-				std::shared_ptr<SquareWorldState> worldState = std::static_pointer_cast<SquareWorldState>(screen->getState());
+				std::shared_ptr<SquareWorldState> worldState = screen->getState<SquareWorldState>();
 
 				worldState->squareCount.fetch_sub(1, std::memory_order_relaxed);
 			}

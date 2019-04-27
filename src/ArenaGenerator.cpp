@@ -47,7 +47,7 @@ namespace {
 			wall->addComponent<RenderComponent>(WALL_MAT, WALL_MESH, renderScale);
 		}
 
-		wall->setState(std::make_shared<WallState>(box));
+		wall->setState<WallState>(box);
 		world->addObject(wall);
 	}
 }
@@ -63,7 +63,7 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 
 	//Create ground
 	std::shared_ptr<Object> ground = std::make_shared<Object>();
-	ground->setState(std::make_shared<GameObjectState>(ObjectType::FLOOR));
+	ground->setState<GameObjectState>(ObjectType::FLOOR);
 
 	PhysicsInfo planeInfo = {
 		.shape = PhysicsShape::PLANE,
@@ -105,8 +105,8 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 	world->addObject(sky);
 
 	//Set screen state
-	std::shared_ptr<SquareWorldState> worldState = std::make_shared<SquareWorldState>();
-	world->setState(worldState);
+	world->setState<SquareWorldState>();
+	std::shared_ptr<SquareWorldState> worldState = world->getState<SquareWorldState>();
 
 	//Create player and game over objects if world is playable (not demo for main menu)
 	//Also change camera based on world playability - follow player or fixed animation
@@ -114,11 +114,10 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 		//Player
 		std::shared_ptr<Object> square = std::make_shared<Object>();
 
-		std::shared_ptr<SquareState> playerState = std::make_shared<SquareState>(Engine::instance->getModelManager().getMesh(SQUARE_MESH, CacheLevel::MEMORY)->getMesh()->getBox(), glm::vec3(0.1f, 0.9f, 0.1f), true);
-		square->setState(playerState);
+		square->setState<SquareState>(Engine::instance->getModelManager().getMesh(SQUARE_MESH, CacheLevel::MEMORY)->getMesh()->getBox(), glm::vec3(0.1f, 0.9f, 0.1f), true);
 
 		if (playerStateOut) {
-			*playerStateOut = playerState;
+			*playerStateOut = square->getState<SquareState>();
 		}
 
 		square->addComponent<RenderComponent>(SQUARE_MAT, SQUARE_MESH);

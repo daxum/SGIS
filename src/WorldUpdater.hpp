@@ -29,7 +29,7 @@ public:
 	WorldUpdater(std::shared_ptr<Object> trackObject) : UpdateComponent(), tracking(trackObject) {}
 
 	void update(Screen* screen) {
-		std::shared_ptr<SquareState> trackedState = std::static_pointer_cast<SquareState>(tracking->getState());
+		std::shared_ptr<SquareState> trackedState = tracking->getState<SquareState>();
 
 		if (trackedState->eaten) {
 			//Player got eaten!
@@ -38,7 +38,7 @@ public:
 
 			//Add game over screen
 			std::shared_ptr<Screen> gameOver = std::make_shared<Screen>(screen->getDisplay(), false);
-			gameOver->setState(std::make_shared<EmptyScreenState>());
+			gameOver->setState<EmptyScreenState>();
 
 			gameOver->addComponentManager<PhysicsComponentManager>();
 			gameOver->addComponentManager<GuiComponentManager>();
@@ -79,7 +79,7 @@ public:
 
 			//Retry button
 			std::shared_ptr<Object> retryButton = std::make_shared<Object>();
-			retryButton->setState(std::make_shared<ButtonState>(glm::vec3(0.9, 0.9, 0.0)));
+			retryButton->setState<ButtonState>(glm::vec3(0.9, 0.9, 0.0));
 
 			retryButton->addComponent<RetryButton>(Key::R);
 			retryButton->addComponent<RenderComponent>(BUTTON_MAT, SQUARE_MESH);
@@ -96,7 +96,7 @@ public:
 
 			//Button to return to main menu
 			std::shared_ptr<Object> backButton = std::make_shared<Object>();
-			backButton->setState(std::make_shared<ButtonState>(glm::vec3(0.9, 0.1, 0.0)));
+			backButton->setState<ButtonState>(glm::vec3(0.9, 0.1, 0.0));
 
 			backButton->addComponent<BackButton>(Key::ESCAPE);
 			backButton->addComponent<RenderComponent>(BUTTON_MAT, SQUARE_MESH);

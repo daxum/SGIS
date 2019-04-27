@@ -251,7 +251,7 @@ void Game::loadScreens(DisplayEngine& display) {
 
 	//Create main menu.
 	std::shared_ptr<Screen> mainMenu = std::make_shared<Screen>(display, false);
-	mainMenu->setState(std::make_shared<EmptyScreenState>());
+	mainMenu->setState<EmptyScreenState>();
 
 	//Add component managers.
 	mainMenu->addComponentManager<RenderComponentManager>();
@@ -262,8 +262,8 @@ void Game::loadScreens(DisplayEngine& display) {
 	std::shared_ptr<Object> quitButton = std::make_shared<Object>();
 	std::shared_ptr<Object> startButton = std::make_shared<Object>();
 
-	quitButton->setState(std::make_shared<ButtonState>(glm::vec3(0.9, 0.1, 0.0)));
-	startButton->setState(std::make_shared<ButtonState>(glm::vec3(0.0, 1.0, 0.0)));
+	quitButton->setState<ButtonState>(glm::vec3(0.9, 0.1, 0.0));
+	startButton->setState<ButtonState>(glm::vec3(0.0, 1.0, 0.0));
 
 	quitButton->addComponent<BackButton>(Key::ESCAPE);
 	quitButton->addComponent<RenderComponent>(BUTTON_MAT, SQUARE_MESH);

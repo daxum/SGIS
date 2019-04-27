@@ -28,7 +28,7 @@
 void SquareSpawner::update(Screen* screen) {
 	size_t spawned = 0;
 
-	std::shared_ptr<SquareWorldState> state = std::static_pointer_cast<SquareWorldState>(screen->getState());
+	std::shared_ptr<SquareWorldState> state = screen->getState<SquareWorldState>();
 
 	const AxisAlignedBB& squareBox(Engine::instance->getModelManager().getMesh(SQUARE_MESH, CacheLevel::MEMORY)->getMesh()->getBox());
 
@@ -84,12 +84,12 @@ std::shared_ptr<Object> SquareSpawner::makeSquare(const AxisAlignedBB& baseBox) 
 
 	//Is square a block (blue square, can't eat/be eaten)?
 	if (ExMath::randomFloat(0.0f, 1.0f) > 0.9f) {
-		square->setState(std::make_shared<SquareState>(box, glm::vec3(0.0, 0.35, 1.0), false, true));
+		square->setState<SquareState>(box, glm::vec3(0.0, 0.35, 1.0), false, true);
 	}
 	else {
 		//Big - red, small - yellow
 		glm::vec3 color = scale <= scaleFactor ? glm::vec3(0.95f, 0.95f, 0.04f) : glm::vec3(0.9f, 0.06f, 0.06f);
-		square->setState(std::make_shared<SquareState>(box, color, false));
+		square->setState<SquareState>(box, color, false);
 	}
 
 	PhysicsInfo physInfo = {

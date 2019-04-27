@@ -34,7 +34,7 @@ namespace {
 
 		//Add hud thing
 		std::shared_ptr<Screen> hud = std::make_shared<Screen>(current->getDisplay(), false);
-		hud->setState(std::make_shared<EmptyScreenState>());
+		hud->setState<EmptyScreenState>();
 
 		hud->addComponentManager<RenderComponentManager>();
 		hud->addComponentManager<UpdateComponentManager>();
