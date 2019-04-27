@@ -57,10 +57,10 @@ namespace {
 }
 
 void Game::createRenderObjects(RenderInitializer& renderInit) {
-	renderInit.createBuffer(GENERIC_VERTEX_BUFFER, 1048576, BufferType::VERTEX, BufferStorage::DEVICE);
-	renderInit.createBuffer(GENERIC_INDEX_BUFFER, 1048576, BufferType::INDEX, BufferStorage::DEVICE);
-	renderInit.createBuffer(TEXT_VERTEX_BUFFER, 1048576, BufferType::VERTEX, BufferStorage::DEVICE);
-	renderInit.createBuffer(TEXT_INDEX_BUFFER, 1048576, BufferType::INDEX, BufferStorage::DEVICE);
+	renderInit.createBuffer(GENERIC_VERTEX_BUFFER, 524288, BufferType::VERTEX, BufferStorage::DEVICE);
+	renderInit.createBuffer(GENERIC_INDEX_BUFFER, 524288, BufferType::INDEX, BufferStorage::DEVICE);
+	renderInit.createBuffer(TEXT_VERTEX_BUFFER, 524288, BufferType::VERTEX, BufferStorage::DEVICE);
+	renderInit.createBuffer(TEXT_INDEX_BUFFER, 524288, BufferType::INDEX, BufferStorage::DEVICE);
 
 	renderInit.addVertexFormat(GENERIC_FORMAT, VertexFormat({
 		{VERTEX_ELEMENT_POSITION, VertexFormat::ElementType::VEC3},
