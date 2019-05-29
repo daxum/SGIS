@@ -23,8 +23,6 @@
 //A simple ai controlled by the keyboard
 class ControlledAI : public AIComponent {
 public:
-	static const std::string getName() { return AI_COMPONENT_NAME; }
-
 	ControlledAI() : AIComponent() {}
 
 	void update(Screen* screen);
