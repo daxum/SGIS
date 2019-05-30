@@ -74,28 +74,28 @@ void Game::createRenderObjects(RenderInitializer& renderInit) {
 	}));
 
 	renderInit.addUniformSet(PHONG_SET, UniformSetType::MATERIAL, 3,
-		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KD_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
-		{UniformType::VEC3, UNIFORM_NAME_KA, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
-		{UniformType::VEC3, UNIFORM_NAME_KS, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
-		{UniformType::FLOAT, UNIFORM_NAME_SHININESS, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KD_TEX, 0, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
+		{UniformType::VEC3, UNIFORM_NAME_KA, 0, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
+		{UniformType::VEC3, UNIFORM_NAME_KS, 0, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER},
+		{UniformType::FLOAT, UNIFORM_NAME_SHININESS, 0, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
 	);
 
 	renderInit.addUniformSet(BASIC_SET, UniformSetType::MATERIAL, 1,
-		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KD_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KD_TEX, 0, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
 	);
 
 	renderInit.addUniformSet(CUBE_SET, UniformSetType::MATERIAL, 1,
-		{{UniformType::SAMPLER_CUBE, UNIFORM_NAME_KD_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+		{{UniformType::SAMPLER_CUBE, UNIFORM_NAME_KD_TEX, 0, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
 	);
 
 	renderInit.addUniformSet(TEXT_SET, UniformSetType::MATERIAL, 1,
-		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KD_TEX, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
+		{{UniformType::SAMPLER_2D, UNIFORM_NAME_KD_TEX, 0, UniformProviderType::MATERIAL, USE_FRAGMENT_SHADER}}
 	);
 
-	renderInit.addUniformSet(SCREEN_SET, UniformSetType::PER_SCREEN, 3,
-		{{UniformType::MAT4, "projection", UniformProviderType::CAMERA_PROJECTION, USE_VERTEX_SHADER},
-		{UniformType::MAT4, "view", UniformProviderType::CAMERA_VIEW, USE_VERTEX_SHADER},
-		{UniformType::VEC3, "light", UniformProviderType::SCREEN_STATE, USE_VERTEX_SHADER}}
+	renderInit.addUniformSet(SCREEN_SET, UniformSetType::PER_SCREEN, 8,
+		{{UniformType::MAT4, "projection", 0, UniformProviderType::CAMERA_PROJECTION, USE_VERTEX_SHADER},
+		{UniformType::MAT4, "view", 0, UniformProviderType::CAMERA_VIEW, USE_VERTEX_SHADER},
+		{UniformType::VEC3, "light", 0, UniformProviderType::SCREEN_STATE, USE_VERTEX_SHADER}}
 	);
 }
 
@@ -203,8 +203,8 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	basicInfo.format = GENERIC_FORMAT;
 	basicInfo.uniformSets = {SCREEN_SET, BASIC_SET};
 	basicInfo.pushConstants = {
-		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
-		{UniformType::VEC3, "color", UniformProviderType::OBJECT_STATE, USE_FRAGMENT_SHADER}
+		{UniformType::MAT4, "modelView", 0, UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
+		{UniformType::VEC3, "color", 0, UniformProviderType::OBJECT_STATE, USE_FRAGMENT_SHADER}
 	};
 
 	ShaderInfo phongInfo;
@@ -214,8 +214,8 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	phongInfo.format = GENERIC_FORMAT;
 	phongInfo.uniformSets = {SCREEN_SET, PHONG_SET};
 	phongInfo.pushConstants = {
-		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
-		{UniformType::VEC3, "color", UniformProviderType::OBJECT_STATE, USE_FRAGMENT_SHADER}
+		{UniformType::MAT4, "modelView", 0, UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER},
+		{UniformType::VEC3, "color", 0, UniformProviderType::OBJECT_STATE, USE_FRAGMENT_SHADER}
 	};
 
 	ShaderInfo textInfo;
@@ -225,7 +225,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	textInfo.format = TEXT_FORMAT;
 	textInfo.uniformSets = {SCREEN_SET, TEXT_SET};
 	textInfo.pushConstants = {
-		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
+		{UniformType::MAT4, "modelView", 0, UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
 	};
 
 	ShaderInfo skyInfo;
@@ -235,7 +235,7 @@ void Game::loadShaders(std::shared_ptr<ShaderLoader> loader) {
 	skyInfo.format = GENERIC_FORMAT;
 	skyInfo.uniformSets = {SCREEN_SET, CUBE_SET};
 	skyInfo.pushConstants = {
-		{UniformType::MAT4, "modelView", UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
+		{UniformType::MAT4, "modelView", 0, UniformProviderType::OBJECT_MODEL_VIEW, USE_VERTEX_SHADER}
 	};
 
 	loader->loadShader(BASIC_SHADER, basicInfo);
