@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
 	//Create instance of game engine
 	EngineConfig config = {};
 	config.gameName = "simpleSquareGame";
-	config.gameVersion = Engine::makeVersion(3, 0, 1);
+	config.gameVersion = Engine::makeVersion(3, 0, 2);
 	config.renderer.renderType = Game::USE_VULKAN ? Renderer::VULKAN : Renderer::OPEN_GL;
 	config.renderer.windowWidth = 960;
 	config.renderer.windowHeight = 540;

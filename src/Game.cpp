@@ -59,8 +59,6 @@ namespace {
 void Game::createRenderObjects(RenderInitializer& renderInit) {
 	renderInit.createBuffer(GENERIC_VERTEX_BUFFER, 524288, BufferType::VERTEX, BufferStorage::DEVICE);
 	renderInit.createBuffer(GENERIC_INDEX_BUFFER, 524288, BufferType::INDEX, BufferStorage::DEVICE);
-	renderInit.createBuffer(TEXT_VERTEX_BUFFER, 524288, BufferType::VERTEX, BufferStorage::DEVICE);
-	renderInit.createBuffer(TEXT_INDEX_BUFFER, 524288, BufferType::INDEX, BufferStorage::DEVICE);
 
 	renderInit.addVertexFormat(GENERIC_FORMAT, VertexFormat({
 		{VERTEX_ELEMENT_POSITION, VertexFormat::ElementType::VEC3},
@@ -288,8 +286,8 @@ void Game::loadScreens(DisplayEngine& display) {
 	TextMeshInfo textInfo = {
 		.font = FONT_TEX,
 		.text = U"Main Menu",
-		.vertexBuffer = TEXT_VERTEX_BUFFER,
-		.indexBuffer = TEXT_INDEX_BUFFER,
+		.vertexBuffer = GENERIC_VERTEX_BUFFER,
+		.indexBuffer = GENERIC_INDEX_BUFFER,
 		.format = TEXT_FORMAT,
 	};
 

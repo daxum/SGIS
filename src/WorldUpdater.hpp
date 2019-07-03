@@ -47,8 +47,8 @@ public:
 			TextMeshInfo textInfo = {
 				.font = FONT_TEX,
 				.text = U"Game Over",
-				.vertexBuffer = TEXT_VERTEX_BUFFER,
-				.indexBuffer = TEXT_INDEX_BUFFER,
+				.vertexBuffer = GENERIC_VERTEX_BUFFER,
+				.indexBuffer = GENERIC_INDEX_BUFFER,
 				.format = TEXT_FORMAT,
 			};
 

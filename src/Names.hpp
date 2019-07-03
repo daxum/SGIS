@@ -22,8 +22,6 @@
 
 const char* const GENERIC_VERTEX_BUFFER = "gnrcBfv";
 const char* const GENERIC_INDEX_BUFFER = "gnrcBfi";
-const char* const TEXT_VERTEX_BUFFER = "txtBfv";
-const char* const TEXT_INDEX_BUFFER = "txtBfi";
 
 //Textures
 
