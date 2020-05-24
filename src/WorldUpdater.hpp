@@ -40,9 +40,9 @@ public:
 			std::shared_ptr<Screen> gameOver = std::make_shared<Screen>(screen->getDisplay(), false);
 			gameOver->setState<EmptyScreenState>();
 
-			gameOver->addComponentManager<PhysicsComponentManager>();
-			gameOver->addComponentManager<GuiComponentManager>();
-			gameOver->addComponentManager<RenderComponentManager>();
+			gameOver->addComponentManager<PhysicsManager>();
+			gameOver->addComponentManager<GuiManager>();
+			gameOver->addComponentManager<RenderManager>();
 
 			TextMeshInfo textInfo = {
 				.font = FONT_TEX,

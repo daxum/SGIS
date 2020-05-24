@@ -252,9 +252,9 @@ void Game::loadScreens(DisplayEngine& display) {
 	mainMenu->setState<EmptyScreenState>();
 
 	//Add component managers.
-	mainMenu->addComponentManager<RenderComponentManager>();
-	mainMenu->addComponentManager<GuiComponentManager>();
-	mainMenu->addComponentManager<PhysicsComponentManager>();
+	mainMenu->addComponentManager<RenderManager>();
+	mainMenu->addComponentManager<GuiManager>();
+	mainMenu->addComponentManager<PhysicsManager>();
 
 	//Create buttons.
 	std::shared_ptr<Object> quitButton = std::make_shared<Object>();

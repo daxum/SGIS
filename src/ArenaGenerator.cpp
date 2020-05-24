@@ -56,10 +56,10 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 	std::shared_ptr<Screen> world = std::make_shared<Screen>(display, false);
 
 	//Add component managers to world
-	world->addComponentManager<RenderComponentManager>();
-	world->addComponentManager<AIComponentManager>();
-	world->addComponentManager<PhysicsComponentManager>();
-	world->addComponentManager<UpdateComponentManager>();
+	world->addComponentManager<RenderManager>();
+	world->addComponentManager<AIManager>();
+	world->addComponentManager<PhysicsManager>();
+	world->addComponentManager<UpdateManager>();
 
 	//Create ground
 	std::shared_ptr<Object> ground = std::make_shared<Object>();

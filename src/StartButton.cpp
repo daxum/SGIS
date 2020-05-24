@@ -36,8 +36,8 @@ namespace {
 		std::shared_ptr<Screen> hud = std::make_shared<Screen>(current->getDisplay(), false);
 		hud->setState<EmptyScreenState>();
 
-		hud->addComponentManager<RenderComponentManager>();
-		hud->addComponentManager<UpdateComponentManager>();
+		hud->addComponentManager<RenderManager>();
+		hud->addComponentManager<UpdateManager>();
 
 		//Score tracker for the player
 		std::shared_ptr<Object> score = std::make_shared<Object>();
