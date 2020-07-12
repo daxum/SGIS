@@ -77,7 +77,7 @@ public:
 	/**
 	 * Listens for mouse scroll events and zooms out/in accordingly.
 	 */
-	bool onEvent(const InputHandler* handler, const std::shared_ptr<const InputEvent> event) override;
+	bool onEvent(Screen* screen, const InputHandler* handler, const std::shared_ptr<const InputEvent> event) override;
 
 private:
 	//These three vectors define a camera - pos is position,
