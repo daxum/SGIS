@@ -20,30 +20,30 @@
 #include "Components/PhysicsComponent.hpp"
 
 void ControlledAI::update(Screen* screen) {
-	InputHandler& handler = screen->getInputHandler();
+	std::shared_ptr<InputMap> inputMap = screen->getInputMap();
 
 	glm::vec3 newVelocity(0.0, 0.0, 0.0);
 	float speed = 80.0f;
 
-	if (handler.isKeyPressed(Key::A)) {
+	if (inputMap->isKeyPressed(Key::A)) {
 		newVelocity.x -= 1.0f;
 	}
 
 	//Yes, "north" is negative z. I don't like it either.
-	if (handler.isKeyPressed(Key::W)) {
+	if (inputMap->isKeyPressed(Key::W)) {
 		newVelocity.z -= 1.0f;
 	}
 
-	if (handler.isKeyPressed(Key::D)) {
+	if (inputMap->isKeyPressed(Key::D)) {
 		newVelocity.x += 1.0f;
 	}
 
-	if (handler.isKeyPressed(Key::S)) {
+	if (inputMap->isKeyPressed(Key::S)) {
 		newVelocity.z += 1.0f;
 	}
 
 	//Debugging only
-	if (handler.isKeyPressed(Key::SPACE)) {
+	if (inputMap->isKeyPressed(Key::SPACE)) {
 		newVelocity.y += 1.0f;
 	}
 

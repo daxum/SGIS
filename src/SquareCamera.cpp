@@ -59,8 +59,8 @@ void SquareCamera::setTarget(std::shared_ptr<Object> object) {
 	target = object;
 }
 
-bool SquareCamera::onEvent(Screen* screen, const InputHandler* handler, const std::shared_ptr<const InputEvent> event) {
-	if (event->type == EventType::MOUSE_SCROLL) {
+bool SquareCamera::onEvent(const std::shared_ptr<const Event> event) {
+	if (event->type == MouseScrollEvent::EVENT_TYPE) {
 		velocity.y -= std::static_pointer_cast<const MouseScrollEvent>(event)->y;
 
 		return true;

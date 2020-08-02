@@ -24,10 +24,10 @@
 #include "Camera.hpp"
 #include "Engine.hpp"
 #include "ExtraMath.hpp"
-#include "InputListener.hpp"
+#include "Events/EventListener.hpp"
 
 //Follows an object around at a fixed height.
-class SquareCamera : public Camera, public InputListener {
+class SquareCamera : public Camera, public EventListener {
 public:
 	/**
 	 * Creates a camera at the given position looking in the specific direction
@@ -77,7 +77,7 @@ public:
 	/**
 	 * Listens for mouse scroll events and zooms out/in accordingly.
 	 */
-	bool onEvent(Screen* screen, const InputHandler* handler, const std::shared_ptr<const InputEvent> event) override;
+	bool onEvent(const std::shared_ptr<const Event> event) override;
 
 private:
 	//These three vectors define a camera - pos is position,

@@ -26,14 +26,14 @@
 #include "SquareWorldState.hpp"
 
 namespace {
-	void createGameWorld(Screen* current) {
+	void createGameWorld(DisplayEngine& current) {
 		std::shared_ptr<SquareState> playerState;
-		std::shared_ptr<Screen> world = ArenaGenerator::generateArena(current->getDisplay(), true, 1000, &playerState);
+		std::shared_ptr<Screen> world = ArenaGenerator::generateArena(current, true, 1000, &playerState);
 
-		current->getDisplay().pushScreen(world);
+		current.pushScreen(world);
 
 		//Add hud thing
-		std::shared_ptr<Screen> hud = std::make_shared<Screen>(current->getDisplay(), false);
+		std::shared_ptr<Screen> hud = std::make_shared<Screen>(current, false);
 		hud->setState<EmptyScreenState>();
 
 		hud->addComponentManager<RenderManager>();
@@ -52,15 +52,16 @@ namespace {
 		hud->addObject(score);
 		hud->setCamera(std::make_shared<GuiCamera>());
 
-		current->getDisplay().pushOverlay(hud);
+		current.pushOverlay(hud);
 	}
 }
 
 void StartButton::doButtonAction(Screen* screen) {
-	createGameWorld(screen);
+	createGameWorld(screen->getDisplay());
 }
 
 void RetryButton::doButtonAction(Screen* screen) {
+	DisplayEngine& display = screen->getDisplay();
 	screen->getDisplay().popScreen();
-	createGameWorld(screen);
+	createGameWorld(display);
 }

@@ -18,7 +18,7 @@
 
 #pragma once
 
-#include "KeyList.hpp"
+#include "Input/KeyList.hpp"
 #include "ScreenComponents.hpp"
 
 struct ButtonState : public ObjectState {
@@ -40,10 +40,10 @@ struct ButtonState : public ObjectState {
 
 class Button : public GuiComponent {
 public:
-	Button(Key shortcut) : GuiComponent(), actionKey(shortcut) {}
+	Button(Key::KeyEnum shortcut) : GuiComponent(), actionKey(shortcut) {}
 	virtual ~Button() {}
 
-	bool onKeyPress(Screen* screen, Key key, KeyAction action) {
+	bool onKeyPress(Screen* screen, Key::KeyEnum key, KeyAction action) override {
 		if (key == actionKey && action == KeyAction::RELEASE) {
 			doButtonAction(screen);
 			return true;
@@ -52,13 +52,13 @@ public:
 		return false;
 	}
 
-	void onMouseClick(Screen* screen, MouseButton button, MouseAction action) {
+	void onMouseClick(Screen* screen, MouseButton button, MouseAction action) override {
 		if (button == MouseButton::LEFT && action == MouseAction::RELEASE) {
 			doButtonAction(screen);
 		}
 	}
 
-	void onHoverStart(Screen* screen) {
+	void onHoverStart(Screen* screen) override {
 		std::shared_ptr<RenderComponent> render = lockParent()->getComponent<RenderComponent>(RENDER_COMPONENT_NAME);
 
 		if (render) {
@@ -66,7 +66,7 @@ public:
 		}
 	}
 
-	void onHoverStop(Screen* screen) {
+	void onHoverStop(Screen* screen) override {
 		std::shared_ptr<RenderComponent> render = lockParent()->getComponent<RenderComponent>(RENDER_COMPONENT_NAME);
 
 		if (render) {
@@ -77,7 +77,7 @@ public:
 	virtual void doButtonAction(Screen* screen) = 0;
 
 protected:
-	Key actionKey;
+	Key::KeyEnum actionKey;
 };
 
 #undef BUTTON_SIZE_CHANGE
@@ -85,7 +85,7 @@ protected:
 //Pops the screen stack.
 class BackButton : public Button {
 public:
-	BackButton(Key shortcut) : Button(shortcut) {}
+	BackButton(Key::KeyEnum shortcut) : Button(shortcut) {}
 
 	void doButtonAction(Screen* screen) { screen->getDisplay().popScreen(); }
 };
@@ -93,7 +93,7 @@ public:
 //Starts the game.
 class StartButton : public Button {
 public:
-	StartButton(Key shortcut) : Button(shortcut) {}
+	StartButton(Key::KeyEnum shortcut) : Button(shortcut) {}
 
 	void doButtonAction(Screen* screen);
 };
@@ -101,7 +101,7 @@ public:
 //Retry after losing.
 class RetryButton : public Button {
 public:
-	RetryButton(Key shortcut) : Button(shortcut) {}
+	RetryButton(Key::KeyEnum shortcut) : Button(shortcut) {}
 
 	void doButtonAction(Screen* screen);
 };
