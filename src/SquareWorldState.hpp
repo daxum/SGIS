@@ -20,7 +20,7 @@
 
 #include <atomic>
 
-#include "Screen.hpp"
+#include "Display/Screen.hpp"
 
 struct SquareWorldState : public ScreenState {
 	SquareWorldState() : squareCount(0), lightDir(1.0, 1.0, 0.01) {}

@@ -20,7 +20,7 @@
 
 #include <memory>
 
-#include "Screen.hpp"
+#include "Display/Screen.hpp"
 #include "GameObjectStates.hpp"
 
 namespace ArenaGenerator {

@@ -20,7 +20,7 @@
 
 #include <glm/glm.hpp>
 
-#include "Camera.hpp"
+#include "Display/Camera.hpp"
 #include "Engine.hpp"
 #include "ExtraMath.hpp"
 #include "SplineAnimation.hpp"

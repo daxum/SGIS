@@ -20,7 +20,7 @@
 
 #include <atomic>
 
-#include "Object.hpp"
+#include "Display/Object.hpp"
 #include "AxisAlignedBB.hpp"
 
 enum class ObjectType {

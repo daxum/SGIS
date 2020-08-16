@@ -19,7 +19,7 @@
 #pragma once
 
 #include "Buttons.hpp"
-#include "DefaultCamera.hpp"
+#include "Display/DefaultCamera.hpp"
 #include "ScreenComponents.hpp"
 #include "Names.hpp"
 

@@ -20,8 +20,8 @@
 
 #include <glm/glm.hpp>
 
-#include "Object.hpp"
-#include "Camera.hpp"
+#include "Display/Object.hpp"
+#include "Display/Camera.hpp"
 #include "Engine.hpp"
 #include "ExtraMath.hpp"
 #include "Events/EventListener.hpp"

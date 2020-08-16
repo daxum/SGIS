@@ -20,7 +20,7 @@
 #include "Buttons.hpp"
 #include "ArenaGenerator.hpp"
 #include "ScreenComponents.hpp"
-#include "DefaultCamera.hpp"
+#include "Display/DefaultCamera.hpp"
 #include "Models/VertexFormat.hpp"
 #include "Names.hpp"
 #include "SquareWorldState.hpp"
