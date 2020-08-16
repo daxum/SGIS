@@ -28,13 +28,6 @@ SquareCamera::SquareCamera(glm::vec3 startPos, glm::vec3 startLook, glm::vec3 st
 
 }
 
-void SquareCamera::setProjection() {
-	float width = Engine::instance->getWindowInterface().getWindowWidth();
-	float height = Engine::instance->getWindowInterface().getWindowHeight();
-
-	projection = glm::perspective(ExMath::PI / 4.0f, width / height, near, far);
-}
-
 void SquareCamera::update() {
 	if (target) {
 		glm::vec3 targetPos = target->getPhysics()->getTranslation();
@@ -64,6 +57,12 @@ bool SquareCamera::onEvent(const std::shared_ptr<const Event> event) {
 		velocity.y -= std::static_pointer_cast<const MouseScrollEvent>(event)->y;
 
 		return true;
+	}
+	else if (event->type == WindowSizeEvent::EVENT_TYPE || event->type == ScreenChangeEvent::EVENT_TYPE) {
+		float width = Engine::instance->getWindowInterface().getWindowWidth();
+		float height = Engine::instance->getWindowInterface().getWindowHeight();
+
+		projection = glm::perspective(ExMath::PI / 4.0f, width / height, near, far);
 	}
 
 	return false;

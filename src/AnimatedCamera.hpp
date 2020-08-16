@@ -1,6 +1,6 @@
 /******************************************************************************
  * SGIS - A simple game involving squares
- * Copyright (C) 2017
+ * Copyright (C) 2017, 2020
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -44,11 +44,15 @@ public:
 		return projection;
 	}
 
-	void setProjection() override {
-		float width = Engine::instance->getWindowInterface().getWindowWidth();
-		float height = Engine::instance->getWindowInterface().getWindowHeight();
+	bool onEvent(const std::shared_ptr<const Event> event) override {
+		if (event->type == WindowSizeEvent::EVENT_TYPE || event->type == ScreenChangeEvent::EVENT_TYPE) {
+			float width = Engine::instance->getWindowInterface().getWindowWidth();
+			float height = Engine::instance->getWindowInterface().getWindowHeight();
 
-		projection = glm::perspective(ExMath::PI / 4.0f, width / height, near, far);
+			projection = glm::perspective(ExMath::PI / 4.0f, width / height, near, far);
+		}
+
+		return false;
 	}
 
 	std::pair<float, float> getNearFar() const override {

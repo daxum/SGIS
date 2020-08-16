@@ -25,9 +25,11 @@
 #include "Engine.hpp"
 #include "ExtraMath.hpp"
 #include "Events/EventListener.hpp"
+#include "Display/WindowSizeEvent.hpp"
+#include "Display/ScreenChangeEvent.hpp"
 
 //Follows an object around at a fixed height.
-class SquareCamera : public Camera, public EventListener {
+class SquareCamera : public Camera {
 public:
 	/**
 	 * Creates a camera at the given position looking in the specific direction
@@ -48,11 +50,6 @@ public:
 	 * Gets the projection matrix.
 	 */
 	const glm::mat4 getProjection() const override { return projection; }
-
-	/**
-	 * Sets the projection matrix.
-	 */
-	void setProjection() override;
 
 	/**
 	 * Gets the near and far planes.

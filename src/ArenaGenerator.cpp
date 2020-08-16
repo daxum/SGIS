@@ -151,7 +151,6 @@ std::shared_ptr<Screen> ArenaGenerator::generateArena(DisplayEngine& display, bo
 		//Camera
 		std::shared_ptr<SquareCamera> camera = std::make_shared<SquareCamera>(glm::vec3(0.0f, 135.0f, 0.01f));
 		camera->setTarget(square);
-		world->getEventQueue()->addListener(camera);
 
 		world->setCamera(camera);
 	}

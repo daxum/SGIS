@@ -22,6 +22,8 @@
 
 #include "Display/Camera.hpp"
 #include "Engine.hpp"
+#include "Display/WindowSizeEvent.hpp"
+#include "Display/ScreenChangeEvent.hpp"
 
 class GuiCamera : public Camera {
 public:
@@ -30,8 +32,12 @@ public:
 	const glm::mat4 getView() const override { return glm::lookAt(glm::vec3(0.0, 0.0, 1.0), glm::vec3(0.0, 0.0, -1.0), glm::vec3(0.0, 1.0, 0.0)); }
 	const glm::mat4 getProjection() const override { return projection; }
 
-	void setProjection() override {
-		projection = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f, near, far);
+	bool onEvent(const std::shared_ptr<const Event> event) override {
+		if (event->type == WindowSizeEvent::EVENT_TYPE || event->type == ScreenChangeEvent::EVENT_TYPE) {
+			projection = glm::ortho(0.0f, 1920.0f, 0.0f, 1080.0f, near, far);
+		}
+
+		return false;
 	}
 
 	std::pair<float, float> getNearFar() const override { return {near, far}; }
