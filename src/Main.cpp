@@ -1,6 +1,6 @@
 /******************************************************************************
  * SGIS - A simple game involving squares
- * Copyright (C) 2017
+ * Copyright (C) 2017, 2021
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
 	config.renderer.windowTitle = "Squares";
 	config.renderer.deviceOverride = false;
 	config.renderer.forceIndex = 1;
-	config.renderer.validationLayers = { "VK_LAYER_LUNARG_standard_validation" };
+	config.renderer.validationLayers = { "VK_LAYER_KHRONOS_validation" };
 	config.timestep = 1000.0 / 60.0;
 	config.physicsTimestep = 1.0f / 120.0f;
 	config.frameReportFrequency = 5000;
